@@ -1,0 +1,74 @@
+name: Development CI/CD
+
+on:
+  push:
+    branches: [ development ]
+  pull_request:
+    branches: [ development ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Lint
+      run: npm run lint
+      
+    - name: Build
+      run: npm run build
+      env:
+        NODE_ENV: development
+      
+    - name: Test
+      run: npm test
+      env:
+        NODE_ENV: development
+
+  deploy-dev:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18.x'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build
+      run: npm run build
+      env:
+        NODE_ENV: development
+        
+    # Example deployment step - adjust based on your hosting provider
+    - name: Deploy to development environment
+      run: |
+        echo "Deploying to development environment"
+        # Add your deployment commands here
+        # For example, using Vercel:
+        # npx vercel --token ${VERCEL_TOKEN} --prod
+      env:
+        # Add your deployment secrets here
+        # VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        NODE_ENV: development
