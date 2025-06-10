@@ -1,6 +1,18 @@
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 import * as path from 'path';
+import { URL } from 'url';
+
+// Helper function to extract port from URL
+function extractPortFromUrl(urlString: string): number {
+  try {
+    const url = new URL(urlString);
+    return url.port ? parseInt(url.port, 10) : url.protocol === 'https:' ? 443 : 80;
+  } catch (error) {
+    console.warn(`Invalid URL: ${urlString}. Using default port 3000.`);
+    return 3000;
+  }
+}
 
 // Load environment variables based on NODE_ENV
 export function loadEnvConfig() {
@@ -42,6 +54,9 @@ export interface AppConfig {
     orderService: string;
     restaurantService: string;
     userService: string;
+    orderServicePort: number;
+    restaurantServicePort: number;
+    userServicePort: number;
   };
   thirdParty: {
     stripeApiKey: string;
@@ -71,6 +86,9 @@ export function getConfig(): AppConfig {
       orderService: process.env.ORDER_SERVICE_URL || 'http://localhost:3001',
       restaurantService: process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002',
       userService: process.env.USER_SERVICE_URL || 'http://localhost:3003',
+      orderServicePort: extractPortFromUrl(process.env.ORDER_SERVICE_URL || 'http://localhost:3001'),
+      restaurantServicePort: extractPortFromUrl(process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002'),
+      userServicePort: extractPortFromUrl(process.env.USER_SERVICE_URL || 'http://localhost:3003'),
     },
     thirdParty: {
       stripeApiKey: process.env.STRIPE_API_KEY || '',

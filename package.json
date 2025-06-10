@@ -17,7 +17,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/foodhub/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/foodhub/test/jest-e2e.json",
+    "start:order": "nest start order-service --watch",
+    "start:restaurant": "nest start restaurant-service --watch",
+    "start:user": "nest start user-service --watch",
+    "start:all": "npm run start:order & npm run start:restaurant & npm run start:user & cd apps/web && npm run dev"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",

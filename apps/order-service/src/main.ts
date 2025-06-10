@@ -17,9 +17,9 @@ async function bootstrap() {
   // Set global prefix
   app.setGlobalPrefix('api');
   
-  // Start the service on the configured port
-  await app.listen(config.api.port);
+  // Start the service on the port from config
+  await app.listen(config.services.orderServicePort);
   
-  console.log(`Order service running on ${config.api.protocol}://${config.api.host}:${config.api.port}`);
+  console.log(`Order service running on ${config.api.protocol}://${config.api.host}:${config.services.orderServicePort}`);
 }
 bootstrap();
