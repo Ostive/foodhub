@@ -12,7 +12,7 @@ export default function Navbar() {
             <Link href="/" className="flex items-center">
               <span className="font-display text-3xl">
                 <span className="text-[#FF9800]">Food</span>
-                <span className="text-[#4CAF50]">Hub</span>
+                <span className="text-[#4CAF50]">you</span>
               </span>
             </Link>
 
@@ -24,7 +24,7 @@ export default function Navbar() {
               <Link href="/restaurant-dashboard" className="text-[#fff] hover:text-[#4CAF50] text-sm font-medium">
                 Restaurant
               </Link>
-              <Link href="/deliver" className="text-[#fff] hover:text-[#4CAF50] text-sm font-medium">
+              <Link href="/mobile" className="text-[#fff] hover:text-[#4CAF50] text-sm font-medium">
                 Deliver
               </Link>
               <Link 

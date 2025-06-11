@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { ReactNode } from "react"
-import { Button } from "@workspace/ui/components/button"
-import { Card } from "@workspace/ui/components/card"
+import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/card"
 
 type RoleCardProps = {
   icon: ReactNode
