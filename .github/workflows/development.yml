@@ -32,7 +32,7 @@ jobs:
         NODE_ENV: development
       
     - name: Run frontend
-      run: cd apps/web && npm run dev
+      run: cd apps/web && npm install && npm run dev
       env:
         NODE_ENV: development
         
