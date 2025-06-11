@@ -40,6 +40,14 @@ export function loadEnvConfig() {
 export interface AppConfig {
   database: {
     url: string;
+    type: string;
+    host: string;
+    port: number;
+    username: string;
+    password: string;
+    database: string;
+    synchronize: boolean;
+    logging: boolean;
   };
   api: {
     port: number;
@@ -72,6 +80,14 @@ export function getConfig(): AppConfig {
   return {
     database: {
       url: process.env.DATABASE_URL || 'postgres://localhost:5432/foodhub',
+      type: process.env.DATABASE_TYPE || 'postgres',
+      host: process.env.DATABASE_HOST || 'localhost',
+      port: parseInt(process.env.DATABASE_PORT || '5432', 10),
+      username: process.env.DATABASE_USERNAME || 'postgres',
+      password: process.env.DATABASE_PASSWORD || 'postgres',
+      database: process.env.DATABASE_NAME || 'foodhub',
+      synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
+      logging: process.env.DATABASE_LOGGING === 'true',
     },
     api: {
       port: parseInt(process.env.API_PORT || '3000', 10),

@@ -21,15 +21,26 @@
     "start:order": "nest start order-service --watch",
     "start:restaurant": "nest start restaurant-service --watch",
     "start:user": "nest start user-service --watch",
-    "start:all": "npm run start:order & npm run start:restaurant & npm run start:user & cd apps/web && npm run dev"
+    "start:all": "npm run start:order & npm run start:restaurant & npm run start:user & cd apps/web && npm run dev",
+    "start:web": "cd apps/web && npm run dev"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/typeorm": "^11.0.0",
+    "@types/bcrypt": "^5.0.2",
+    "bcrypt": "^6.0.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.2",
     "dotenv": "^16.5.0",
+    "lucide-react": "^0.513.0",
+    "mongodb": "^6.17.0",
+    "pg": "^8.16.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "typeorm": "^0.3.24"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
