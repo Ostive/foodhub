@@ -32,7 +32,7 @@ jobs:
         NODE_ENV: production
       
     - name: Run frontend
-      run: cd apps/web && npm run start
+      run: cd apps/web && npm install && npm run start
       env:
         NODE_ENV: production
         
