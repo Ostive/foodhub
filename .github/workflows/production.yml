@@ -31,10 +31,10 @@ jobs:
       env:
         NODE_ENV: production
       
-    - name: Run frontend
-      run: cd apps/web && npm install && npm run start
-      env:
-        NODE_ENV: production
+    # - name: Run frontend
+    #   run: cd apps/web && npm install && npm run start
+    #   env:
+    #     NODE_ENV: production
         
     # Example deployment step - adjust based on your hosting provider
     - name: Deploy to production environment
