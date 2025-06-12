@@ -1,5 +1,7 @@
 // Modern Hero Section with food imagery
+import {Marquee} from "./Marquee"
 import { Search, MapPin } from "lucide-react"
+
 
 export default function Hero() {
   return (
@@ -10,11 +12,7 @@ export default function Hero() {
           className="absolute inset-0 bg-black/50 z-10" 
           style={{ mixBlendMode: 'multiply' }}
         />
-        <img 
-          src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80" 
-          alt="Fresh vegetables and food" 
-          className="w-full h-full object-cover"
-        />
+        <Marquee />
       </div>
 
       {/* Content */}
