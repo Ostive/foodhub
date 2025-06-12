@@ -11,7 +11,7 @@ const fontSans = Geist({
 const fontMono = Geist_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-})
+})  
 
 export default function RootLayout({
   children,
