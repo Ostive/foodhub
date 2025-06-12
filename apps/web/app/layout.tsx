@@ -5,7 +5,7 @@ import { Providers } from "@/components/providers"
 
 const fontSans = Geist({
   subsets: ["latin"],
-  variable: "--font-sans",y
+  variable: "--font-sans",
 })
 
 const fontMono = Geist_Mono({
