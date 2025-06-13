@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-
+import { IconMenu2, IconX } from "@tabler/icons-react";
 import {
   motion,
   AnimatePresence,
@@ -58,7 +58,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
   const [visible, setVisible] = useState<boolean>(false);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    if (latest > 50) {
+    if (latest > 30) {
       setVisible(true);
     } else {
       setVisible(false);
@@ -69,7 +69,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
     <motion.div
       ref={ref}
       // IMPORTANT: Change this to class of `fixed` if you want the navbar to be fixed
-      className={cn("fixed inset-x-0 top-4 z-40 w-full", className)}
+      className={cn("fixed inset-x-0 top-5 z-40 w-full", className)}
     >
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
@@ -216,7 +216,19 @@ export const MobileNavMenu = ({
   );
 };
 
-
+export const MobileNavToggle = ({
+  isOpen,
+  onClick,
+}: {
+  isOpen: boolean;
+  onClick: () => void;
+}) => {
+  return isOpen ? (
+    <IconX className="text-black dark:text-white" onClick={onClick} />
+  ) : (
+    <IconMenu2 className="text-black dark:text-white" onClick={onClick} />
+  );
+};
 
 export const NavbarLogo = () => {
   return (

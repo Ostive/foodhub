@@ -7,7 +7,7 @@ import {
   NavbarLogo,
   NavbarButton,
   MobileNavHeader,
-
+  MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 import { useState } from "react";
@@ -15,21 +15,22 @@ import { useState } from "react";
 export default function NavbarDemo() {
   const navItems = [
     {
-      name: "Features",
+      name: "Order",
       link: "#features",
     },
     {
-      name: "Pricing",
+      name: "Restaurant",
       link: "#pricing",
     },
     {
-      name: "Contact",
+      name: "Delivery",
       link: "#contact",
     },
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  
   return (
     <div className="relative w-full">
       <Navbar>
@@ -42,14 +43,17 @@ export default function NavbarDemo() {
             <NavbarButton variant="primary">Book a call</NavbarButton>
           </div>
         </NavBody>
-
+ 
         {/* Mobile Navigation */}
         <MobileNav>
           <MobileNavHeader>
             <NavbarLogo />
-            
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
           </MobileNavHeader>
-
+ 
           <MobileNavMenu
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
@@ -83,10 +87,9 @@ export default function NavbarDemo() {
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
-      <div className="pt-20" />
-        
-
+      
       {/* Navbar */}
+      <div className="pt-20" />
     </div>
   );
 }

@@ -5,11 +5,12 @@ import Hero from "./_components/Hero"
 import Navbar from "./_components/Navbar"
 import RoleCard from "./_components/RoleCard"
 import Footer from "./_components/Footer"
+import NavbarDemo from "./_components/topbar"
 
 export default function Page() {
   return (
     <main className="min-h-screen">
-      <Navbar />
+      <NavbarDemo />
       <Hero />
       
       {/* Role Selection */}
