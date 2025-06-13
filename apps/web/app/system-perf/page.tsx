@@ -11,15 +11,6 @@ import ChartLineInteractive from "../_components/line-chart"
 import SectionCards from "../_components/section-card"
 import NavbarDemo from "../_components/topbar"
 
-const performanceData = [
-  { name: 'Mon', orders: 400, deliveries: 300 },
-  { name: 'Tue', orders: 500, deliveries: 420 },
-  { name: 'Wed', orders: 700, deliveries: 600 },
-  { name: 'Thu', orders: 600, deliveries: 580 },
-  { name: 'Fri', orders: 800, deliveries: 750 },
-  { name: 'Sat', orders: 950, deliveries: 900 },
-  { name: 'Sun', orders: 720, deliveries: 690 },
-]
 
 export default function Page() {
   return (
