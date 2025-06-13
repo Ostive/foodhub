@@ -9,7 +9,7 @@ export default function Hero() {
       {/* Background Image with Overlay */}
       <div className="absolute inset-0 z-0">
         <div 
-          className="absolute inset-0 bg-black/50 z-10" 
+          className="absolute inset-0  z-10" 
           style={{ mixBlendMode: 'multiply' }}
         />
         <Marquee />

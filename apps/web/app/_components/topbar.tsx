@@ -16,15 +16,15 @@ export default function NavbarDemo() {
   const navItems = [
     {
       name: "Order",
-      link: "#features",
+      link: "/customer",
     },
     {
       name: "Restaurant",
-      link: "#pricing",
+      link: "/restaurant-dashboard",
     },
     {
       name: "Delivery",
-      link: "#contact",
+      link: "/deliver",
     },
   ];
 
