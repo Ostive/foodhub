@@ -2,6 +2,7 @@ import { Injectable, ValidationPipe, UsePipes } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { Restaurant } from './entities/restaurant.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -12,9 +13,8 @@ export class RestaurantService {
   constructor(
     @InjectRepository(Restaurant)
     private restaurantRepository: Repository<Restaurant>,
-  ) {
+  ) {}
 
-  }
   getHello(): string {
     return 'Hello World!';
   }
@@ -34,9 +34,29 @@ async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
         return userWithoutPassword as Restaurant;
   }
 
-  updateRestaurant(id: string, updateRestaurantDto: UpdateRestaurantDto) {
-    // Implementation will go here
-    return { message: 'Restaurant updated', id, updates: updateRestaurantDto };
+  async updateRestaurant(id: number, updateRestaurantDto: UpdateRestaurantDto) {
+    const restaurant = await this.restaurantRepository.findOne({ where: { id } });
+
+    if (!restaurant) {
+      throw new Error(`Restaurant with ID ${id} not found`);
+    }
+            
+    // If password is being updated, hash it
+    if ('password' in updateRestaurantDto && updateRestaurantDto.password) {
+      const hashedPassword = await bcrypt.hash(updateRestaurantDto.password as string, 10);
+      updateRestaurantDto = { ...updateRestaurantDto, password: hashedPassword };
+    }
+        
+    // Update restaurant
+    await this.restaurantRepository.update(id, updateRestaurantDto);
+        
+    // Return updated restaurant
+    const updatedRestaurant = await this.restaurantRepository.findOne({ where: { id } });
+    if (!updatedRestaurant) {
+      throw new Error(`Restaurant with ID ${id} not found after update`);
+    }
+    const { password, ...restaurantWithoutPassword } = updatedRestaurant;
+    return restaurantWithoutPassword as Restaurant;
   }
 
   getRestaurantById(id: string) {
