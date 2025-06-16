@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { UsersMicroserviceClient } from './users-microservice.client';
-import { UsersService } from './users.service';
+import { HttpModule } from '@nestjs/axios';
+import { UsersHttpService } from './users-http.service';
 
 @Module({
-  providers: [UsersMicroserviceClient, UsersService],
-  exports: [UsersService],
+  imports: [HttpModule],
+  providers: [UsersHttpService],
+  exports: [UsersHttpService],
 })
 export class UsersModule {}

@@ -39,4 +39,18 @@ export class UsersHttpService {
       throw new HttpException('Error communicating with user service', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
+  async create(createUserDto: any): Promise<any> {
+    try {
+      const response = await firstValueFrom(
+        this.httpService.post(`${this.userServiceUrl}/api/users`, createUserDto)
+      );
+      return response.data;
+    } catch (error) {
+      if (error.response?.status === 400) {
+        throw new HttpException(error.response.data.message || 'Bad request', HttpStatus.BAD_REQUEST);
+      }
+      throw new HttpException('Error creating user', HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
