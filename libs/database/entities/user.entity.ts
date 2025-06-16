@@ -3,6 +3,7 @@ import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 import { OneToMany } from 'typeorm';
 import { CreditCard } from './credit_card.entity';
 
+
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
@@ -24,13 +25,13 @@ export class User {
     homeLocalisation: string;
 
     @Column({type: 'varchar', length: 255 })
-    passwordHash: string;
+    password: string;
 
     @Column({ type: 'varchar', length: 255, nullable: true /* AUTO_RANDOM n'existe pas sur typeorm, générer côté code */ })
     referralCode: number;
 
     @Column({ type: 'varchar', length: 255 })
-    role: string;
+    role: 'customer' | 'delivery' | 'restaurateur' | 'developer' | 'manager' | 'admin' = 'customer';
 
     @Column({ type: 'varchar', length: 255, unique: true })
     email: string;
@@ -41,7 +42,7 @@ export class User {
     @BeforeInsert()
     async hashPassword() {
         const salt = await bcrypt.genSalt();
-        this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
+        this.password = await bcrypt.hash(this.password, salt);
     }
 
     @OneToMany(() => CreditCard, creditCard => creditCard.user)

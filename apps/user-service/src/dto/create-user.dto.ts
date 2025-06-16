@@ -14,6 +14,8 @@ export class CreateUserDto {
   @IsEmail({}, { message: 'Please provide a valid email address' })
   email: string;
 
+  @IsNotEmpty()
+  @IsString()
   @IsIn(['customer', 'admin'], { message: 'Role must be either customer or admin' })
   role: 'customer' | 'admin' = 'customer';
 }

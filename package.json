@@ -23,7 +23,10 @@
     "start:user": "nest start user-service --watch",
     "start:auth": "nest start auth-service --watch",
     "start:all": "npm run start:order & npm run start:restaurant & npm run start:user & cd apps/web && npm run dev",
-    "start:web": "cd apps/web && npm run dev"
+    "start:web": "cd apps/web && npm run dev",
+    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
+    "migration:run": "npm run typeorm -- migration:run -d libs/database/database.config.ts",
+    "migration:revert": "npm run typeorm -- migration:revert -d libs/database/database.config.ts"
   },
   "dependencies": {
     "@nestjs/axios": "^4.0.0",
