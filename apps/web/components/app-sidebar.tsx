@@ -42,27 +42,32 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "../admin-homepage",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
+      title: "APIs",
+      url: "../admin-api",
       icon: IconListDetails,
     },
     {
-      title: "Analytics",
-      url: "#",
+      title: "Data Base",
+      url: "../admin-db",
       icon: IconChartBar,
     },
     {
-      title: "Projects",
-      url: "#",
+      title: "Visits",
+      url: "../admin-visit",
       icon: IconFolder,
     },
     {
-      title: "Team",
-      url: "#",
+      title: "System",
+      url: "../admin-system",
+      icon: IconUsers,
+    },
+    {
+      title: "Components",
+      url: "../admin-component",
       icon: IconUsers,
     },
   ],
@@ -160,7 +165,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
+              <a href="../">
                 <IconInnerShadowTop className="!size-5" />
                 <span className="text-base font-semibold">FoodHUB</span>
               </a>
@@ -169,8 +174,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
+        <NavMain items={data.navMain}  />
+        {/* <NavDocuments items={data.documents} /> */}
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
