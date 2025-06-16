@@ -12,7 +12,7 @@ export default function Navbar() {
             <Link href="/" className="flex items-center">
               <span className="font-display text-3xl">
                 <span className="text-[#FF9800]">Food</span>
-                <span className="text-[#4CAF50]">Hub</span>
+                <span className="text-[#4CAF50]">HUB</span>
               </span>
             </Link>
 
