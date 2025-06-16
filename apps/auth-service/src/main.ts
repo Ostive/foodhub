@@ -1,17 +1,17 @@
 import { NestFactory } from '@nestjs/core';
-import { UsersModule } from './users-service.module';
+import { AuthModule } from './auth-service.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { loadEnvConfig, getConfig } from 'libs/config';
 
 async function bootstrap() {
-  // Load environment configuration based on NODE_ENV
+  // Load environment configuration
   loadEnvConfig();
   
   // Get the configuration
   const config = getConfig();
   
   // Create the HTTP application
-  const app = await NestFactory.create(UsersModule);
+  const app = await NestFactory.create(AuthModule);
   
   // Configure CORS
   app.enableCors();
@@ -20,7 +20,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   
   // Create the microservice
-  const microservicePort = config.services.userMicroservicePort || 3010;
+  const microservicePort = config.services.authMicroservicePort || 3012;
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.TCP,
     options: {
@@ -33,9 +33,11 @@ async function bootstrap() {
   await app.startAllMicroservices();
   
   // Start the HTTP server
-  await app.listen(config.services.userServicePort);
+  const httpPort = config.services.authServicePort || 3004;
+  await app.listen(httpPort);
   
-  console.log(`User service HTTP running on ${config.api.protocol}://${config.api.host}:${config.services.userServicePort}`);
-  console.log(`User service Microservice running on port ${microservicePort}`);
+  console.log(`Auth service HTTP running on port ${httpPort}`);
+  console.log(`Auth service Microservice running on port ${microservicePort}`);
 }
+
 bootstrap();

@@ -95,7 +95,7 @@ export default function CustomerNavbar({ forceLight = false }) {
             <div className="flex items-center justify-between h-16">
               {/* Logo */}
               <Link href="/customer" className="flex items-center">
-                <span className={`font-display text-3xl font-bold ${forceLight ? 'text-[#4CAF50]' : 'text-white'} transition-colors duration-300`}>Foodyou</span>
+                <span className={`font-display text-3xl font-bold ${forceLight ? 'text-[#4CAF50]' : 'text-white'} transition-colors duration-300`}>FoodHub</span>
               </Link>
               
               {/* Search Bar (Desktop) */}
