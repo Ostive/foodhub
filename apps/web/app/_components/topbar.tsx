@@ -89,7 +89,7 @@ export default function NavbarDemo() {
       </Navbar>
       
       {/* Navbar */}
-      <div className="pt-20" />
+    
     </div>
   );
 }

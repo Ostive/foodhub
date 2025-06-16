@@ -120,7 +120,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-200 hover:text-zinc-800 lg:flex lg:space-x-2",
+        "relative hidden lg:flex flex-row items-center justify-center space-x-4 px-4 py-2 rounded-full bg-black/80 backdrop-blur-md text-white transition",
         className,
       )}
     >
@@ -242,7 +242,7 @@ export const NavbarLogo = () => {
         width={30}
         height={30}
       />
-      <span className="font-medium text-black dark:text-white">Startup</span>
+      <span className="font-medium text-black dark:text-white">FoodHUB</span>
     </a>
   );
 };

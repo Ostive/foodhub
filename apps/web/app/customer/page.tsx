@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import restaurantsData from "./restaurant/restaurantData";
 import { MenuItem, OfferType, Restaurant } from "./restaurant/restaurantData";
+import NavbarDemo from "../_components/topbar";
 
 const categories = [
   { name: "Pizza", image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?auto=format&fit=crop&w=400&q=80" },
@@ -473,8 +474,8 @@ export default function CustomerPage() {
   return (
     <div className="bg-[#f8f9fa] min-h-svh">
       {/* Modern semi-transparent overlay for navbar visibility */}
-      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-xs bg-linear-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
-      <CustomerNavbar />
+      <div className="fixed top-0 left-0 right-0 h-16 z-40  bg-linear-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
+      <NavbarDemo />
       <main className="pb-20">
         {/* Clean, modern hero section */}
         <section className="relative h-[600px] mb-12 -mt-px overflow-hidden">
