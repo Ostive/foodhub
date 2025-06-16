@@ -89,7 +89,7 @@ export default function SpecialOfferCard({ offer }: SpecialOfferCardProps) {
           </button>
           
           {/* Rating badge */}
-          <div className="absolute bottom-3 left-3 z-20 bg-white/90 backdrop-blur-sm rounded-full px-2 py-1 shadow-md flex items-center">
+          <div className="absolute bottom-3 left-3 z-20 bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 shadow-md flex items-center">
             <Star size={14} className="mr-1 text-[#FF9800] fill-[#FF9800]" />
             <span className="text-xs font-medium text-gray-800">{offer.rating}</span>
             <span className="text-xs text-gray-500 ml-1">({offer.reviewCount})</span>

@@ -1,6 +1,5 @@
 import { NestFactory } from '@nestjs/core';
 import { UsersModule } from './users-service.module';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { loadEnvConfig, getConfig } from 'libs/config';
 
 async function bootstrap() {
@@ -19,23 +18,9 @@ async function bootstrap() {
   // Set global prefix
   app.setGlobalPrefix('api');
   
-  // Create the microservice
-  const microservicePort = config.services.userMicroservicePort || 3010;
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.TCP,
-    options: {
-      host: '0.0.0.0',
-      port: microservicePort,
-    },
-  });
-
-  // Start both the HTTP server and microservice
-  await app.startAllMicroservices();
-  
   // Start the HTTP server
   await app.listen(config.services.userServicePort);
   
   console.log(`User service HTTP running on ${config.api.protocol}://${config.api.host}:${config.services.userServicePort}`);
-  console.log(`User service Microservice running on port ${microservicePort}`);
 }
 bootstrap();

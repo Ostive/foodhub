@@ -44,12 +44,12 @@ export default function PopularRestaurantsPage() {
           
           {/* Sorting options */}
           <div className="flex items-center space-x-2">
-            <div className="bg-white rounded-lg shadow-sm p-2 flex items-center">
+            <div className="bg-white rounded-lg shadow-xs p-2 flex items-center">
               <Filter className="h-5 w-5 text-gray-500 mr-2" />
               <select 
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'rating' | 'popularity')}
-                className="bg-transparent border-none text-gray-700 focus:outline-none text-sm font-medium"
+                className="bg-transparent border-none text-gray-700 focus:outline-hidden text-sm font-medium"
               >
                 <option value="popularity">Most Popular</option>
                 <option value="rating">Highest Rated</option>

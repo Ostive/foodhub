@@ -94,7 +94,7 @@ const MenuItemPreview = ({ item, showDetails = true }: MenuItemPreviewProps) => 
             {/* Allergens */}
             {allergens && allergens.length > 0 && (
               <div className="flex items-start text-xs">
-                <AlertCircle className="h-4 w-4 mr-1 text-amber-500 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="h-4 w-4 mr-1 text-amber-500 shrink-0 mt-0.5" />
                 <span className="text-gray-600">
                   Contains: {allergens.join(", ")}
                 </span>

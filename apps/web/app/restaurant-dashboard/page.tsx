@@ -90,7 +90,7 @@ export default function RestaurantDashboardIndex() {
           >
             <Card className="h-full transition-all hover:shadow-md hover:border-orange-300">
               <div className="h-40 w-full bg-gray-100 rounded-t-lg relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent z-10"></div>
+                <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent z-10"></div>
                 <div className="absolute bottom-2 left-3 flex items-center text-white z-20">
                   <Star className="h-3.5 w-3.5 text-yellow-400 mr-1" />
                   <span className="text-sm font-medium">{restaurant.rating}</span>
@@ -107,7 +107,7 @@ export default function RestaurantDashboardIndex() {
               </CardHeader>
               <CardContent className="pb-4 pt-0">
                 <div className="flex items-start text-sm text-gray-500 mb-1">
-                  <MapPin className="h-3.5 w-3.5 mr-1 mt-0.5 flex-shrink-0" />
+                  <MapPin className="h-3.5 w-3.5 mr-1 mt-0.5 shrink-0" />
                   <span>{restaurant.address}</span>
                 </div>
                 <div className="flex items-center text-sm text-gray-500">

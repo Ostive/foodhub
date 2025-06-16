@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function RestaurantPage() {
   return (
-    <main className="min-h-svh flex flex-col items-center justify-start bg-gradient-to-br from-[#fff7ed] via-[#fff3e0] to-[#fff7ed]">
+    <main className="min-h-svh flex flex-col items-center justify-start bg-linear-to-br from-[#fff7ed] via-[#fff3e0] to-[#fff7ed]">
       {/* Hero Section */}
       <section className="w-full flex flex-col items-center py-16 px-4">
         <Image
@@ -16,7 +16,7 @@ export default function RestaurantPage() {
         <p className="text-lg md:text-xl text-[#a45b00] text-center max-w-2xl mb-6">
           Welcome to FoodYou's restaurant partner portal. Manage your menu, orders, and reach more customers with ease.
         </p>
-        <a href="#features" className="inline-block bg-[#FF9800] text-white px-8 py-3 rounded-full font-semibold shadow hover:bg-[#e65100] transition">See Features</a>
+        <a href="#features" className="inline-block bg-[#FF9800] text-white px-8 py-3 rounded-full font-semibold shadow-sm hover:bg-[#e65100] transition">See Features</a>
       </section>
 
       {/* Features Section */}
@@ -43,7 +43,7 @@ export default function RestaurantPage() {
 
       {/* Call to Action */}
       <section className="w-full flex flex-col items-center py-12">
-        <a href="/restaurant-dashboard/signup" className="bg-[#FF9800] text-white px-10 py-4 rounded-full font-bold shadow hover:bg-[#e65100] transition text-lg">Join Now</a>
+        <a href="/restaurant-dashboard/signup" className="bg-[#FF9800] text-white px-10 py-4 rounded-full font-bold shadow-sm hover:bg-[#e65100] transition text-lg">Join Now</a>
       </section>
     </main>
   );

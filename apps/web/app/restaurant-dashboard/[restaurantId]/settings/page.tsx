@@ -48,7 +48,7 @@ export default function SettingsPage() {
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Sidebar */}
-        <div className="lg:w-64 bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div className="lg:w-64 bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden">
           <nav>
             <ul>
               {tabs.map((tab) => {
@@ -71,7 +71,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Content */}
-        <div className="flex-1 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="flex-1 bg-white rounded-xl shadow-xs border border-gray-100 p-6">
           {activeTab === "profile" && (
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-6">Restaurant Profile</h2>

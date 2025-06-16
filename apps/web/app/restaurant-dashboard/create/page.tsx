@@ -138,7 +138,7 @@ export default function CreateRestaurantPage() {
       
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Restaurant Image */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-xs p-6">
           <h2 className="text-lg font-semibold mb-4">Restaurant Image</h2>
           <div className="flex items-center space-x-6">
             <div className="relative w-40 h-40 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
@@ -168,7 +168,7 @@ export default function CreateRestaurantPage() {
         </div>
         
         {/* Basic Information */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-xs p-6">
           <h2 className="text-lg font-semibold mb-4">Basic Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -238,7 +238,7 @@ export default function CreateRestaurantPage() {
         </div>
         
         {/* Contact Information */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-xs p-6">
           <h2 className="text-lg font-semibold mb-4">Contact Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
@@ -311,7 +311,7 @@ export default function CreateRestaurantPage() {
         </div>
         
         {/* Opening Hours */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-xs p-6">
           <h2 className="text-lg font-semibold mb-4">Opening Hours</h2>
           <div className="space-y-4">
             {Object.entries(formData.openingHours).map(([day, hours]) => (
@@ -355,7 +355,7 @@ export default function CreateRestaurantPage() {
         </div>
         
         {/* Delivery Information */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-xs p-6">
           <h2 className="text-lg font-semibold mb-4">Delivery Information</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div>
@@ -413,7 +413,7 @@ export default function CreateRestaurantPage() {
         </div>
         
         {/* Tags */}
-        <div className="bg-white rounded-xl shadow-sm p-6">
+        <div className="bg-white rounded-xl shadow-xs p-6">
           <h2 className="text-lg font-semibold mb-4">Tags</h2>
           <p className="text-sm text-gray-600 mb-4">Add tags to help customers find your restaurant (e.g. Vegan, Gluten-Free, Family-Friendly)</p>
           

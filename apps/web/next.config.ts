@@ -11,6 +11,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'source.unsplash.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'randomuser.me',
+      },
+       {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+      },
       // Add other domains as needed
     ],
   },

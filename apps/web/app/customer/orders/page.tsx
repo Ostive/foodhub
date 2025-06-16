@@ -261,7 +261,7 @@ export default function OrdersPage() {
                 placeholder="Search orders by restaurant or item"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
               />
             </div>
           </div>
@@ -292,7 +292,7 @@ export default function OrdersPage() {
           {filteredOrders.length > 0 ? (
             <div className="space-y-4">
               {filteredOrders.map((order) => (
-                <div key={order.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div key={order.id} className="bg-white rounded-xl shadow-xs overflow-hidden">
                   {/* Order Header */}
                   <div className="p-4 border-b border-gray-100">
                     <div className="flex items-center justify-between">

@@ -6,9 +6,9 @@ services:
     image: postgres:15
     container_name: foodhub-postgres
     environment:
-      POSTGRES_USER: foodhub
-      POSTGRES_PASSWORD: foodhub_password
-      POSTGRES_DB: foodhub
+      - POSTGRES_USER=foodhub
+      - POSTGRES_PASSWORD=foodhub_password
+      - POSTGRES_DB=foodhub
     ports:
       - "5431:5432"
     volumes:

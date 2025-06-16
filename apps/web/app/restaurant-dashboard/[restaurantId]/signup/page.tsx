@@ -40,7 +40,7 @@ export default function RestaurantSignup() {
   };
 
   return (
-    <main className="min-h-svh bg-gradient-to-br from-[#fff7ed] via-[#fff3e0] to-[#fff7ed] py-8 px-4">
+    <main className="min-h-svh bg-linear-to-br from-[#fff7ed] via-[#fff3e0] to-[#fff7ed] py-8 px-4">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="flex flex-col md:flex-row">
           {/* Left Side - Image */}

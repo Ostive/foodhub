@@ -145,9 +145,9 @@ export default function CategoriesPage() {
           alert.type === "success" ? "bg-green-50 text-green-800 border border-green-200" : "bg-red-50 text-red-800 border border-red-200"
         }`}>
           {alert.type === "success" ? (
-            <Check className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0 text-green-500" />
+            <Check className="h-5 w-5 mr-2 mt-0.5 shrink-0 text-green-500" />
           ) : (
-            <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0 text-red-500" />
+            <AlertCircle className="h-5 w-5 mr-2 mt-0.5 shrink-0 text-red-500" />
           )}
           <span>{alert.message}</span>
         </div>
@@ -165,7 +165,7 @@ export default function CategoriesPage() {
                 id="name"
                 value={newCategory.name}
                 onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-none transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
                 placeholder="e.g. Appetizers"
               />
             </div>
@@ -177,7 +177,7 @@ export default function CategoriesPage() {
                 id="description"
                 value={newCategory.description}
                 onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-none transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
                 placeholder="e.g. Starters and small plates"
               />
             </div>
@@ -203,7 +203,7 @@ export default function CategoriesPage() {
       )}
       
       {/* Categories list */}
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-white rounded-xl shadow-xs overflow-hidden">
         <div className="grid grid-cols-12 bg-gray-50 p-4 border-b border-gray-200">
           <div className="col-span-4 font-medium text-gray-700">Name</div>
           <div className="col-span-5 font-medium text-gray-700">Description</div>
@@ -292,7 +292,7 @@ export default function CategoriesPage() {
       {/* Help text */}
       <div className="mt-6 bg-blue-50 border border-blue-100 rounded-lg p-4 text-sm text-blue-800">
         <p className="flex items-start">
-          <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0 text-blue-500" />
+          <AlertCircle className="h-5 w-5 mr-2 mt-0.5 shrink-0 text-blue-500" />
           <span>
             <strong>Note:</strong> Categories with menu items cannot be deleted. You must first move or delete all items in a category before you can delete it.
           </span>

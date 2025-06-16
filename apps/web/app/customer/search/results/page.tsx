@@ -164,7 +164,7 @@ export default function SearchResultsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for restaurants, dishes, or cuisines"
-                className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-300 focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
               />
               {searchQuery && (
                 <button
@@ -186,7 +186,7 @@ export default function SearchResultsPage() {
                   <div>
                     <button
                       type="button"
-                      className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50]"
+                      className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-xs px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50]"
                       id="sort-menu-button"
                       aria-expanded="true"
                       aria-haspopup="true"
@@ -198,7 +198,7 @@ export default function SearchResultsPage() {
                   </div>
                   <div
                     id="sort-dropdown"
-                    className="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10"
+                    className="hidden origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-hidden z-10"
                     role="menu"
                     aria-orientation="vertical"
                     aria-labelledby="sort-menu-button"

@@ -271,12 +271,12 @@ export default function CartPage() {
     return (
       <div className="bg-[#f8f9fa] min-h-svh">
         {/* Dark overlay for navbar */}
-        <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-sm bg-gradient-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
+        <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-xs bg-linear-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
         <CustomerNavbar />
         
         <div className="max-w-4xl mx-auto px-4 pt-20 pb-6">
           <div className="flex items-center mb-6">
-            <Link href="/customer" className="mr-4 bg-white p-2 rounded-full shadow-sm text-gray-700 hover:bg-gray-100 transition-colors">
+            <Link href="/customer" className="mr-4 bg-white p-2 rounded-full shadow-xs text-gray-700 hover:bg-gray-100 transition-colors">
               <ChevronLeft size={20} />
             </Link>
             <h1 className="text-2xl font-bold text-gray-900">Your Cart</h1>
@@ -311,12 +311,12 @@ export default function CartPage() {
   return (
     <div className="bg-[#f8f9fa] min-h-svh pb-20">
       {/* Dark overlay for navbar */}
-      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-sm bg-gradient-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
+      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-xs bg-linear-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
       <CustomerNavbar />
       
       <div className="max-w-4xl mx-auto px-4 pt-20 pb-6">
         <div className="flex items-center mb-6">
-          <Link href="/customer" className="mr-4 bg-white p-2 rounded-full shadow-sm text-gray-700 hover:bg-gray-100 transition-colors">
+          <Link href="/customer" className="mr-4 bg-white p-2 rounded-full shadow-xs text-gray-700 hover:bg-gray-100 transition-colors">
             <ChevronLeft size={20} />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Your Cart</h1>
@@ -331,7 +331,7 @@ export default function CartPage() {
               <div className="space-y-4">
                 {cartItems.map((item) => (
                   <div key={item.id} className="flex border-b border-gray-100 pb-4 last:border-0 last:pb-0">
-                    <div className="w-20 h-20 rounded-lg overflow-hidden mr-4 flex-shrink-0">
+                    <div className="w-20 h-20 rounded-lg overflow-hidden mr-4 shrink-0">
                       <Image 
                         src={item.image} 
                         alt={item.name} 
@@ -341,7 +341,7 @@ export default function CartPage() {
                       />
                     </div>
                     
-                    <div className="flex-grow">
+                    <div className="grow">
                       <h3 className="font-medium text-gray-900">{item.name}</h3>
                       <p className="text-[#4CAF50] font-medium">{item.price}</p>
                     </div>
@@ -399,7 +399,7 @@ export default function CartPage() {
                 <textarea
                   id="delivery-instructions"
                   rows={2}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                   placeholder="E.g., Ring doorbell, leave at door, call upon arrival, etc."
                   value={deliveryInstructions}
                   onChange={(e) => setDeliveryInstructions(e.target.value)}
@@ -489,7 +489,7 @@ export default function CartPage() {
                     <input
                       type="text"
                       id="promo-code"
-                      className="flex-grow border border-gray-300 rounded-l-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                      className="grow border border-gray-300 rounded-l-lg px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                       placeholder="Enter promo code"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value)}
@@ -585,7 +585,7 @@ export default function CartPage() {
                     <input
                       ref={searchInputRef}
                       type="text"
-                      className="w-full border border-gray-300 rounded-lg pl-10 pr-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                      className="w-full border border-gray-300 rounded-lg pl-10 pr-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                       placeholder="Search for an address"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -593,7 +593,7 @@ export default function CartPage() {
                   </div>
                 </div>
                 
-                <div className="overflow-y-auto flex-grow">
+                <div className="overflow-y-auto grow">
                   {filteredAddresses.length > 0 ? (
                     <div className="p-2">
                       {filteredAddresses.map((addr) => (
@@ -602,7 +602,7 @@ export default function CartPage() {
                           className="p-3 hover:bg-gray-50 rounded-lg cursor-pointer flex items-start"
                           onClick={() => handleSelectAddress(addr.address, addr.latitude, addr.longitude)}
                         >
-                          <MapPin className="w-5 h-5 text-[#4CAF50] mt-1 mr-3 flex-shrink-0" />
+                          <MapPin className="w-5 h-5 text-[#4CAF50] mt-1 mr-3 shrink-0" />
                           <div>
                             <p className="text-gray-900">{addr.address}</p>
                           </div>
@@ -627,7 +627,7 @@ export default function CartPage() {
                   </p>
                 </div>
                 
-                <div className="flex-grow overflow-hidden">
+                <div className="grow overflow-hidden">
                   <div ref={mapContainer} className="w-full h-[300px]" />
                 </div>
                 

@@ -227,7 +227,7 @@ export default function DriverDashboard() {
   return (
     <div className="min-h-svh bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow-sm py-4 px-6 sticky top-0 z-10">
+      <header className="bg-white shadow-xs py-4 px-6 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center">
             <Link href="/deliver" className="text-2xl font-bold text-[#1976d2]">Food'EM</Link>
@@ -261,7 +261,7 @@ export default function DriverDashboard() {
       </header>
       
       {/* Main Content */}
-      <main className="flex-grow flex">
+      <main className="grow flex">
         {/* Sidebar */}
         <div className="w-20 bg-white shadow-md fixed left-0 top-[73px] bottom-0 flex flex-col items-center py-6 space-y-8">
           {navItems.map((item) => (
@@ -276,7 +276,7 @@ export default function DriverDashboard() {
         </div>
         
         {/* Dashboard Content */}
-        <div className="flex-grow pl-20 p-6">
+        <div className="grow pl-20 p-6">
           <div className="max-w-7xl mx-auto">
             {/* Status and Stats */}
             <div className="bg-white rounded-xl shadow-md p-6 mb-6">
@@ -361,7 +361,7 @@ export default function DriverDashboard() {
                 </div>
                 
                 <div className="flex items-start mb-6">
-                  <div className="w-16 h-16 rounded-lg overflow-hidden mr-4 flex-shrink-0">
+                  <div className="w-16 h-16 rounded-lg overflow-hidden mr-4 shrink-0">
                     <Image 
                       src={activeOrder.restaurantImage} 
                       alt={activeOrder.restaurantName} 
@@ -371,7 +371,7 @@ export default function DriverDashboard() {
                     />
                   </div>
                   
-                  <div className="flex-grow">
+                  <div className="grow">
                     <h3 className="font-medium text-gray-900">{activeOrder.restaurantName}</h3>
                     <div className="flex items-center text-gray-500 text-sm mt-1">
                       <MapPin className="w-4 h-4 mr-1" />
@@ -393,7 +393,7 @@ export default function DriverDashboard() {
                 <div className="border-t border-gray-100 pt-4">
                   <h3 className="font-medium text-gray-900 mb-2">Customer Information</h3>
                   <div className="flex items-start">
-                    <div className="flex-grow">
+                    <div className="grow">
                       <p className="font-medium">{activeOrder.customerName}</p>
                       <div className="flex items-center text-gray-500 text-sm mt-1">
                         <MapPin className="w-4 h-4 mr-1" />
@@ -464,7 +464,7 @@ export default function DriverDashboard() {
                     {availableOrdersList.map((order) => (
                       <div key={order.id} className="border border-gray-200 rounded-lg p-4 hover:border-[#1976d2] transition-colors">
                         <div className="flex items-start">
-                          <div className="w-16 h-16 rounded-lg overflow-hidden mr-4 flex-shrink-0">
+                          <div className="w-16 h-16 rounded-lg overflow-hidden mr-4 shrink-0">
                             <Image 
                               src={order.restaurantImage} 
                               alt={order.restaurantName} 
@@ -474,7 +474,7 @@ export default function DriverDashboard() {
                             />
                           </div>
                           
-                          <div className="flex-grow">
+                          <div className="grow">
                             <h3 className="font-medium text-gray-900">{order.restaurantName}</h3>
                             <div className="flex items-center text-gray-500 text-sm mt-1">
                               <MapPin className="w-4 h-4 mr-1" />
@@ -552,7 +552,7 @@ export default function DriverDashboard() {
               
               <div className="space-y-4">
                 <div className="flex items-start">
-                  <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3 flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3 shrink-0">
                     <DollarSign className="h-5 w-5 text-green-600" />
                   </div>
                   <div>
@@ -563,7 +563,7 @@ export default function DriverDashboard() {
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3 flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3 shrink-0">
                     <Star className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
@@ -574,7 +574,7 @@ export default function DriverDashboard() {
                 </div>
                 
                 <div className="flex items-start">
-                  <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3 flex-shrink-0">
+                  <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3 shrink-0">
                     <Package className="h-5 w-5 text-purple-600" />
                   </div>
                   <div>

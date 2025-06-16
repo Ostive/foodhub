@@ -159,7 +159,7 @@ export default function FavoritesPage() {
                 placeholder="Search saved restaurants"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
               />
             </div>
             
@@ -167,7 +167,7 @@ export default function FavoritesPage() {
               <select
                 value={selectedCuisine || ''}
                 onChange={(e) => setSelectedCuisine(e.target.value || null)}
-                className="appearance-none w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent bg-white pr-10"
+                className="appearance-none w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent bg-white pr-10"
               >
                 <option value="">All Cuisines</option>
                 {cuisines.map(cuisine => (

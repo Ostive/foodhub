@@ -142,7 +142,7 @@ export default function RestaurantDashboardLayout({
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         {/* Header */}
-        <header className="bg-white shadow-sm p-4 flex justify-between items-center">
+        <header className="bg-white shadow-xs p-4 flex justify-between items-center">
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden block">
             <Menu className="h-6 w-6 text-gray-500" />
           </button>
@@ -150,7 +150,7 @@ export default function RestaurantDashboardLayout({
             <input 
               type="text" 
               placeholder="Search orders, menu items..." 
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
             />
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -202,7 +202,7 @@ export default function RestaurantDashboardLayout({
         {/* Page Content */}
         <main className="p-6">
           {isLoading && (
-            <div className="fixed inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-white/50 backdrop-blur-xs flex items-center justify-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
                 <Loader2 className="h-10 w-10 animate-spin text-[#FF9800]" />
                 <p className="mt-4 text-gray-600">Loading...</p>

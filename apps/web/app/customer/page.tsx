@@ -473,11 +473,11 @@ export default function CustomerPage() {
   return (
     <div className="bg-[#f8f9fa] min-h-svh">
       {/* Modern semi-transparent overlay for navbar visibility */}
-      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-sm bg-gradient-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
+      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-xs bg-linear-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
       <CustomerNavbar />
       <main className="pb-20">
         {/* Clean, modern hero section */}
-        <section className="relative h-[600px] mb-12 -mt-[1px] overflow-hidden">
+        <section className="relative h-[600px] mb-12 -mt-px overflow-hidden">
           {/* High-quality background image with overlay */}
           <div className="absolute inset-0 bg-black/50 z-10"></div>
           <div 
@@ -506,7 +506,7 @@ export default function CustomerPage() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search for restaurants, dishes, or cuisines"
-                    className="w-full px-3 py-3 bg-transparent border-none focus:outline-none text-gray-800 placeholder-gray-500"
+                    className="w-full px-3 py-3 bg-transparent border-none focus:outline-hidden text-gray-800 placeholder-gray-500"
                   />
                 </form>
                 <button 
@@ -799,7 +799,7 @@ export default function CustomerPage() {
               ) : hasMore ? (
                 <button 
                   onClick={loadMoreRestaurants}
-                  className="bg-white hover:bg-gray-50 text-[#4CAF50] font-medium px-6 py-3 rounded-lg shadow-sm border border-gray-200 transition-all duration-300 flex items-center"
+                  className="bg-white hover:bg-gray-50 text-[#4CAF50] font-medium px-6 py-3 rounded-lg shadow-xs border border-gray-200 transition-all duration-300 flex items-center"
                 >
                   Load More Restaurants
                   <ChevronDown className="h-4 w-4 ml-2" />

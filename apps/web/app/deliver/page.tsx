@@ -55,7 +55,7 @@ export default function DeliverPage() {
   return (
     <main className="min-h-svh bg-white">
       {/* Navbar */}
-      <nav className="bg-white shadow-sm py-4 px-6 sticky top-0 z-10">
+      <nav className="bg-white shadow-xs py-4 px-6 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold text-[#1976d2]">Food'EM</Link>
           <div className="flex items-center space-x-6">
@@ -69,7 +69,7 @@ export default function DeliverPage() {
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-[#1976d2] to-[#64B5F6] py-20 px-4 overflow-hidden">
+      <section className="relative bg-linear-to-r from-[#1976d2] to-[#64B5F6] py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             <path d="M0,0 L100,0 L100,100 L0,100 Z" fill="url(#grid-pattern)" />
@@ -146,7 +146,7 @@ export default function DeliverPage() {
             ))}
           </div>
           
-          <div className="bg-gradient-to-r from-[#1976d2] to-[#64B5F6] rounded-3xl p-10 text-white">
+          <div className="bg-linear-to-r from-[#1976d2] to-[#64B5F6] rounded-3xl p-10 text-white">
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div>
                 <h3 className="text-3xl font-bold mb-4">Ready to start earning?</h3>
@@ -225,7 +225,7 @@ export default function DeliverPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">Hear from people already delivering with FoodYou</p>
           </div>
           
-          <div className="bg-gradient-to-r from-[#1976d2] to-[#64B5F6] rounded-3xl p-10 text-white relative overflow-hidden">
+          <div className="bg-linear-to-r from-[#1976d2] to-[#64B5F6] rounded-3xl p-10 text-white relative overflow-hidden">
             <div className="absolute inset-0 opacity-10">
               <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <path d="M0,0 L100,0 L100,100 L0,100 Z" fill="url(#quote-pattern)" />
@@ -339,7 +339,7 @@ export default function DeliverPage() {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-20 px-4 bg-gradient-to-r from-[#1976d2] to-[#64B5F6] text-white">
+      <section className="py-20 px-4 bg-linear-to-r from-[#1976d2] to-[#64B5F6] text-white">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Start Your Journey?</h2>
           <p className="text-xl text-blue-100 mb-10 max-w-3xl mx-auto">Join thousands of delivery partners already earning with FoodYou. Apply today and start delivering tomorrow.</p>

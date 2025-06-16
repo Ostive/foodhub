@@ -200,13 +200,13 @@ export default function CustomersPage() {
           <input 
             type="text" 
             placeholder="Search customers..." 
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div className="flex space-x-2">
-          <button className="flex items-center space-x-1 text-gray-700 hover:text-[#FF9800] text-sm font-medium px-4 py-2 bg-white rounded-lg shadow-sm border border-gray-200">
+          <button className="flex items-center space-x-1 text-gray-700 hover:text-[#FF9800] text-sm font-medium px-4 py-2 bg-white rounded-lg shadow-xs border border-gray-200">
             <Filter className="h-4 w-4" />
             <span>Filter</span>
           </button>
@@ -217,7 +217,7 @@ export default function CustomersPage() {
       </div>
 
       {/* Customers Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-8 overflow-hidden">
+      <div className="bg-white rounded-xl shadow-xs border border-gray-100 mb-8 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 text-left">
@@ -263,7 +263,7 @@ export default function CustomersPage() {
                   <tr key={customer.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <div className="flex items-center">
-                        <div className="h-10 w-10 flex-shrink-0">
+                        <div className="h-10 w-10 shrink-0">
                           <Image 
                             src={customer.avatar} 
                             alt={customer.name}
@@ -330,24 +330,24 @@ export default function CustomersPage() {
 
       {/* Customer Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Total Customers</h3>
           <p className="text-3xl font-bold text-[#FF9800]">{customers.length}</p>
           <p className="text-sm text-green-600 mt-1">+12% from last month</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Active Customers</h3>
           <p className="text-3xl font-bold text-[#FF9800]">{customers.filter(c => c.status === 'active').length}</p>
           <p className="text-sm text-green-600 mt-1">87.5% active rate</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Avg. Lifetime Value</h3>
           <p className="text-3xl font-bold text-[#FF9800]">
             ${(customers.reduce((sum, c) => sum + c.totalSpent, 0) / customers.length).toFixed(2)}
           </p>
           <p className="text-sm text-green-600 mt-1">+5% from last month</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Avg. Rating</h3>
           <div className="flex items-center">
             <p className="text-3xl font-bold text-[#FF9800]">

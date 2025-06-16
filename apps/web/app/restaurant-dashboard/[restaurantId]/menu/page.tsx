@@ -204,7 +204,7 @@ export default function MenuPage() {
           <input 
             type="text" 
             placeholder="Search menu items..." 
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -212,7 +212,7 @@ export default function MenuPage() {
       </div>
 
       {/* Menu Items Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+      <div className="bg-white rounded-xl shadow-xs border border-gray-100 overflow-hidden mb-8">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
@@ -352,24 +352,24 @@ export default function MenuPage() {
 
       {/* Menu Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Total Items</h3>
           <p className="text-3xl font-bold text-[#FF9800]">{menuItems.length}</p>
           <p className="text-sm text-gray-500 mt-1">Across {categories.length - 1} categories</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Popular Items</h3>
           <p className="text-3xl font-bold text-[#FF9800]">{menuItems.filter(item => item.isPopular).length}</p>
           <p className="text-sm text-gray-500 mt-1">Based on order frequency</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Avg. Item Price</h3>
           <p className="text-3xl font-bold text-[#FF9800]">
             ${(menuItems.reduce((sum, item) => sum + item.price, 0) / menuItems.length).toFixed(2)}
           </p>
           <p className="text-sm text-gray-500 mt-1">Excluding special offers</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Unavailable</h3>
           <p className="text-3xl font-bold text-[#FF9800]">{menuItems.filter(item => !item.isAvailable).length}</p>
           <p className="text-sm text-gray-500 mt-1">Items currently not available</p>

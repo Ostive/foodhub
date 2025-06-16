@@ -84,7 +84,7 @@ export default function DeliveryLoginPage() {
   return (
     <div className="min-h-svh bg-gray-50 flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow-sm py-4 px-6">
+      <header className="bg-white shadow-xs py-4 px-6">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/deliver" className="text-2xl font-bold text-[#1976d2]">Food'EM</Link>
           <Link 
@@ -97,7 +97,7 @@ export default function DeliveryLoginPage() {
       </header>
       
       {/* Main Content */}
-      <main className="flex-grow flex items-center justify-center p-6">
+      <main className="grow flex items-center justify-center p-6">
         <div className="bg-white rounded-xl shadow-md p-8 w-full max-w-md">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Driver Login</h1>
@@ -106,7 +106,7 @@ export default function DeliveryLoginPage() {
           
           {error && (
             <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center text-red-600">
-              <AlertCircle className="h-5 w-5 mr-2 flex-shrink-0" />
+              <AlertCircle className="h-5 w-5 mr-2 shrink-0" />
               <span>{error}</span>
             </div>
           )}
@@ -121,7 +121,7 @@ export default function DeliveryLoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1976d2] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#1976d2] focus:border-transparent"
                 placeholder="you@example.com"
                 required
               />
@@ -137,7 +137,7 @@ export default function DeliveryLoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1976d2] focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#1976d2] focus:border-transparent"
                   placeholder="u2022u2022u2022u2022u2022u2022u2022u2022"
                   required
                 />

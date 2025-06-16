@@ -50,7 +50,7 @@ export default function ForgotPasswordPage() {
             <div className="space-y-3">
               <Link 
                 href="/customer/login" 
-                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[#4CAF50] hover:bg-[#388e3c] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors"
+                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-xs text-sm font-medium text-white bg-[#4CAF50] hover:bg-[#388e3c] focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors"
               >
                 Return to login <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
                   setIsSubmitted(false);
                   setEmail("");
                 }}
-                className="w-full flex justify-center items-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors"
+                className="w-full flex justify-center items-center py-3 px-4 border border-gray-300 rounded-xl shadow-xs text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors"
               >
                 <ArrowLeft className="mr-2 h-4 w-4" /> Try another email
               </button>
@@ -108,7 +108,7 @@ export default function ForgotPasswordPage() {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl shadow-sm placeholder-gray-400 focus:outline-none focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
+                  className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
                   placeholder="you@example.com"
                 />
               </div>
@@ -118,7 +118,7 @@ export default function ForgotPasswordPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[#4CAF50] hover:bg-[#388e3c] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-xs text-sm font-medium text-white bg-[#4CAF50] hover:bg-[#388e3c] focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <span className="flex items-center">
@@ -147,7 +147,7 @@ export default function ForgotPasswordPage() {
 
       {/* Right side - Image */}
       <div className="hidden md:block md:flex-1 relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#4CAF50]/90 to-[#2E7D32]/90 z-10"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-[#4CAF50]/90 to-[#2E7D32]/90 z-10"></div>
         <Image
           src="https://images.unsplash.com/photo-1493770348161-369560ae357d?q=80&w=1740&auto=format&fit=crop"
           alt="Food delivery"

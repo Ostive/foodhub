@@ -39,13 +39,18 @@ async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
     return { message: 'Restaurant updated', id, updates: updateRestaurantDto };
   }
 
-  addMenuItem(restaurantId: string, menuItemDto: MenuItemDto) {
-    // Implementation will go here
-    return { message: 'Menu item added', restaurantId, item: menuItemDto };
-  }
-
   getRestaurantById(id: string) {
     // Implementation will go here
     return { message: 'Restaurant retrieved', id };
+  }
+
+  getAllRestaurants() {
+    // Implementation will go here
+    return { message: 'All restaurants retrieved', restaurants: [] };
+  }
+
+  getRestaurantsByCategory(category: string) {
+    // Implementation will go here
+    return { message: 'Restaurants by category retrieved', category, restaurants: [] };
   }
 }

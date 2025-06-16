@@ -91,7 +91,7 @@ export default function OrdersPage() {
           <input 
             type="text" 
             placeholder="Search orders..." 
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -99,7 +99,7 @@ export default function OrdersPage() {
       </div>
 
       {/* Orders Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-8">
+      <div className="bg-white rounded-xl shadow-xs border border-gray-100 mb-8">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-gray-50 text-left">
@@ -173,22 +173,22 @@ export default function OrdersPage() {
 
       {/* Order Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Today's Orders</h3>
           <p className="text-3xl font-bold text-[#FF9800]">12</p>
           <p className="text-sm text-gray-500 mt-1">6 completed, 6 in progress</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Average Prep Time</h3>
           <p className="text-3xl font-bold text-[#FF9800]">18 min</p>
           <p className="text-sm text-gray-500 mt-1">2 min faster than last week</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Delivery Success</h3>
           <p className="text-3xl font-bold text-[#FF9800]">98%</p>
           <p className="text-sm text-gray-500 mt-1">2% increase from last month</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Cancelled Orders</h3>
           <p className="text-3xl font-bold text-[#FF9800]">3</p>
           <p className="text-sm text-gray-500 mt-1">Down from 5 last week</p>

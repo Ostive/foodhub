@@ -4,14 +4,13 @@ import { UsersService } from './users-service.service';
 import { UsersController } from './users-service.controller';
 import { User } from '../../../libs/database/entities/user.entity';
 import { DatabaseModule } from '../../../libs/database/database.module';
-import { UsersMicroserviceController } from './users-service.microservice';
 
 @Module({
   imports: [
     DatabaseModule,
     TypeOrmModule.forFeature([User]),
   ],
-  controllers: [UsersController, UsersMicroserviceController],
+  controllers: [UsersController],
   providers: [UsersService],
   exports: [UsersService, TypeOrmModule],
 })

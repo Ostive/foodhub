@@ -125,7 +125,7 @@ export default function RestaurantDashboardLayout({
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         {/* Header */}
-        <header className="bg-white shadow-sm p-4 flex justify-between items-center">
+        <header className="bg-white shadow-xs p-4 flex justify-between items-center">
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden block">
             <Menu className="h-6 w-6 text-gray-500" />
           </button>
@@ -174,7 +174,7 @@ export default function RestaurantDashboardLayout({
         {/* Page Content */}
         <main className="p-6">
           {isLoading && (
-            <div className="fixed inset-0 bg-white/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-white/50 backdrop-blur-xs flex items-center justify-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
                 <Loader2 className="h-10 w-10 animate-spin text-[#FF9800]" />
                 <p className="mt-4 text-gray-600">Loading...</p>

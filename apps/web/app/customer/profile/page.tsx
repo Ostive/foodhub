@@ -269,7 +269,7 @@ export default function ProfilePage() {
           <div className="flex flex-col md:flex-row gap-6">
             {/* Sidebar */}
             <div className="md:w-64">
-              <div className="bg-white rounded-xl shadow-sm overflow-hidden sticky top-24">
+              <div className="bg-white rounded-xl shadow-xs overflow-hidden sticky top-24">
                 <div className="p-6 border-b border-gray-100">
                   <div className="flex items-center space-x-3">
                     <div className="h-12 w-12 rounded-full overflow-hidden">
@@ -334,7 +334,7 @@ export default function ProfilePage() {
             <div className="flex-1">
               {/* Personal Info Tab */}
               {activeTab === "personal" && (
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="bg-white rounded-xl shadow-xs overflow-hidden">
                   <div className="flex items-center justify-between p-6 border-b border-gray-100">
                     <h2 className="text-xl font-bold text-gray-900">Personal Information</h2>
                     {!isEditing ? (
@@ -391,7 +391,7 @@ export default function ProfilePage() {
                               name="name"
                               value={formData.name}
                               onChange={handleInputChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                             />
                           ) : (
                             <p className="text-gray-900 py-2">{userData.name}</p>
@@ -409,7 +409,7 @@ export default function ProfilePage() {
                               name="email"
                               value={formData.email}
                               onChange={handleInputChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                             />
                           ) : (
                             <p className="text-gray-900 py-2">{userData.email}</p>
@@ -427,7 +427,7 @@ export default function ProfilePage() {
                               name="phone"
                               value={formData.phone}
                               onChange={handleInputChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                             />
                           ) : (
                             <p className="text-gray-900 py-2">{userData.phone}</p>
@@ -445,7 +445,7 @@ export default function ProfilePage() {
                               name="address"
                               value={formData.address}
                               onChange={handleInputChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                             />
                           ) : (
                             <p className="text-gray-900 py-2">{userData.address}</p>
@@ -471,7 +471,7 @@ export default function ProfilePage() {
               
               {/* Payment Methods Tab */}
               {activeTab === "payment" && (
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="bg-white rounded-xl shadow-xs overflow-hidden">
                   <div className="flex items-center justify-between p-6 border-b border-gray-100">
                     <h2 className="text-xl font-bold text-gray-900">Payment Methods</h2>
                     <button 
@@ -590,7 +590,7 @@ export default function ProfilePage() {
                                   name="cardNumber"
                                   value={newPaymentForm.cardNumber}
                                   onChange={(e) => setNewPaymentForm(prev => ({ ...prev, cardNumber: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                                 />
                               </div>
                               
@@ -604,7 +604,7 @@ export default function ProfilePage() {
                                   name="cardName"
                                   value={newPaymentForm.cardName}
                                   onChange={(e) => setNewPaymentForm(prev => ({ ...prev, cardName: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                                 />
                               </div>
                               
@@ -618,7 +618,7 @@ export default function ProfilePage() {
                                   name="expiryDate"
                                   value={newPaymentForm.expiryDate}
                                   onChange={(e) => setNewPaymentForm(prev => ({ ...prev, expiryDate: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                                 />
                               </div>
                               
@@ -632,7 +632,7 @@ export default function ProfilePage() {
                                   name="cvv"
                                   value={newPaymentForm.cvv}
                                   onChange={(e) => setNewPaymentForm(prev => ({ ...prev, cvv: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                                 />
                               </div>
                             </div>
@@ -666,7 +666,7 @@ export default function ProfilePage() {
               
               {/* Notifications Tab */}
               {activeTab === "notifications" && (
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="bg-white rounded-xl shadow-xs overflow-hidden">
                   <div className="p-6 border-b border-gray-100">
                     <h2 className="text-xl font-bold text-gray-900">Notification Preferences</h2>
                     <p className="text-gray-500 mt-1">Manage how you receive notifications</p>
@@ -687,7 +687,7 @@ export default function ProfilePage() {
                               onChange={() => toggleNotification(setting.id)} 
                               className="sr-only peer" 
                             />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#4CAF50]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4CAF50]"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-[#4CAF50]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4CAF50]"></div>
                           </label>
                         </div>
                       ))}
@@ -698,7 +698,7 @@ export default function ProfilePage() {
               
               {/* Security Tab */}
               {activeTab === "security" && (
-                <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+                <div className="bg-white rounded-xl shadow-xs overflow-hidden">
                   <div className="p-6 border-b border-gray-100">
                     <h2 className="text-xl font-bold text-gray-900">Security Settings</h2>
                     <p className="text-gray-500 mt-1">Manage your account security</p>
@@ -744,7 +744,7 @@ export default function ProfilePage() {
                                     name="currentPassword"
                                     value={passwordForm.currentPassword}
                                     onChange={(e) => setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                                   />
                                 </div>
                                 
@@ -758,7 +758,7 @@ export default function ProfilePage() {
                                     name="newPassword"
                                     value={passwordForm.newPassword}
                                     onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                                   />
                                 </div>
                                 
@@ -772,7 +772,7 @@ export default function ProfilePage() {
                                     name="confirmPassword"
                                     value={passwordForm.confirmPassword}
                                     onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                                   />
                                 </div>
                               </div>
@@ -829,7 +829,7 @@ export default function ProfilePage() {
                                     name="phoneNumber"
                                     value={twoFactorForm.phoneNumber}
                                     onChange={(e) => setTwoFactorForm(prev => ({ ...prev, phoneNumber: e.target.value }))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                                   />
                                 </div>
                                 
@@ -843,7 +843,7 @@ export default function ProfilePage() {
                                     name="verificationCode"
                                     value={twoFactorForm.verificationCode}
                                     onChange={(e) => setTwoFactorForm(prev => ({ ...prev, verificationCode: e.target.value }))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
                                   />
                                 </div>
                               </div>
