@@ -4,7 +4,7 @@ import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 @Entity()
 export class User {
     @PrimaryGeneratedColumn()
-    customerId: string;
+    userId: string;
 
     @Column({ type: 'varchar', length: 500, nullable: true })
     profilePicture: string;
@@ -24,7 +24,7 @@ export class User {
     @Column({type: 'varchar', length: 255 })
     passwordHash: string;
 
-    @Column({ type: 'float', nullable: true /* AUTO_RANDOM n'existe pas sur typeorm, générer côté code */ })
+    @Column({ type: 'varchar', nullable: true /* AUTO_RANDOM n'existe pas sur typeorm, générer côté code */ })
     referralCode: number;
 
     @Column({ type: 'varchar', length: 255 })

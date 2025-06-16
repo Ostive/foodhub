@@ -2,9 +2,11 @@ import { Module, ValidationPipe } from '@nestjs/common';
 import { APP_PIPE } from '@nestjs/core';
 import { RestaurantServiceController } from './restaurant-service.controller';
 import { RestaurantServiceService } from './restaurant-service.service';
+import { MenuModule } from './menu/menu.module';
+import { DishModule } from './dish/dish.module';
 
 @Module({
-  imports: [],
+  imports: [MenuModule, DishModule],
   controllers: [RestaurantServiceController],
   providers: [
     RestaurantServiceService,
