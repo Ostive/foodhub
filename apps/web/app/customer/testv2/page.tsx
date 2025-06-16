@@ -387,7 +387,7 @@ export default function CoordinateMapPage() {
         <h1 className="text-3xl font-bold text-gray-900 mb-6">Map Coordinate Test</h1>
         
         {/* Address Search Form */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-xs p-6 mb-6">
           <h2 className="text-xl font-bold text-gray-900 mb-4">Search Address</h2>
           <form onSubmit={searchForAddress} className="space-y-4">
             <div className="relative">
@@ -405,7 +405,7 @@ export default function CoordinateMapPage() {
                   setTimeout(() => setShowSuggestions(false), 200);
                 }}
                 placeholder="e.g. 15 rue de Rivoli, Paris"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent outline-none transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent outline-hidden transition-colors"
                 disabled={isSearching}
                 autoComplete="off"
               />
@@ -465,7 +465,7 @@ export default function CoordinateMapPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Map Container */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm p-4 mb-4">
+            <div className="bg-white rounded-xl shadow-xs p-4 mb-4">
               <div 
                 ref={mapContainer} 
                 className="w-full h-[500px] rounded-lg overflow-hidden" 
@@ -478,7 +478,7 @@ export default function CoordinateMapPage() {
           
           {/* Coordinate Display */}
           <div>
-            <div className="bg-white rounded-xl shadow-sm p-6 sticky top-4">
+            <div className="bg-white rounded-xl shadow-xs p-6 sticky top-4">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
                 <MapPin className="w-5 h-5 text-[#4CAF50] mr-2" />
                 Pin Coordinates

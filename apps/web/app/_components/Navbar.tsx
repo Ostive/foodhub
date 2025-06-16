@@ -18,13 +18,13 @@ export default function Navbar() {
 
             {/* Navigation Links & CTA */}
             <nav className="hidden md:flex items-center space-x-8">
-              <Link href="/customer" className="text-[#fff] hover:text-[#4CAF50] text-sm font-medium">
+              <Link href="/customer" className="text-white hover:text-[#4CAF50] text-sm font-medium">
                 Order
               </Link>
-              <Link href="/restaurant-dashboard" className="text-[#fff] hover:text-[#4CAF50] text-sm font-medium">
+              <Link href="/restaurant-dashboard" className="text-white hover:text-[#4CAF50] text-sm font-medium">
                 Restaurant
               </Link>
-              <Link href="/mobile" className="text-[#fff] hover:text-[#4CAF50] text-sm font-medium">
+              <Link href="/mobile" className="text-white hover:text-[#4CAF50] text-sm font-medium">
                 Deliver
               </Link>
               <Link 
@@ -37,7 +37,7 @@ export default function Navbar() {
 
             {/* Mobile Menu Button */}
             <div className="md:hidden flex items-center">
-              <button className="text-[#fff] hover:text-[#4CAF50]">
+              <button className="text-white hover:text-[#4CAF50]">
                 <Menu className="h-6 w-6" />
               </button>
             </div>

@@ -360,7 +360,7 @@ const AddressSelectionModal = ({ isOpen, onClose, onAddressSelected }: AddressSe
                     // Delay hiding suggestions to allow clicking on them
                     setTimeout(() => setShowSuggestions(false), 200);
                   }}
-                  className="ml-2 w-full bg-transparent border-none focus:outline-none text-gray-800 placeholder-gray-500"
+                  className="ml-2 w-full bg-transparent border-none focus:outline-hidden text-gray-800 placeholder-gray-500"
                   autoComplete="off"
                 />
               </div>
@@ -383,7 +383,7 @@ const AddressSelectionModal = ({ isOpen, onClose, onAddressSelected }: AddressSe
                         onClick={() => handleSelectSuggestion(suggestion)}
                       >
                         <div className="flex items-start">
-                          <MapPin className="h-5 w-5 text-[#4CAF50] mr-2 mt-0.5 flex-shrink-0" />
+                          <MapPin className="h-5 w-5 text-[#4CAF50] mr-2 mt-0.5 shrink-0" />
                           <div>
                             <div className="font-medium text-gray-800">{suggestion.properties.label}</div>
                             {suggestion.properties.context && (
@@ -444,7 +444,7 @@ const AddressSelectionModal = ({ isOpen, onClose, onAddressSelected }: AddressSe
             
             {/* Current address display */}
             <div className="mt-4 p-3 bg-gray-50 rounded-lg flex items-start">
-              <MapPin className="h-5 w-5 text-[#4CAF50] mr-2 mt-0.5 flex-shrink-0" />
+              <MapPin className="h-5 w-5 text-[#4CAF50] mr-2 mt-0.5 shrink-0" />
               <div>
                 <div className="font-medium">Selected Address</div>
                 <div className="text-gray-600 break-words">{address || 'No address selected'}</div>

@@ -14,11 +14,11 @@ export default function Page() {
       <Hero />
       
       {/* Role Selection */}
-      <section className="py-20 bg-gradient-to-r from-[#f9f9f9] via-[#f0f9f0] to-[#f9f9f9] bg-animate">
+      <section className="py-20 bg-linear-to-r from-[#f9f9f9] via-[#f0f9f0] to-[#f9f9f9] bg-animate">
         <div className="container mx-auto px-4">
           {/* Big Image Card with Description */}
           <div className="relative rounded-3xl overflow-hidden shadow-2xl mb-16 max-w-7xl mx-auto">
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30 z-10"></div>
+            <div className="absolute inset-0 bg-linear-to-r from-black/70 to-black/30 z-10"></div>
             <img 
               src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80" 
               alt="Food Experience" 
@@ -38,7 +38,7 @@ export default function Page() {
             {/* Customer */}
             <a
               href="/customer"
-              className="group flex flex-col items-center rounded-3xl overflow-visible shadow-2xl bg-white/90 border border-gray-100 hover:shadow-3xl transition-all cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#4CAF50] p-0"
+              className="group flex flex-col items-center rounded-3xl overflow-visible shadow-2xl bg-white/90 border border-gray-100 hover:shadow-3xl transition-all cursor-pointer focus:outline-hidden focus:ring-4 focus:ring-[#4CAF50] p-0"
               style={{ minHeight: '420px' }}
             >
               <img
@@ -54,7 +54,7 @@ export default function Page() {
             {/* Restaurant */}
             <a
               href="/restaurant-dashboard"
-              className="group flex flex-col items-center rounded-3xl overflow-visible shadow-2xl bg-white/90 border border-gray-100 hover:shadow-3xl transition-all cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#FF9800] p-0"
+              className="group flex flex-col items-center rounded-3xl overflow-visible shadow-2xl bg-white/90 border border-gray-100 hover:shadow-3xl transition-all cursor-pointer focus:outline-hidden focus:ring-4 focus:ring-[#FF9800] p-0"
               style={{ minHeight: '420px' }}
             >
               <img
@@ -70,7 +70,7 @@ export default function Page() {
             {/* Deliverer */}
             <a
               href="/deliver"
-              className="group flex flex-col items-center rounded-3xl overflow-visible shadow-2xl bg-white/90 border border-gray-100 hover:shadow-3xl transition-all cursor-pointer focus:outline-none focus:ring-4 focus:ring-[#212121] p-0"
+              className="group flex flex-col items-center rounded-3xl overflow-visible shadow-2xl bg-white/90 border border-gray-100 hover:shadow-3xl transition-all cursor-pointer focus:outline-hidden focus:ring-4 focus:ring-[#212121] p-0"
               style={{ minHeight: '420px' }}
             >
               <img
@@ -88,7 +88,7 @@ export default function Page() {
       </section>
       
       {/* Testimonials */}
-      <section className="py-20 bg-gradient-to-r from-[#f5f5f5] via-[#f8f8f8] to-[#f5f5f5] bg-animate">
+      <section className="py-20 bg-linear-to-r from-[#f5f5f5] via-[#f8f8f8] to-[#f5f5f5] bg-animate">
         <div className="container mx-auto px-4">
           <div className="text-left mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -144,7 +144,7 @@ export default function Page() {
       </section>
       
       {/* App Download Section */}
-      <section className="py-20 bg-gradient-to-r from-[#f9f9f9] via-[#f0f9f0] to-[#f9f9f9] bg-animate">
+      <section className="py-20 bg-linear-to-r from-[#f9f9f9] via-[#f0f9f0] to-[#f9f9f9] bg-animate">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row items-center gap-12 rounded-3xl shadow-2xl bg-white/90 p-10 md:p-16 animate-fade-in">
             {/* Text & Buttons */}

@@ -168,7 +168,7 @@ export default function SpecialOffersPage() {
           
           {/* Filter buttons */}
           <div className="mb-6 flex items-center overflow-x-auto hide-scrollbar pb-2">
-            <div className="flex items-center bg-white rounded-full shadow-sm p-1 mr-4">
+            <div className="flex items-center bg-white rounded-full shadow-xs p-1 mr-4">
               <Filter size={16} className="text-gray-500 ml-2" />
               <span className="text-sm font-medium text-gray-700 mr-2 ml-1">Filter:</span>
             </div>

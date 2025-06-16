@@ -9,7 +9,7 @@ type RoleCardProps = {
   tagline: string
   button: string
   href: string
-  buttonVariant: "default" | "secondary" | "outline"
+  buttonVariant: "default" | "secondary" | "outline-solid"
   index: number
   image: string
 }
@@ -32,7 +32,7 @@ export default function RoleCard({
     >
       {/* Background Image with Gradient Overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30 z-10" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/90 via-black/60 to-black/30 z-10" />
         <img 
           src={image} 
           alt={title}

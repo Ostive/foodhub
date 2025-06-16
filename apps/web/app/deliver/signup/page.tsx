@@ -51,7 +51,7 @@ export default function DeliverSignup() {
   return (
     <main className="min-h-svh bg-white">
       {/* Navbar */}
-      <nav className="bg-white shadow-sm py-4 px-6 sticky top-0 z-10">
+      <nav className="bg-white shadow-xs py-4 px-6 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold text-[#1976d2]">FoodYou<span className="text-[#64B5F6]">Deliver</span></Link>
           <div className="flex items-center space-x-6">
@@ -67,7 +67,7 @@ export default function DeliverSignup() {
           <div className="lg:w-7/12">
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
               {/* Progress Steps */}
-              <div className="bg-gradient-to-r from-[#1976d2] to-[#64B5F6] p-6 relative">
+              <div className="bg-linear-to-r from-[#1976d2] to-[#64B5F6] p-6 relative">
                 <div className="flex justify-between items-center relative z-10">
                   {[1, 2, 3, 4].map((stepNumber) => (
                     <div key={stepNumber} className="flex flex-col items-center">
@@ -397,19 +397,19 @@ export default function DeliverSignup() {
                         <h3 className="font-medium text-gray-900 mb-2">What's Next?</h3>
                         <ol className="text-left text-gray-700 space-y-2">
                           <li className="flex items-start">
-                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">1</span>
+                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">1</span>
                             <span>We'll review your application and documents</span>
                           </li>
                           <li className="flex items-start">
-                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">2</span>
+                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">2</span>
                             <span>You'll receive an email with the status of your application</span>
                           </li>
                           <li className="flex items-start">
-                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">3</span>
+                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">3</span>
                             <span>If approved, you'll get access to download the delivery app</span>
                           </li>
                           <li className="flex items-start">
-                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 flex-shrink-0 mt-0.5">4</span>
+                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">4</span>
                             <span>Start accepting orders and earning money!</span>
                           </li>
                         </ol>
@@ -430,7 +430,7 @@ export default function DeliverSignup() {
           {/* Right Side - Benefits */}
           <div className="lg:w-5/12">
             <div className="sticky top-24">
-              <div className="bg-gradient-to-r from-[#1976d2] to-[#64B5F6] rounded-3xl overflow-hidden shadow-xl mb-8">
+              <div className="bg-linear-to-r from-[#1976d2] to-[#64B5F6] rounded-3xl overflow-hidden shadow-xl mb-8">
                 <div className="relative h-64 w-full">
                   <Image 
                     src="https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=800&q=80" 
@@ -438,7 +438,7 @@ export default function DeliverSignup() {
                     fill
                     className="object-cover opacity-80"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1976d2] to-transparent"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-[#1976d2] to-transparent"></div>
                   <div className="absolute bottom-0 left-0 p-8 text-white">
                     <h2 className="text-3xl font-bold mb-2">Join Our Team</h2>
                     <p className="text-xl text-blue-100">Become a delivery partner today</p>

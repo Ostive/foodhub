@@ -90,7 +90,7 @@ export default function CustomerNavbar({ forceLight = false }) {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-        <div className={`${forceLight ? 'bg-white shadow-md' : 'bg-black/40 backdrop-blur-sm'} transition-all duration-300`}>
+        <div className={`${forceLight ? 'bg-white shadow-md' : 'bg-black/40 backdrop-blur-xs'} transition-all duration-300`}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between h-16">
               {/* Logo */}
@@ -101,12 +101,12 @@ export default function CustomerNavbar({ forceLight = false }) {
               {/* Search Bar (Desktop) */}
               <div className="hidden md:flex flex-1 max-w-md mx-8">
                 <form onSubmit={handleSearch} className="w-full">
-                  <div className={`flex items-center w-full rounded-full px-3 py-2 ${forceLight ? 'bg-gray-100' : 'bg-white/20 backdrop-blur-sm'}`}>
+                  <div className={`flex items-center w-full rounded-full px-3 py-2 ${forceLight ? 'bg-gray-100' : 'bg-white/20 backdrop-blur-xs'}`}>
                     <Search className={`h-5 w-5 ${forceLight ? 'text-gray-500' : 'text-white/80'}`} />
                     <input 
                       type="text" 
                       placeholder="Search for restaurants" 
-                      className={`ml-2 w-full bg-transparent border-none focus:outline-none ${forceLight ? 'text-gray-800 placeholder-gray-500' : 'text-white placeholder-white/70'}`}
+                      className={`ml-2 w-full bg-transparent border-none focus:outline-hidden ${forceLight ? 'text-gray-800 placeholder-gray-500' : 'text-white placeholder-white/70'}`}
                     />
                   </div>
                 </form>
@@ -119,7 +119,7 @@ export default function CustomerNavbar({ forceLight = false }) {
                   onClick={openAddressModal}
                   className={`flex items-center px-4 py-2 rounded-full ${forceLight ? 'bg-gray-100 text-gray-800 hover:bg-gray-200' : 'bg-white/20 text-white hover:bg-white/30'} transition-colors relative`}
                 >
-                  <MapPin className="h-5 w-5 text-[#4CAF50] mr-2 flex-shrink-0" />
+                  <MapPin className="h-5 w-5 text-[#4CAF50] mr-2 shrink-0" />
                   <span className="font-medium truncate max-w-[150px]">
                     {userAddress ? userAddress : "Set delivery address"}
                   </span>
@@ -222,7 +222,7 @@ export default function CustomerNavbar({ forceLight = false }) {
                 <input 
                   type="text" 
                   placeholder="Search for restaurants" 
-                  className="ml-2 w-full bg-transparent border-none focus:outline-none text-gray-800 placeholder-gray-500"
+                  className="ml-2 w-full bg-transparent border-none focus:outline-hidden text-gray-800 placeholder-gray-500"
                 />
               </div>
             </form>

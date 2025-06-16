@@ -181,7 +181,7 @@ export default function ReviewsPage() {
       </div>
 
       {/* Review Summary */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+      <div className="bg-white rounded-xl shadow-xs border border-gray-100 p-6 mb-8">
         <div className="flex flex-col md:flex-row">
           <div className="md:w-1/3 mb-6 md:mb-0 flex flex-col items-center justify-center">
             <div className="text-5xl font-bold text-gray-900 flex items-center">
@@ -236,7 +236,7 @@ export default function ReviewsPage() {
           <input 
             type="text" 
             placeholder="Search reviews..." 
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -247,10 +247,10 @@ export default function ReviewsPage() {
       <div className="space-y-6 mb-8">
         {filteredAndSortedReviews.length > 0 ? (
           filteredAndSortedReviews.map((review) => (
-            <div key={review.id} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+            <div key={review.id} className="bg-white rounded-xl shadow-xs border border-gray-100 p-6">
               <div className="flex justify-between">
                 <div className="flex items-start">
-                  <div className="h-10 w-10 flex-shrink-0">
+                  <div className="h-10 w-10 shrink-0">
                     <Image 
                       src={review.customerAvatar} 
                       alt={review.customerName}
@@ -312,7 +312,7 @@ export default function ReviewsPage() {
             </div>
           ))
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
+          <div className="bg-white rounded-xl shadow-xs border border-gray-100 p-8 text-center">
             <p className="text-gray-500">No reviews found matching your criteria</p>
             <button 
               onClick={() => { setFilterRating("all"); setSearchQuery(""); }}
@@ -326,12 +326,12 @@ export default function ReviewsPage() {
 
       {/* Review Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Total Reviews</h3>
           <p className="text-3xl font-bold text-[#FF9800]">{reviews.length}</p>
           <p className="text-sm text-green-600 mt-1">+15% from last month</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Average Rating</h3>
           <div className="flex items-center">
             <p className="text-3xl font-bold text-[#FF9800]">{averageRating}</p>
@@ -339,14 +339,14 @@ export default function ReviewsPage() {
           </div>
           <p className="text-sm text-green-600 mt-1">+0.3 from last month</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Response Rate</h3>
           <p className="text-3xl font-bold text-[#FF9800]">
             {((reviews.filter(r => r.replied).length / reviews.length) * 100).toFixed(0)}%
           </p>
           <p className="text-sm text-green-600 mt-1">Target: 100%</p>
         </div>
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Flagged Reviews</h3>
           <p className="text-3xl font-bold text-[#FF9800]">{reviews.filter(r => r.flagged).length}</p>
           <p className="text-sm text-red-600 mt-1">Needs attention</p>

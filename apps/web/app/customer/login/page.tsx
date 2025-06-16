@@ -80,7 +80,7 @@ export default function LoginPage() {
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                 Email address
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="mt-1 relative rounded-md shadow-xs">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="h-5 w-5 text-gray-400" />
                 </div>
@@ -92,7 +92,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-hidden focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
                   placeholder="Enter your email"
                 />
               </div>
@@ -102,7 +102,7 @@ export default function LoginPage() {
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Password
               </label>
-              <div className="mt-1 relative rounded-md shadow-sm">
+              <div className="mt-1 relative rounded-md shadow-xs">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Lock className="h-5 w-5 text-gray-400" />
                 </div>
@@ -114,14 +114,14 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
+                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-hidden focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
                   placeholder="Enter your password"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-gray-400 hover:text-gray-500 focus:outline-none"
+                    className="text-gray-400 hover:text-gray-500 focus:outline-hidden"
                   >
                     {showPassword ? (
                       <EyeOff className="h-5 w-5" />
@@ -159,7 +159,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[#4CAF50] hover:bg-[#388e3c] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-xs text-sm font-medium text-white bg-[#4CAF50] hover:bg-[#388e3c] focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <>
@@ -188,7 +188,7 @@ export default function LoginPage() {
             </div>
             <button
               onClick={handleTestLogin}
-              className="mt-4 w-full flex justify-center items-center py-3 px-4 border border-gray-300 rounded-xl shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors duration-200"
+              className="mt-4 w-full flex justify-center items-center py-3 px-4 border border-gray-300 rounded-xl shadow-xs text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors duration-200"
             >
               <User className="mr-2 h-4 w-4 text-[#4CAF50]" />
               Login as Test User
@@ -204,15 +204,15 @@ export default function LoginPage() {
             <h2 className="text-3xl font-bold mb-6">Delicious food, delivered to your door</h2>
             <p className="text-lg mb-8">Order from your favorite local restaurants with free delivery on your first order.</p>
             <div className="flex justify-center space-x-4">
-              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center">
+              <div className="bg-white/20 backdrop-blur-xs p-4 rounded-xl flex flex-col items-center">
                 <span className="text-2xl font-bold">1000+</span>
                 <span className="text-sm">Restaurants</span>
               </div>
-              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center">
+              <div className="bg-white/20 backdrop-blur-xs p-4 rounded-xl flex flex-col items-center">
                 <span className="text-2xl font-bold">30 min</span>
                 <span className="text-sm">Average Delivery</span>
               </div>
-              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-xl flex flex-col items-center">
+              <div className="bg-white/20 backdrop-blur-xs p-4 rounded-xl flex flex-col items-center">
                 <span className="text-2xl font-bold">4.8/5</span>
                 <span className="text-sm">Customer Rating</span>
               </div>

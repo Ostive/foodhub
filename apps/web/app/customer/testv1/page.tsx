@@ -350,7 +350,7 @@ export default function RestaurantTestPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Column - Restaurant Info */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <div className="bg-white rounded-xl shadow-xs p-6 mb-8">
               <h2 className="text-2xl font-bold mb-4">About {restaurant.name}</h2>
               <p className="text-gray-600 mb-6">{restaurant.description}</p>
               
@@ -392,7 +392,7 @@ export default function RestaurantTestPage() {
             </div>
             
             {/* Featured Menu Items */}
-            <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+            <div className="bg-white rounded-xl shadow-xs p-6 mb-8">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold">Popular Items</h2>
                 <Link href="/customer/restaurant/restaurant-1" className="text-[#4CAF50] font-medium hover:underline flex items-center">
@@ -424,11 +424,11 @@ export default function RestaurantTestPage() {
           
           {/* Right Column - Map */}
           <div>
-            <div className="bg-white rounded-xl shadow-sm p-6 sticky top-4">
+            <div className="bg-white rounded-xl shadow-xs p-6 sticky top-4">
               <h2 className="text-xl font-bold mb-4">Restaurant Location</h2>
               <div 
                 ref={mapContainer} 
-                className="w-full h-[300px] rounded-lg overflow-hidden shadow-sm" 
+                className="w-full h-[300px] rounded-lg overflow-hidden shadow-xs" 
               />
               <div className="mt-4">
                 <div className="flex items-start mb-3">

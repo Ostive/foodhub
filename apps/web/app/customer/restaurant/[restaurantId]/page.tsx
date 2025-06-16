@@ -34,7 +34,7 @@ export default function RestaurantPage() {
   // Check if restaurant exists in our data
   if (!restaurantId || !restaurantsData[restaurantId]) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-white to-gray-50 flex flex-col">
+      <div className="min-h-screen bg-linear-to-br from-white to-gray-50 flex flex-col">
         <CustomerNavbar />
         <div className="flex-1 flex items-center justify-center p-4">
           <div className="w-full max-w-3xl bg-white rounded-2xl shadow-lg overflow-hidden">
@@ -89,7 +89,7 @@ export default function RestaurantPage() {
                       <input 
                         type="text" 
                         placeholder="Search by cuisine or restaurant name..." 
-                        className="w-full px-4 py-3 pr-10 border-0 bg-[#4CAF50]/5 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#4CAF50] focus:bg-white transition-all"
+                        className="w-full px-4 py-3 pr-10 border-0 bg-[#4CAF50]/5 rounded-xl focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:bg-white transition-all"
                       />
                       <button className="absolute right-3 top-1/2 transform -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-[#4CAF50] text-white">
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -279,7 +279,7 @@ export default function RestaurantPage() {
     const itemQuantity = getItemQuantity(item.id);
     
     return (
-      <div key={item.id} className={`bg-white rounded-xl shadow-sm overflow-hidden mb-4 transition-all duration-300 ${lastAddedItem === item.id ? 'ring-2 ring-[#4CAF50] scale-[1.01]' : ''}`}>
+      <div key={item.id} className={`bg-white rounded-xl shadow-xs overflow-hidden mb-4 transition-all duration-300 ${lastAddedItem === item.id ? 'ring-2 ring-[#4CAF50] scale-[1.01]' : ''}`}>
         <div className="flex flex-col md:flex-row">
           {/* Image section */}
           <div className="md:w-1/4 h-40 md:h-auto relative">
@@ -440,7 +440,7 @@ export default function RestaurantPage() {
   return (
     <div className="bg-[#f8f9fa] min-h-svh pb-20">
       {/* Dark overlay for navbar */}
-      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-sm bg-gradient-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
+      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-xs bg-linear-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
       <CustomerNavbar />
       
       {/* Hero Section with Cover Image */}
@@ -524,7 +524,7 @@ export default function RestaurantPage() {
               className="flex overflow-x-auto pb-4 hide-scrollbar gap-4"
             >
               {previousItems.map((item: any, index: number) => (
-                <div key={`${item.id}-${index}`} className="flex-shrink-0 w-48 bg-white rounded-xl shadow-sm overflow-hidden">
+                <div key={`${item.id}-${index}`} className="shrink-0 w-48 bg-white rounded-xl shadow-xs overflow-hidden">
                   <div className="relative h-32">
                     <Image 
                       src={item.image} 
@@ -552,7 +552,7 @@ export default function RestaurantPage() {
         )}
         
         {/* Menu Categories Navigation */}
-        <div className="sticky top-16 bg-white z-30 rounded-xl shadow-sm mb-6 overflow-hidden">
+        <div className="sticky top-16 bg-white z-30 rounded-xl shadow-xs mb-6 overflow-hidden">
           <div className="overflow-x-auto hide-scrollbar">
             <div className="flex p-2 min-w-max">
               {restaurantData.menuCategories.map((category) => (
@@ -572,7 +572,7 @@ export default function RestaurantPage() {
         <div className="mb-6">
           <Link
             href={`/customer/restaurant/${restaurantId}/details`}
-            className="bg-white rounded-xl shadow-sm p-4 flex items-center justify-between w-full hover:shadow-md transition-shadow"
+            className="bg-white rounded-xl shadow-xs p-4 flex items-center justify-between w-full hover:shadow-md transition-shadow"
           >
             <div className="flex items-center">
               <div className="bg-[#4CAF50]/10 p-3 rounded-full mr-3">

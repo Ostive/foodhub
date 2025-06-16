@@ -94,7 +94,7 @@ export default function AnalyticsPage() {
 
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-gray-500 font-medium">Total Revenue</h3>
             <div className="p-2 bg-orange-100 rounded-lg">
@@ -112,7 +112,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-gray-500 font-medium">Total Orders</h3>
             <div className="p-2 bg-orange-100 rounded-lg">
@@ -130,7 +130,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-gray-500 font-medium">Total Customers</h3>
             <div className="p-2 bg-orange-100 rounded-lg">
@@ -148,7 +148,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+        <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-gray-500 font-medium">Avg. Order Value</h3>
             <div className="p-2 bg-orange-100 rounded-lg">
@@ -170,7 +170,7 @@ export default function AnalyticsPage() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         {/* Orders by Hour Chart */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-xs border border-gray-100 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Orders by Hour</h3>
           <div className="h-64 flex items-end space-x-2">
             {analyticsData.ordersByHour.map((item) => (
@@ -186,7 +186,7 @@ export default function AnalyticsPage() {
         </div>
 
         {/* Orders by Day Chart */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-xs border border-gray-100 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Orders by Day</h3>
           <div className="h-64 flex items-end space-x-2">
             {analyticsData.ordersByDay.map((item) => (
@@ -203,7 +203,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Top Selling Items */}
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-8">
+      <div className="bg-white rounded-xl shadow-xs border border-gray-100 mb-8">
         <div className="p-6 border-b border-gray-100">
           <h3 className="text-lg font-semibold text-gray-900">Top Selling Items</h3>
           <p className="text-gray-500">Your best performing menu items</p>
@@ -247,7 +247,7 @@ export default function AnalyticsPage() {
 
       {/* Additional Insights */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-xs border border-gray-100 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Order Insights</h3>
           <div className="space-y-4">
             <div className="flex justify-between items-center pb-2 border-b border-gray-100">
@@ -278,7 +278,7 @@ export default function AnalyticsPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+        <div className="bg-white rounded-xl shadow-xs border border-gray-100 p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Customer Insights</h3>
           <div className="space-y-4">
             <div className="flex justify-between items-center pb-2 border-b border-gray-100">

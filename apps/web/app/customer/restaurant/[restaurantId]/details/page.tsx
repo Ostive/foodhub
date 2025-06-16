@@ -583,7 +583,7 @@ export default function RestaurantDetailsPage() {
           priority
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/10"></div>
+        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-black/40 to-black/10"></div>
         
         {/* Navigation and Action Buttons */}
         <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-center">
@@ -650,7 +650,7 @@ export default function RestaurantDetailsPage() {
           {/* Left Column - Restaurant Info */}
           <div className="lg:col-span-7">
             {/* About Section */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+            <div className="bg-white rounded-xl shadow-xs overflow-hidden mb-8">
               <div className="p-6 border-b border-gray-100">
                 <h2 className="text-2xl font-bold text-gray-900">About {restaurant.name}</h2>
                 <p className="mt-3 text-gray-600 leading-relaxed">{restaurant.description}</p>
@@ -660,7 +660,7 @@ export default function RestaurantDetailsPage() {
               <div className="p-6 bg-gray-50">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">Restaurant Stats</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <div className="bg-white rounded-lg p-4 shadow-xs">
                     <div className="flex items-center mb-2">
                       <Users className="h-5 w-5 text-[#4CAF50]" />
                       <span className="ml-2 text-sm text-gray-600">Total Orders</span>
@@ -668,7 +668,7 @@ export default function RestaurantDetailsPage() {
                     <p className="text-xl font-bold text-gray-900">{restaurantStats.totalOrders.toLocaleString()}</p>
                   </div>
                   
-                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <div className="bg-white rounded-lg p-4 shadow-xs">
                     <div className="flex items-center mb-2">
                       <Calendar className="h-5 w-5 text-[#4CAF50]" />
                       <span className="ml-2 text-sm text-gray-600">Open Since</span>
@@ -676,7 +676,7 @@ export default function RestaurantDetailsPage() {
                     <p className="text-sm font-bold text-gray-900">{restaurantStats.openDate}</p>
                   </div>
                   
-                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <div className="bg-white rounded-lg p-4 shadow-xs">
                     <div className="flex items-center mb-2">
                       <Award className="h-5 w-5 text-[#4CAF50]" />
                       <span className="ml-2 text-sm text-gray-600">Rating</span>
@@ -691,7 +691,7 @@ export default function RestaurantDetailsPage() {
                     </div>
                   </div>
                   
-                  <div className="bg-white rounded-lg p-4 shadow-sm">
+                  <div className="bg-white rounded-lg p-4 shadow-xs">
                     <div className="flex items-center mb-2">
                       <Utensils className="h-5 w-5 text-[#4CAF50]" />
                       <span className="ml-2 text-sm text-gray-600">Popular Dish</span>
@@ -703,7 +703,7 @@ export default function RestaurantDetailsPage() {
             </div>
             
             {/* Contact Information */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-white rounded-xl shadow-xs overflow-hidden">
               <div className="p-6 border-b border-gray-100">
                 <h2 className="text-2xl font-bold text-gray-900">Contact Information</h2>
               </div>
@@ -785,7 +785,7 @@ export default function RestaurantDetailsPage() {
           {/* Right Column - Map and Reviews */}
           <div className="lg:col-span-5">
             {/* Map Card */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden mb-8 sticky top-4">
+            <div className="bg-white rounded-xl shadow-xs overflow-hidden mb-8 sticky top-4">
               <div className="p-6 border-b border-gray-100 flex justify-between items-center">
                 <h2 className="text-2xl font-bold text-gray-900">Location</h2>
                 {distance && (
@@ -815,7 +815,7 @@ export default function RestaurantDetailsPage() {
             </div>
             
             {/* Reviews Section */}
-            <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+            <div className="bg-white rounded-xl shadow-xs overflow-hidden">
               <div className="p-6 border-b border-gray-100">
                 <h2 className="text-2xl font-bold text-gray-900">Reviews</h2>
               </div>

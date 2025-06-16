@@ -276,7 +276,7 @@ export default function ManageMenuItemPage() {
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-none transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
                 placeholder="e.g. Margherita Pizza"
               />
             </div>
@@ -289,7 +289,7 @@ export default function ManageMenuItemPage() {
                 value={formData.categoryId}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-none transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
               >
                 <option value="">Select category</option>
                 {categories.map((category) => (
@@ -309,7 +309,7 @@ export default function ManageMenuItemPage() {
                 onChange={handleInputChange}
                 required
                 rows={3}
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-none transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
                 placeholder="Describe your menu item..."
               ></textarea>
             </div>
@@ -328,7 +328,7 @@ export default function ManageMenuItemPage() {
                 required
                 step="0.01"
                 min="0"
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-none transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
                 placeholder="e.g. 12.99"
               />
             </div>
@@ -344,7 +344,7 @@ export default function ManageMenuItemPage() {
                 name="prepTime"
                 value={formData.prepTime}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-none transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
                 placeholder="e.g. 15-20"
               />
             </div>
@@ -517,7 +517,7 @@ export default function ManageMenuItemPage() {
                         setFormData({...formData, personalizationOptions: updatedOptions});
                       }}
                       placeholder="Choice name"
-                      className="flex-1 px-3 py-1.5 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-none transition-all duration-200"
+                      className="flex-1 px-3 py-1.5 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
                     />
                     <div className="flex items-center w-32">
                       <span className="text-gray-500 mr-1">+$</span>
@@ -532,7 +532,7 @@ export default function ManageMenuItemPage() {
                         step="0.01"
                         min="0"
                         placeholder="0.00"
-                        className="w-full px-2 py-1.5 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-none transition-all duration-200"
+                        className="w-full px-2 py-1.5 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
                       />
                     </div>
                     <button

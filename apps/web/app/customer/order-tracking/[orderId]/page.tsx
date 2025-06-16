@@ -272,12 +272,12 @@ export default function OrderTrackingPage() {
   return (
     <div className="bg-[#f8f9fa] min-h-svh pb-20">
       {/* Dark overlay for navbar */}
-      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-sm bg-gradient-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
+      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-xs bg-linear-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
       <CustomerNavbar />
       
       <div className="max-w-4xl mx-auto px-4 pt-20 pb-6">
         <div className="flex items-center mb-6">
-          <Link href="/customer/orders" className="mr-4 bg-white p-2 rounded-full shadow-sm text-gray-700 hover:bg-gray-100 transition-colors">
+          <Link href="/customer/orders" className="mr-4 bg-white p-2 rounded-full shadow-xs text-gray-700 hover:bg-gray-100 transition-colors">
             <ChevronLeft size={20} />
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Order Tracking</h1>
@@ -348,7 +348,7 @@ export default function OrderTrackingPage() {
                 />
               </div>
               
-              <div className="flex-grow">
+              <div className="grow">
                 <h3 className="font-medium text-gray-900">{order.delivery.driver.name}</h3>
                 <div className="flex items-center text-gray-500 text-sm mt-1">
                   <MapPin className="w-4 h-4 mr-1" />

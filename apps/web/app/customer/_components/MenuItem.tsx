@@ -39,7 +39,7 @@ export default function MenuItem({ item, restaurantId, onAddToCart }: MenuItemPr
     <div className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
       <div className="flex">
         {/* Item image */}
-        <div className="h-24 w-24 rounded-lg overflow-hidden flex-shrink-0">
+        <div className="h-24 w-24 rounded-lg overflow-hidden shrink-0">
           <Image 
             src={item.image} 
             alt={item.name} 
