@@ -1,6 +1,10 @@
+'use client'
 import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
-
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { ClipboardCopyIcon, DownloadIcon } from "lucide-react"
+import { toast } from "sonner"
+
 import {
   Card,
   CardAction,
@@ -97,6 +101,60 @@ export function SectionCards() {
           <div className="text-muted-foreground">Meets growth projections</div>
         </CardFooter>
       </Card>
+    </div>
+  )
+}
+
+const components = [
+  {
+    name: "Button",
+    description: "Versatile button with multiple variants and sizes.",
+    demo: <Button variant="default">Click Me</Button>,
+    code: `<Button variant="default">Click Me</Button>`,
+  },
+  {
+    name: "Badge",
+    description: "Small label for metadata or status indicators.",
+    demo: <Badge variant="outline">Beta</Badge>,
+    code: `<Badge variant="outline">Beta</Badge>`,
+  },
+  // Add more component cards here...
+]
+
+export function SectionCards2() {
+  const handleCopy = (code: string) => {
+    navigator.clipboard.writeText(code)
+    toast.success("Code copied to clipboard!")
+  }
+
+  return (
+    <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+      {components.map((component) => (
+        <Card key={component.name} className="@container/card">
+          <CardHeader>
+            <CardTitle>{component.name}</CardTitle>
+            <CardDescription>{component.description}</CardDescription>
+          </CardHeader>
+          <div className="flex items-center justify-center py-4">
+            {component.demo}
+          </div>
+          <CardFooter className="flex justify-end gap-2">
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => handleCopy(component.code)}
+            >
+              <ClipboardCopyIcon className="mr-2 size-4" />
+              Copy Code
+            </Button>
+            {/* Optional: add a download button for raw files */}
+            {/* <Button size="sm" variant="ghost">
+              <DownloadIcon className="mr-2 size-4" />
+              Download
+            </Button> */}
+          </CardFooter>
+        </Card>
+      ))}
     </div>
   )
 }
