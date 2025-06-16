@@ -1,16 +1,37 @@
 import { Injectable, ValidationPipe, UsePipes } from '@nestjs/common';
-import { CreateRestaurantDto, UpdateRestaurantDto, MenuItemDto } from './dto/restaurant.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { Restaurant } from './entities/restaurant.entity';
+import * as bcrypt from 'bcrypt';
+
 
 @Injectable()
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
-export class RestaurantServiceService {
+export class RestaurantService {
+  constructor(
+    @InjectRepository(Restaurant)
+    private restaurantRepository: Repository<Restaurant>,
+  ) {
+
+  }
   getHello(): string {
     return 'Hello World!';
   }
 
-  createRestaurant(createRestaurantDto: CreateRestaurantDto) {
-    // Implementation will go here
-    return { message: 'Restaurant created', restaurant: createRestaurantDto };
+async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
+    const hashedPassword = await bcrypt.hash(createRestaurantDto.password, 10);
+        
+        // Create new user with hashed password
+        const newUser = this.restaurantRepository.create({
+          ...createRestaurantDto,
+          password: hashedPassword,
+        });
+        
+        // Save and return the user (without the password)
+        const savedUser = await this.restaurantRepository.save(newUser);
+        const { password, ...userWithoutPassword } = savedUser;
+        return userWithoutPassword as Restaurant;
   }
 
   updateRestaurant(id: string, updateRestaurantDto: UpdateRestaurantDto) {
