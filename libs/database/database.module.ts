@@ -3,6 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { configModule } from '../config';
 import { User } from './entities/user.entity';
+import { CreditCard } from './entities/credit_card.entity';
+import { PromoAvailableUser } from './entities/promo_available_user.entity';
+import { Promo } from './entities/promo.entity';
 
 @Module({
   imports: [
@@ -22,7 +25,7 @@ import { User } from './entities/user.entity';
           username: configService.get('POSTGRES_DB_USER') || 'postgres',
           password: configService.get('POSTGRES_DB_PASSWORD') || 'postgres',
           database: configService.get('POSTGRES_DB_NAME') || 'default_db',
-          entities: [User],
+          entities: [User,CreditCard,PromoAvailableUser,Promo],
           synchronize: configService.get('POSTGRES_DB_SYNCHRONIZE') === 'true',
           autoLoadEntities: true,
         };

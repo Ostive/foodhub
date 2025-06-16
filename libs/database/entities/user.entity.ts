@@ -24,7 +24,7 @@ export class User {
     homeLocalisation: string;
 
     @Column({type: 'varchar', length: 255 })
-    passwordHash: string;
+    password: string;
 
     @Column({ type: 'varchar', length: 255, nullable: true /* AUTO_RANDOM n'existe pas sur typeorm, générer côté code */ })
     referralCode: number;
@@ -41,7 +41,7 @@ export class User {
     @BeforeInsert()
     async hashPassword() {
         const salt = await bcrypt.genSalt();
-        this.passwordHash = await bcrypt.hash(this.passwordHash, salt);
+        this.password = await bcrypt.hash(this.password, salt);
     }
 
     @OneToMany(() => CreditCard, creditCard => creditCard.user)
