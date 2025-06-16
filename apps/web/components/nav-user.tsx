@@ -84,25 +84,23 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <IconUserCircle />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconCreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notifications
-              </DropdownMenuItem>
+              <a href="../admin-profile">
+                <DropdownMenuItem className="cursor-pointer">
+                  <IconUserCircle />
+                  <span>Account</span>
+                </DropdownMenuItem>
+              </a>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <IconLogout />
-              Log out
-            </DropdownMenuItem>
-          </DropdownMenuContent>
+           <DropdownMenuGroup>
+            <a href="../admin-profile">
+              <DropdownMenuItem className="cursor-pointer">
+                <IconLogout />
+                <span>Log out</span>
+              </DropdownMenuItem>
+            </a>
+          </DropdownMenuGroup>
+          </DropdownMenuContent>  
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
