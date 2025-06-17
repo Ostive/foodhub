@@ -3,7 +3,9 @@ import { User } from './user.entity';
 import { OneToMany } from "typeorm";
 import { DishesTopping } from './dish_topping.entity';
 import { DishAllergen } from './dish_allergen.entity';
-
+import { MenuDish } from './menu_dish.entity';
+import { Comment } from './comment.entity';
+import { OrderDish } from './order_dish.entity';
 
 @Entity({ name: 'dishes' })
 export class Dish {
@@ -51,4 +53,15 @@ export class Dish {
 
   @OneToMany(() => DishAllergen, da => da.dish)
   dishAllergens: DishAllergen[];
+
+  @OneToMany(() => MenuDish, md => md.menu)
+  menuDishes: MenuDish[];
+
+  @OneToMany(() => Comment, comment => comment.dish)
+  comments: Comment[];
+
+  @OneToMany(() => OrderDish, od => od.dish)
+  orderDish: OrderDish[];
+
+
 }

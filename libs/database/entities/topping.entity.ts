@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import { ToppingAllergen } from './topping_allergen.entity';
 import { OneToMany } from "typeorm";
 import { DishesTopping } from './dish_topping.entity';
+import { MenuTopping } from './menu_topping.entity';
 
 @Entity({ name: 'toppings' })
 export class Topping {
@@ -31,5 +32,8 @@ export class Topping {
   toppingAllergens: ToppingAllergen[];
 
   @OneToMany(() => DishesTopping, dt => dt.topping)
- dishesToppings: DishesTopping[];
+  dishesToppings: DishesTopping[];
+
+  @OneToMany(() => MenuTopping, mt => mt.topping)
+  menuToppings: MenuTopping[];
 }
