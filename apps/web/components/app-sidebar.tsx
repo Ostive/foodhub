@@ -42,32 +42,32 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "../admin-homepage",
+      url: "../admin",
       icon: IconDashboard,
     },
     {
       title: "APIs",
-      url: "../admin-api",
+      url: "../admin/admin-api",
       icon: IconListDetails,
     },
     {
       title: "Data Base",
-      url: "../admin-db",
+      url: "../admin/admin-db",
       icon: IconChartBar,
     },
     {
       title: "Visits",
-      url: "../admin-visit",
+      url: "../admin/admin-visit",
       icon: IconFolder,
     },
     {
       title: "System",
-      url: "../admin-system",
+      url: "../admin/admin-system",
       icon: IconUsers,
     },
     {
       title: "Components",
-      url: "../admin-component",
+      url: "../admin/admin-component",
       icon: IconUsers,
     },
   ],
