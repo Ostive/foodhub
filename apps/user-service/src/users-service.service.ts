@@ -72,11 +72,12 @@ export class UsersService {
     const customer = this.userRepository.create({
       ...createCustomerDto,
       password: hashedPassword,
-    });
+    } as any);
 
     const savedUser = await this.userRepository.save(customer);
-    const { password, ...userWithoutPassword } = savedUser;
-    return userWithoutPassword as User;
+    // Using type assertion to handle the password removal correctly
+    const { password, ...userWithoutPassword } = savedUser as any;
+    return userWithoutPassword as unknown as User;
   }
 
   async createDeliveryPerson(createDeliveryPersonDto: CreateDeliveryPersonDto): Promise<User> {
@@ -87,11 +88,12 @@ export class UsersService {
     const deliveryPerson = this.userRepository.create({
       ...createDeliveryPersonDto,
       password: hashedPassword,
-    });
+    } as any);
 
     const savedUser = await this.userRepository.save(deliveryPerson);
-    const { password, ...userWithoutPassword } = savedUser;
-    return userWithoutPassword as User;
+    // Using type assertion to handle the password removal correctly
+    const { password, ...userWithoutPassword } = savedUser as any;
+    return userWithoutPassword as unknown as User;
   }
 
   async createRestaurant(createRestaurantDto: CreateRestaurantDto): Promise<User> {
@@ -106,11 +108,11 @@ export class UsersService {
     // Extract planning data
     const { planning, ...restaurantData } = createRestaurantDto;
     
-    // Create restaurant user
+    // Create restaurant user with proper type casting to match entity structure
     const restaurant = this.userRepository.create({
       ...restaurantData,
       password: hashedPassword,
-    });
+    } as any);
 
     // Save restaurant to get ID
     const savedRestaurant = await this.userRepository.save(restaurant);
@@ -128,13 +130,14 @@ export class UsersService {
         sunday: `${planning.sundayOpen}-${planning.sundayClose}`,
       };
       
-      const newPlanning = this.planningRepository.create(planningData);
+      // Fix the planning creation with proper typing
+      const newPlanning = this.planningRepository.create(planningData as any);
       await this.planningRepository.save(newPlanning);
     }
 
     // Return user without password
-    const { password, ...userWithoutPassword } = savedRestaurant;
-    return userWithoutPassword as User;
+    const { password, ...userWithoutPassword } = savedRestaurant as any;
+    return userWithoutPassword as unknown as User;
   }
 
   async findAll(): Promise<User[]> {

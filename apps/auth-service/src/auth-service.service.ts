@@ -17,15 +17,28 @@ export class AuthService {
             // Find user by email
             const user = await this.usersService.findByEmail(loginUserDto.email);
             
-            // Verify password
-            const isPasswordValid = await bcrypt.compare(
-                loginUserDto.password,
-                user.password
-            );
+            if (!user || !user.password) {
+                throw new UnauthorizedException('Invalid credentials');
+            }
+            
+            // Verify password using bcrypt
+            let isPasswordValid = false;
+            
+            try {
+                // Use bcrypt.compare for secure password validation
+                isPasswordValid = await bcrypt.compare(
+                    loginUserDto.password,
+                    user.password
+                );
+            } catch (error) {
+                console.error('Error during password validation:', error);
+                throw new UnauthorizedException('Authentication error');
+            }
             
             if (!isPasswordValid) {
                 throw new UnauthorizedException('Invalid credentials');
             }
+            console.log('Password validation successful');
             
             // Generate JWT token
             const payload: JwtPayload = { 

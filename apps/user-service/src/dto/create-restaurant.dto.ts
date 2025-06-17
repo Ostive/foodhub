@@ -103,6 +103,11 @@ export class CreateRestaurantDto {
   @Matches(/^https?:\/\/.+/, { message: 'Website must be a valid URL' })
   website?: string;
 
+  @IsOptional()
+  @IsString({ message: 'Address must be a string' })
+  @Length(5, 255, { message: 'Address must be between 5 and 255 characters' })
+  rib?: string;
+
   @IsNotEmpty({ message: 'Minimum purchase amount is required' })
   @IsNumber({}, { message: 'Minimum purchase must be a number' })
   @Min(0, { message: 'Minimum purchase cannot be negative' })
