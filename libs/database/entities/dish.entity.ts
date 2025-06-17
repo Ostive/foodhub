@@ -18,13 +18,13 @@ export class Dish {
   @Column({ type: 'varchar', length: 500, nullable: true })
   description: string;
 
-  @Column({ type: 'boolean', nullable: true })
+  @Column({ type: 'boolean'})
   isSoldAlone: boolean;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   tags: string;
 
-  @Column({ type: 'boolean', nullable: true })
+  @Column({ type: 'boolean'})
   isVegetarian: boolean;
 
   @Column({ type: 'int', nullable: true })
@@ -33,10 +33,7 @@ export class Dish {
   @Column({ type: 'varchar', length: 50 })
   name: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  category: string;
-
-  @Column({ type: 'float', nullable: true })
+  @Column({ type: 'float'})
   cost: number;
 
   @Column({ type: 'varchar', length: 100, nullable: true })

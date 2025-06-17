@@ -31,7 +31,7 @@ export class Order {
   cost: number;
 
   @Column()
-  state: string;
+  status: string;
 
   // Relations utilisateurs, tous pointant vers User (mais différenciés par leur rôle l’app)
   @ManyToOne(() => User, user => user.customerOrders, { onDelete: 'SET NULL' })
