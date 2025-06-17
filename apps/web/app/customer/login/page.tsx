@@ -58,14 +58,14 @@ export default function LoginPage() {
         <div className="mx-auto w-full max-w-sm lg:max-w-md">
           <div className="text-center mb-8">
             <Link href="/customer" className="inline-block">
-              <span className="text-4xl font-bold text-[#4CAF50]">Foodyou</span>
+              <span className="text-4xl font-bold text-[#4CAF50]">FoodHUB</span>
             </Link>
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Welcome back</h2>
             <p className="mt-2 text-sm text-gray-600">
               Don't have an account?{" "}
               <Link href="/customer/signup" className="font-medium text-[#4CAF50] hover:text-[#388e3c]">
                 Sign up
-              </Link>
+              </Link> 
             </p>
           </div>
 
