@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-import { Restaurant } from './entities/restaurant.entity';
+import { User as Restaurant } from 'libs/database/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 
