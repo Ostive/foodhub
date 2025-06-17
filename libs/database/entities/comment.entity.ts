@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 import { Menu } from './menu.entity';
 import { Dish } from './dish.entity';
 
-@Entity('comments')
+@Entity({ name: 'comments' })
 export class Comment {
   @PrimaryGeneratedColumn()
   commentId: number;
@@ -26,6 +26,9 @@ export class Comment {
   @Column({ type: 'float'})
   grade: number;
 
+  @CreateDateColumn()
+  createdAt: Date;
+
   // Relations
   @ManyToOne(() => User, user => user.customerComments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'customerId' })
@@ -35,11 +38,11 @@ export class Comment {
   @JoinColumn({ name: 'restaurantId' })
   restaurant: User;
 
-  @ManyToOne(() => Menu, menu => menu.comments, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Menu, menu => menu.comments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'menuId' })
   menu: Menu;
 
-  @ManyToOne(() => Dish, dish => dish.comments, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Dish, dish => dish.comments, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'dishId' })
   dish: Dish;
 }

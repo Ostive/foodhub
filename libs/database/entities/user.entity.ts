@@ -1,5 +1,5 @@
 import * as bcrypt from 'bcrypt';
-import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert, CreateDateColumn } from 'typeorm';
 import { OneToMany } from 'typeorm';
 import { OneToOne } from 'typeorm';
 import { CreditCard } from './credit_card.entity';
@@ -61,7 +61,10 @@ export class User {
     deliveryRadius: number;   
 
     @Column({ type: 'int' })
-    averagePreparationTime: number;   
+    averagePreparationTime: number;
+
+    @CreateDateColumn()
+ createdAt: Date;
 
     @BeforeInsert()
     async hashPassword() {

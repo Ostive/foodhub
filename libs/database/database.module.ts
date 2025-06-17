@@ -19,6 +19,7 @@ import { Order } from './entities/order.entity';
 import { OrderDish } from './entities/order_dish.entity';
 import { OrderMenu } from './entities/order_menu.entity';
 import { MenuTopping } from './entities/menu_topping.entity';
+import { Comment } from './entities/comment.entity';
 
 @Module({
   imports: [
@@ -38,7 +39,7 @@ import { MenuTopping } from './entities/menu_topping.entity';
           username: configService.get('POSTGRES_DB_USER') || 'postgres',
           password: configService.get('POSTGRES_DB_PASSWORD') || 'postgres',
           database: configService.get('POSTGRES_DB_NAME') || 'default_db',
-          entities: [MenuTopping,OrderMenu,OrderDish,Order,User,CreditCard,PromoAvailableUser,Promo,Allergen,Topping,Dish,Menu,ToppingAllergen,DishesTopping,DishAllergen,Planning,MenuDish],
+          entities: [MenuTopping,OrderMenu,OrderDish,Order,User,CreditCard,PromoAvailableUser,Promo,Allergen,Topping,Dish,Menu,ToppingAllergen,DishesTopping,DishAllergen,Planning,MenuDish,Comment],
           synchronize: configService.get('POSTGRES_DB_SYNCHRONIZE') === 'true',
           autoLoadEntities: true,
         };
