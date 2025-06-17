@@ -1,5 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Restaurant } from './restaurant.entity';
+import { OneToMany } from "typeorm";
+import { DishesTopping } from './dishes_topping.entity';
+import { DishAllergen } from './dishes_allergen.entity';
+
 
 @Entity({ name: 'Dishes' })
 export class Dish {
@@ -22,7 +26,7 @@ export class Dish {
   isVegetarian: boolean;
 
   @Column({ type: 'int', nullable: true })
-  isSpicy: number;
+  Spicy: number;
 
   @Column({ type: 'varchar', length: 50 })
   dishName: string;
@@ -41,4 +45,10 @@ export class Dish {
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   promo: string;
+
+  @OneToMany(() => DishesTopping, dt => dt.dish)
+  dishesToppings: DishesTopping[];
+
+  @OneToMany(() => DishAllergen, da => da.dish)
+  dishAllergens: DishAllergen[];
 }
