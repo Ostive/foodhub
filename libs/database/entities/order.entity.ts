@@ -34,15 +34,15 @@ export class Order {
   state: string;
 
   // Relations utilisateurs, tous pointant vers User (mais différenciés par leur rôle l’app)
-  @ManyToOne(() => User, user => user.customerOrders, { onDelete: 'SET NULL' })
+  @ManyToOne(() => User, user => user.customerOrder, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'customerId' })
   customer: User;
 
-  @ManyToOne(() => User, user => user.restaurantOrders, { onDelete: 'SET NULL' })
+  @ManyToOne(() => User, user => user.restaurantOrder, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'restaurantId' })
   restaurant: User;
 
-  @ManyToOne(() => User, user => user.deleveryOrders, { onDelete: 'SET NULL' })
+  @ManyToOne(() => User, user => user.deleveryOrder, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'deleveryId' })
   delevery: User;
 

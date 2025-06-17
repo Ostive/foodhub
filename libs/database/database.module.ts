@@ -20,6 +20,9 @@ import { OrderDish } from './entities/order_dish.entity';
 import { OrderMenu } from './entities/order_menu.entity';
 import { MenuTopping } from './entities/menu_topping.entity';
 import { Comment } from './entities/comment.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { LogsFiles, LogsFilesSchema } from './schemas/logs_files.schema';
+import { Picture, PictureSchema } from './schemas/picture.schema';
 
 @Module({
   imports: [
@@ -43,9 +46,18 @@ import { Comment } from './entities/comment.entity';
           synchronize: configService.get('POSTGRES_DB_SYNCHRONIZE') === 'true',
           autoLoadEntities: true,
         };
+        
       },
     }),
+
+    MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/foodhub'),
+
+    // Schémas Mongo
+    MongooseModule.forFeature([
+      { name: LogsFiles.name, schema: LogsFilesSchema },
+      { name: Picture.name, schema: PictureSchema },
+    ]),
   ],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule,MongooseModule],
 })
 export class DatabaseModule {}
