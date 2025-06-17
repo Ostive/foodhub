@@ -35,7 +35,7 @@ async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
   }
 
   async updateRestaurant(id: number, updateRestaurantDto: UpdateRestaurantDto) {
-    const restaurant = await this.restaurantRepository.findOne({ where: { id } });
+    const restaurant = await this.restaurantRepository.findOne({ where: { userId:id } });
 
     if (!restaurant) {
       throw new Error(`Restaurant with ID ${id} not found`);
@@ -51,7 +51,7 @@ async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
     await this.restaurantRepository.update(id, updateRestaurantDto);
         
     // Return updated restaurant
-    const updatedRestaurant = await this.restaurantRepository.findOne({ where: { id } });
+    const updatedRestaurant = await this.restaurantRepository.findOne({ where: { userId:id } });
     if (!updatedRestaurant) {
       throw new Error(`Restaurant with ID ${id} not found after update`);
     }
@@ -69,7 +69,7 @@ async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
   }
 
   async findOne(id: number): Promise<Restaurant> {
-    const restaurant = await this.restaurantRepository.findOne({ where: { id } });
+    const restaurant = await this.restaurantRepository.findOne({ where: { userId:id } });
 
     if (!restaurant) {
       throw new Error(`Restaurant with ID ${id} not found`);
@@ -91,7 +91,7 @@ async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
   }
 
   async findById(id: number): Promise<Restaurant> {
-    const restaurant = await this.restaurantRepository.findOne({ where: { id } });
+    const restaurant = await this.restaurantRepository.findOne({ where: { userId:id } });
     if (!restaurant) {
       throw new Error(`Restaurant with ID ${id} not found`);
     }
@@ -99,7 +99,7 @@ async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
   }
 
     async remove(id: number): Promise<void> {
-    const restaurant = await this.restaurantRepository.findOne({ where: { id } });
+    const restaurant = await this.restaurantRepository.findOne({ where: { userId:id } });
 
     if (!restaurant) {
       throw new Error(`Restaurant with ID ${id} not found`);
