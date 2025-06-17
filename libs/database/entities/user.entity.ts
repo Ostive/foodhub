@@ -10,7 +10,7 @@ import { Planning } from './planning.entity';
 import { Order } from './order.entity';
 import { Comment } from './comment.entity';
 
-@Entity({ name: 'users' })
+@Entity()
 export class User {
     @PrimaryGeneratedColumn()
     userId: number;
@@ -28,7 +28,7 @@ export class User {
     birthDate: Date;
 
     @Column({ type: 'varchar', length: 255, nullable: true })
-    homeLocalisation: string;
+    address: string;
 
     @Column({type: 'varchar', length: 255 })
     password: string;
@@ -50,6 +50,18 @@ export class User {
 
     @Column({ type: 'varchar', length: 50, nullable: true })
     transport: string;
+
+    @Column({ type: 'varchar', length: 50, nullable: true })
+    website: string;   
+
+    @Column({ type: 'float' })
+    minimumPurchase: string;   
+
+    @Column({ type: 'float' })
+    deliveryRadius: number;   
+
+    @Column({ type: 'int' })
+    averagePreparationTime: number;   
 
     @BeforeInsert()
     async hashPassword() {
