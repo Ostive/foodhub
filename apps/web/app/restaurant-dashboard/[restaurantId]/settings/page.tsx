@@ -42,8 +42,8 @@ export default function SettingsPage() {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900 mb-1">Settings</h1>
-        <p className="text-gray-600">Manage your restaurant settings and preferences</p>
+        <h1 className="text-2xl font-bold text-gray-900 mb-1">Account</h1>
+        <p className="text-gray-600">Manage your restaurant account and settings</p>
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">

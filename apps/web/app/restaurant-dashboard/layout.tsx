@@ -123,7 +123,7 @@ export default function RestaurantDashboardLayout({
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto ">
         {/* Header */}
         <header className="bg-white shadow-xs p-4 flex justify-between items-center">
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden block">

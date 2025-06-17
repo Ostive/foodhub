@@ -50,7 +50,7 @@ export default function RestaurantDashboardLayout({
     { name: "Analytics", path: `/restaurant-dashboard/${restaurantId}/analytics`, icon: BarChart2 },
     { name: "Customers", path: `/restaurant-dashboard/${restaurantId}/customers`, icon: Users },
     { name: "Reviews", path: `/restaurant-dashboard/${restaurantId}/reviews`, icon: MessageSquare },
-    { name: "Settings", path: `/restaurant-dashboard/${restaurantId}/settings`, icon: Settings },
+    /*{ name: "Settings", path: `/restaurant-dashboard/${restaurantId}/settings`, icon: Settings },*/
   ];
 
   const restaurants = {
@@ -60,20 +60,25 @@ export default function RestaurantDashboardLayout({
     "burger-joint": { name: "Burger Joint", cuisine: "American" }
   };
   
-  const restaurant = restaurants[restaurantId as string] || { name: "Restaurant", cuisine: "Unknown" };
+type RestaurantKey = keyof typeof restaurants;
+
+const restaurant =
+  typeof restaurantId === "string" && restaurantId in restaurants
+    ? restaurants[restaurantId as RestaurantKey]
+    : { name: "Restaurant", cuisine: "Unknown" };
 
   return (
-    <div className="flex h-svh bg-gray-50">
+    <div className="flex h-svh bg-gray-50 ">
       {/* Sidebar */}
       <aside className={`bg-white shadow-xl h-full fixed lg:relative z-10 transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-0 lg:w-20 overflow-hidden'}`}>
         <div className="p-4 flex items-center justify-between border-b">
           {sidebarOpen ? (
             <Link href="/restaurant-dashboard" className="text-xl font-bold text-[#FF9800]">
               <span className="text-gray-800">Food</span>
-              <span className="text-[#FF9800]">You</span>
+              <span className="text-[#FF9800]">HUB</span>
             </Link>
           ) : (
-            <Link href="/restaurant-dashboard" className="text-2xl font-bold text-[#FF9800]">FY</Link>
+            <Link href="/restaurant-dashboard" className="text-2xl font-bold text-[#FF9800]">FH</Link>
           )}
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:block hidden">
             <Menu className="h-6 w-6 text-gray-500" />
@@ -107,34 +112,7 @@ export default function RestaurantDashboardLayout({
                 </li>
               );
             })}
-            <li className="pt-6">
-              <button
-                onClick={() => handleNavigation("/restaurant-dashboard")}
-                className="w-full flex items-center space-x-3 text-gray-700 hover:bg-gray-100 rounded-lg p-3 transition-colors"
-                disabled={isLoading}
-              >
-                {isLoading && pathname !== "/restaurant-dashboard" ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                ) : (
-                  <ChevronDown className="h-5 w-5 rotate-90" />
-                )}
-                {sidebarOpen && <span className="ml-3">Back to Restaurants</span>}
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => handleNavigation("/")}
-                className="w-full flex items-center space-x-3 text-red-500 hover:bg-red-50 rounded-lg p-3 transition-colors"
-                disabled={isLoading}
-              >
-                {isLoading && pathname !== "/" ? (
-                  <Loader2 className="h-5 w-5 animate-spin text-red-500" />
-                ) : (
-                  <LogOut className="h-5 w-5" />
-                )}
-                {sidebarOpen && <span className="ml-3">Sign Out</span>}
-              </button>
-            </li>
+            
           </ul>
         </nav>
       </aside>
@@ -181,13 +159,14 @@ export default function RestaurantDashboardLayout({
                   <p className="text-xs text-gray-500">Restaurant Admin</p>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <Users className="h-4 w-4 mr-3 text-gray-500" />
-                  <span>Profile</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="h-4 w-4 mr-3 text-gray-500" />
-                  <span>Settings</span>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={`/restaurant-dashboard/${restaurantId}/settings`}
+                    className="flex items-center w-full cursor-pointer"
+                  >
+                    <Settings className="h-4 w-4 mr-3 text-gray-500" />
+                    <span>Account</span>
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive">
