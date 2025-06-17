@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './user.entity';
 
-@Entity()
+@Entity({ name: 'credit_cards' })
 export class CreditCard {
     @PrimaryGeneratedColumn()
     creditCardId: number;

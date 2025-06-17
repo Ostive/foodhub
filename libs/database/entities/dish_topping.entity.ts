@@ -2,10 +2,10 @@ import { Entity, PrimaryColumn, ManyToOne, JoinColumn, Column } from 'typeorm';
 import { Dish } from './dish.entity';
 import { Topping } from './topping.entity';
 
-@Entity({ name: 'Dishes_Topping' })
+@Entity({ name: 'dishes_toppings' })
 export class DishesTopping {
   @PrimaryColumn()
-  topingId: number;
+  toppingId: number;
 
   @PrimaryColumn()
   dishId: number;

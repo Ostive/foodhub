@@ -5,12 +5,12 @@ import { DishesTopping } from './dish_topping.entity';
 import { DishAllergen } from './dish_allergen.entity';
 
 
-@Entity({ name: 'Dishes' })
+@Entity({ name: 'dishes' })
 export class Dish {
   @PrimaryGeneratedColumn()
   dishId: number;
 
-  @ManyToOne(() => User, user => user.dish)
+  @ManyToOne(() => User, user => user.dishes)
   user: User;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
@@ -20,13 +20,13 @@ export class Dish {
   isSoldAlone: boolean;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  food: string;
+  tags: string;
 
   @Column({ type: 'boolean', nullable: true })
   isVegetarian: boolean;
 
   @Column({ type: 'int', nullable: true })
-  Spicy: number;
+  spicyLevel: number;
 
   @Column({ type: 'varchar', length: 50 })
   name: string;

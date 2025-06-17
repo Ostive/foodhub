@@ -4,10 +4,10 @@ import { ToppingAllergen } from './topping_allergen.entity';
 import { OneToMany } from "typeorm";
 import { DishesTopping } from './dish_topping.entity';
 
-@Entity({ name: 'Toping' })
+@Entity({ name: 'toppings' })
 export class Topping {
   @PrimaryGeneratedColumn()
-  topingId: number;
+  toppingId: number;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   description: string;

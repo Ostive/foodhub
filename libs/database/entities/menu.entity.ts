@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 
-@Entity({ name: 'Menu' })
+@Entity({ name: 'menus' })
 export class Menu {
   @PrimaryGeneratedColumn()
   menuId: number;
@@ -13,13 +13,13 @@ export class Menu {
   name: string;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
-  food: string;
+  tags: string;
 
   @Column({ type: 'boolean', nullable: true })
-  vegetarian: boolean;
+  isVegetarian: boolean;
 
   @Column({ type: 'int', nullable: true })
-  spicy: number;
+  spicyLevel: number;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   description: string;

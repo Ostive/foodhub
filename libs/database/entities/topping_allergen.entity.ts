@@ -2,19 +2,19 @@ import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Topping } from './topping.entity';
 import { Allergen } from './allergen.entity';
 
-@Entity({ name: 'Toping_Allergens' })
+@Entity({ name: 'topping_allergens' })
 export class ToppingAllergen {
   @PrimaryColumn()
-  topingId: number;
+  toppingId: number;
 
   @PrimaryColumn()
-  allergensId: number;
+  allergenId: number;
 
   @ManyToOne(() => Topping, topping => topping.toppingAllergens, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'topingId' })
+  @JoinColumn({ name: 'toppingId' })
   topping: Topping;
 
   @ManyToOne(() => Allergen, allergen => allergen.toppingAllergens, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'allergensId' })
+  @JoinColumn({ name: 'allergenId' })
   allergen: Allergen;
 }

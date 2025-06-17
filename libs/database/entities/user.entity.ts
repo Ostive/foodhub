@@ -7,7 +7,7 @@ import { Dish } from './dish.entity';
 import { Menu } from './menu.entity';
 
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
     @PrimaryGeneratedColumn()
     userId: number;
@@ -24,9 +24,6 @@ export class User {
     @Column({ type: 'date', nullable: true })
     birthDate: Date;
 
-    @Column({ type: 'varchar', length: 255, nullable: true })
-    homeLocalisation: string;
-
     @Column({type: 'varchar', length: 255 })
     password: string;
 
@@ -40,7 +37,16 @@ export class User {
     email: string;
 
     @Column({ type: 'varchar', length: 50, nullable: true })
+    phone: string;
+
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    homeLocalisation: string;
+
+    @Column({ type: 'varchar', length: 50, nullable: true })
     transport: string;
+
+    @Column({ type: 'varchar', length: 50, nullable: true })
+    tags: string;
 
     @BeforeInsert()
     async hashPassword() {
@@ -54,8 +60,10 @@ export class User {
     @OneToMany(() => Topping, topping => topping.user)
     toppings: Topping[];
 
+
+    //Restaurateur
     @OneToMany(() => Dish, dish => dish.user)
-    dish: Dish[];
+    dishes: Dish[];
 
     @OneToMany(() => Menu, menu => menu.user)
     menus: Menu[];
