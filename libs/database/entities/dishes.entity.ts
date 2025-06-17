@@ -4,7 +4,7 @@ import { Restaurant } from './restaurant.entity';
 @Entity({ name: 'Dishes' })
 export class Dish {
   @PrimaryGeneratedColumn()
-  dishesId: number;
+  dishId: number;
 
   @ManyToOne(() => Restaurant, restaurant => restaurant.dishes)
   restaurant: Restaurant;
@@ -13,19 +13,19 @@ export class Dish {
   description: string;
 
   @Column({ type: 'boolean', nullable: true })
-  sellSolo: boolean;
+  isSoldAlone: boolean;
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   food: string;
 
   @Column({ type: 'boolean', nullable: true })
-  vegetarian: boolean;
+  isVegetarian: boolean;
 
   @Column({ type: 'int', nullable: true })
-  spicy: number;
+  isSpicy: number;
 
   @Column({ type: 'varchar', length: 50 })
-  dishesName: string;
+  dishName: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   category: string;
