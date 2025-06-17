@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Restaurant } from './restaurant.entity';
+import { User } from './user.entity';
 import { ToppingAllergen } from './topping_allergen.entity';
 import { OneToMany } from "typeorm";
-import { DishesTopping } from './dishes_topping.entity';
+import { DishesTopping } from './dish_topping.entity';
 
 @Entity({ name: 'Toping' })
 export class Topping {
@@ -24,8 +24,8 @@ export class Topping {
   @Column({ type: 'varchar', length: 500, default: false })
   promo: boolean;
 
-  @ManyToOne(() => Restaurant, restaurant => restaurant.toppings)
-  restaurant: Restaurant;
+  @ManyToOne(() => User, user => user.toppings)
+  user: User;
 
   @OneToMany(() => ToppingAllergen, ta => ta.topping)
   toppingAllergens: ToppingAllergen[];

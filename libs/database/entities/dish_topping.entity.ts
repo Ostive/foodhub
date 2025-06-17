@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, ManyToOne, JoinColumn, Column } from 'typeorm';
-import { Dish } from './dishes.entity';
+import { Dish } from './dish.entity';
 import { Topping } from './topping.entity';
 
 @Entity({ name: 'Dishes_Topping' })
@@ -8,7 +8,7 @@ export class DishesTopping {
   topingId: number;
 
   @PrimaryColumn()
-  dishesId: number;
+  dishId: number;
 
   @ManyToOne(() => Topping, topping => topping.dishesToppings, { onDelete: 'CASCADE' })
   @JoinColumn()

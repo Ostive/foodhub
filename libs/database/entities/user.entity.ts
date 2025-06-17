@@ -2,6 +2,9 @@ import * as bcrypt from 'bcrypt';
 import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 import { OneToMany } from 'typeorm';
 import { CreditCard } from './credit_card.entity';
+import { Topping } from './topping.entity';
+import { Dish } from './dish.entity';
+import { Menu } from './menu.entity';
 
 
 @Entity()
@@ -47,4 +50,13 @@ export class User {
 
     @OneToMany(() => CreditCard, creditCard => creditCard.user)
     creditCards: CreditCard[];
+
+    @OneToMany(() => Topping, topping => topping.user)
+    toppings: Topping[];
+
+    @OneToMany(() => Dish, dish => dish.user)
+    dish: Dish[];
+
+    @OneToMany(() => Menu, menu => menu.user)
+    menus: Menu[];
 }

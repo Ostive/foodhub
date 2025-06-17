@@ -1,5 +1,5 @@
 import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
-import { Dish } from './dishes.entity';
+import { Dish } from './dish.entity';
 import { Allergen } from './allergen.entity';
 
 @Entity({ name: 'Dishes_Allergens' })

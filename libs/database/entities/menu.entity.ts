@@ -1,13 +1,13 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Restaurant } from './restaurant.entity';
+import { User } from './user.entity';
 
 @Entity({ name: 'Menu' })
 export class Menu {
   @PrimaryGeneratedColumn()
   menuId: number;
 
-  @ManyToOne(() => Restaurant, restaurant => restaurant.menus)
-  restaurant: Restaurant;
+  @ManyToOne(() => User, user => user.menus)
+  user: User;
 
   @Column({ type: 'varchar', length: 50 })
   name: string;

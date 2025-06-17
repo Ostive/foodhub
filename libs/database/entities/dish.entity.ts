@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
-import { Restaurant } from './restaurant.entity';
+import { User } from './user.entity';
 import { OneToMany } from "typeorm";
-import { DishesTopping } from './dishes_topping.entity';
-import { DishAllergen } from './dishes_allergen.entity';
+import { DishesTopping } from './dish_topping.entity';
+import { DishAllergen } from './dish_allergen.entity';
 
 
 @Entity({ name: 'Dishes' })
@@ -10,8 +10,8 @@ export class Dish {
   @PrimaryGeneratedColumn()
   dishId: number;
 
-  @ManyToOne(() => Restaurant, restaurant => restaurant.dishes)
-  restaurant: Restaurant;
+  @ManyToOne(() => User, user => user.dish)
+  user: User;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   description: string;
@@ -29,7 +29,7 @@ export class Dish {
   Spicy: number;
 
   @Column({ type: 'varchar', length: 50 })
-  dishName: string;
+  name: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   category: string;
