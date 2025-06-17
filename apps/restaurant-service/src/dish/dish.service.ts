@@ -46,8 +46,14 @@ export class DishService {
     return { message: 'Dish updated', dishId, updates: updateDishDto };
   }
 
-  async deleteDish(restaurantId: string, dishId: string) {
-    // Implementation will go here
-    return { message: 'Dish deleted', restaurantId, dishId };
+  async deleteDish(dishId: string) {
+    
+    const dish = await this.dishRepository.findOne({ where: {dishId} });
+    if (!dish) {
+      throw new NotFoundException(`Dish with ID ${dishId} not found`);
+    }
+    // Delete the dish
+    await this.dishRepository.delete(dishId);
+    return { message: 'Dish deleted', dishId };
   }
 }
