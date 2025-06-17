@@ -15,7 +15,7 @@ export class DishService {
 
   async createDish(createDishDto: CreateDishDto) {
 
-    const newDish = this.dishRepository.create({CreateDishDto});
+    const newDish = this.dishRepository.create({...createDishDto});
     
     return { message: 'Dish created', newDish: createDishDto };
   }
@@ -26,7 +26,7 @@ export class DishService {
     return { message: 'All dishes retrieved', dishes };
   }
 
-  async findOne(dishId: string) {
+  async findOne(dishId: number) {
     const dish = await this.dishRepository.find({ where: { dishId } });
     if (!dish) {
       throw new NotFoundException(`Dish with ID ${dishId} not found`);
@@ -35,7 +35,7 @@ export class DishService {
   }
 
   async updateDish(dishId: number, updateDishDto: UpdateDishDto) {
-    const dish = this.dishRepository.findOne({ where: { id: dishId}});
+    const dish = this.dishRepository.findOne({ where: { dishId }});
     
     if (!dish) {
       throw new Error(`Dish with ID ${dishId} not found`);
@@ -46,7 +46,7 @@ export class DishService {
     return { message: 'Dish updated', dishId, updates: updateDishDto };
   }
 
-  async deleteDish(dishId: string) {
+  async deleteDish(dishId: number) {
     
     const dish = await this.dishRepository.findOne({ where: {dishId} });
     if (!dish) {
