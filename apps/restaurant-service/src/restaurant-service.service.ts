@@ -40,7 +40,7 @@ async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
     if (!restaurant) {
       throw new Error(`Restaurant with ID ${id} not found`);
     }
-            
+
     // If password is being updated, hash it
     if ('password' in updateRestaurantDto && updateRestaurantDto.password) {
       const hashedPassword = await bcrypt.hash(updateRestaurantDto.password as string, 10);
@@ -59,18 +59,42 @@ async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
     return restaurantWithoutPassword as Restaurant;
   }
 
-  getRestaurantById(id: string) {
-    // Implementation will go here
-    return { message: 'Restaurant retrieved', id };
+  async findAll(): Promise<Restaurant[]> {
+    const restaurants = await this.restaurantRepository.find();
+    // Remove passwords from the response
+    return restaurants.map(restaurant => {
+      const { password, ...restaurantWithoutPassword } = restaurant;
+      return restaurantWithoutPassword as Restaurant;
+    });
   }
 
-  getAllRestaurants() {
-    // Implementation will go here
-    return { message: 'All restaurants retrieved', restaurants: [] };
+  async findOne(id: number): Promise<Restaurant> {
+    const restaurant = await this.restaurantRepository.findOne({ where: { id } });
+
+    if (!restaurant) {
+      throw new Error(`Restaurant with ID ${id} not found`);
+    }
+
+    // Remove password from the response
+    const { password, ...restaurantWithoutPassword } = restaurant;
+    return restaurantWithoutPassword as Restaurant;
   }
 
-  getRestaurantsByCategory(category: string) {
-    // Implementation will go here
-    return { message: 'Restaurants by category retrieved', category, restaurants: [] };
+  async findByEmail(email: string): Promise<Restaurant> {
+    const restaurant = await this.restaurantRepository.findOne({ where: { email } });
+
+    if (!restaurant) {
+      throw new Error(`Restaurant with email ${email} not found`);
+    }
+
+    return restaurant; // Return with password for auth purposes
+  }
+
+  async findById(id: number): Promise<Restaurant> {
+    const restaurant = await this.restaurantRepository.findOne({ where: { id } });
+    if (!restaurant) {
+      throw new Error(`Restaurant with ID ${id} not found`);
+    }
+    return restaurant; // Return with password for auth purposes
   }
 }
