@@ -97,4 +97,15 @@ async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
     }
     return restaurant; // Return with password for auth purposes
   }
+
+    async remove(id: number): Promise<void> {
+    const restaurant = await this.restaurantRepository.findOne({ where: { id } });
+
+    if (!restaurant) {
+      throw new Error(`Restaurant with ID ${id} not found`);
+    }
+
+    await this.restaurantRepository.remove(restaurant);
+  }
+  
 }
