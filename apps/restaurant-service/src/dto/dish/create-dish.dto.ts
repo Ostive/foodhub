@@ -1,33 +1,53 @@
-import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, Min } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, Min, Max } from 'class-validator';
 
 export class CreateDishDto {
+
+  @IsNotEmpty()
+  @IsString()
+  userId: string;
+
   @IsNotEmpty()
   @IsString()
   name: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   description: string;
 
   @IsNotEmpty()
   @IsNumber()
   @Min(0)
-  price: number;
-
-  @IsOptional()
-  @IsUrl()
-  imageUrl?: string;
+  isSoldAlone: boolean;
 
   @IsOptional()
   @IsArray()
-  categories?: string[];
+  @IsString({ each: true })
+  tags?: string[];
 
-  @IsOptional()
-  @IsString()
-  ingredients?: string;
+  @IsNotEmpty()
+  @IsBoolean()
+  isVegetarian: boolean;
 
   @IsOptional()
   @IsNumber()
   @Min(0)
-  preparationTime?: number; // in minutes
+  @Max(5)
+  spicyLevel: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  @Min(0)
+  cost: number;
+
+  @IsOptional()
+  @IsString()
+  additionalAllergens?: string;
+
+  @IsOptional()
+  @IsUrl()
+  picture?: string;
+
+  @IsOptional()
+  @IsString()
+  promo?: string;
 }

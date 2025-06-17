@@ -73,7 +73,7 @@ const restaurant =
       <aside className={`bg-white shadow-xl h-full fixed lg:relative z-10 transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-0 lg:w-20 overflow-hidden'}`}>
         <div className="p-4 flex items-center justify-between border-b">
           {sidebarOpen ? (
-            <Link href="/" className="text-xl font-bold text-[#FF9800]">
+            <Link href="/restaurant-dashboard" className="text-xl font-bold text-[#FF9800]">
               <span className="text-gray-800">Food</span>
               <span className="text-[#FF9800]">HUB</span>
             </Link>

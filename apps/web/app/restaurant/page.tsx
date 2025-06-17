@@ -1,50 +1,157 @@
-import Image from "next/image";
+"use client";
 
-export default function RestaurantPage() {
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { ArrowRight, Eye, EyeOff, AlertCircle, ArrowLeft } from "lucide-react";
+
+export default function DeliveryLoginPage() {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    // Ici tu peux intégrer ta logique d'authentification réelle
+
+    setTimeout(() => {
+      setError("Invalid email or password"); // Exemple d'erreur par défaut
+      setLoading(false);
+    }, 1000);
+  };
+
   return (
-    <main className="min-h-svh flex flex-col items-center justify-start bg-linear-to-br from-[#fff7ed] via-[#fff3e0] to-[#fff7ed]">
-      {/* Hero Section */}
-      <section className="w-full flex flex-col items-center py-16 px-4">
-        <Image
-          src="https://images.unsplash.com/photo-1519864600265-abb23847ef2c?auto=format&fit=crop&w=800&q=80"
-          alt="Restaurant dashboard"
-          width={320}
-          height={200}
-          className="rounded-3xl shadow-xl mb-8 object-cover w-full max-w-xl h-56"
-        />
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 text-center">Grow Your Restaurant</h1>
-        <p className="text-lg md:text-xl text-[#a45b00] text-center max-w-2xl mb-6">
-          Welcome to FoodYou's restaurant partner portal. Manage your menu, orders, and reach more customers with ease.
-        </p>
-        <a href="#features" className="inline-block bg-[#FF9800] text-white px-8 py-3 rounded-full font-semibold shadow-sm hover:bg-[#e65100] transition">See Features</a>
-      </section>
+    <div className="min-h-svh bg-gray-50 flex flex-col relative overflow-hidden">
+      {/* Decorative Blurs */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute top-[-100px] left-[-80px] w-[300px] h-[300px] bg-blue-400 opacity-30 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-[-120px] right-[-60px] w-[260px] h-[260px] bg-purple-400 opacity-30 blur-[100px] rounded-full"></div>
+        <div className="absolute top-[40%] left-[30%] w-[250px] h-[250px] bg-green-300 opacity-20 blur-[100px] rounded-full"></div>
+      </div>
 
-      {/* Features Section */}
-      <section id="features" className="w-full max-w-5xl py-12 px-4">
-        <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">Why Partner with FoodYou?</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8">
-            <Image src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=400&q=80" alt="Menu Management" width={100} height={100} className="rounded-xl mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Menu Management</h3>
-            <p className="text-gray-600 text-center">Easily update your menu and showcase your best dishes.</p>
+      {/* Main Content */}
+      <main className="grow flex items-center justify-center p-6 relative z-10">
+        <div className="bg-white rounded-xl shadow-md p-8 w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="flex items-center gap-3 mb-4">
+              <Link
+                href="./"
+                className="inline-flex items-center justify-center rounded-full p-2 hover:bg-gray-100 transition"
+                aria-label="Go back"
+              >
+                <ArrowLeft className="h-5 w-5 text-gray-600" />
+              </Link>
+              <h1 className="text-2xl font-bold text-gray-900 tracking-tight">
+                Restaurant Login
+              </h1>
+            </div>
+            <p className="text-gray-600">
+              Log in to manage your restaurant profile
+            </p>
           </div>
-          <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8">
-            <Image src="https://images.unsplash.com/photo-1464306076886-debca5e8a6b0?auto=format&fit=crop&w=400&q=80" alt="Order Dashboard" width={100} height={100} className="rounded-xl mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Order Dashboard</h3>
-            <p className="text-gray-600 text-center">Track and manage incoming orders in real time.</p>
+
+          {error && (
+            <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg flex items-center text-red-600">
+              <AlertCircle className="h-5 w-5 mr-2 shrink-0" />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#1976d2] focus:border-transparent"
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#1976d2] focus:border-transparent"
+                  placeholder="••••••••"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
+              </div>
+              <div className="flex justify-end mt-1">
+                <Link href="/deliver/forgot-password" className="text-sm text-[#1976d2] hover:underline">
+                  Forgot password?
+                </Link>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#1976d2] hover:bg-[#1565c0] text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+            >
+              {loading ? (
+                <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <>
+                  Sign In <ArrowRight className="ml-2 h-5 w-5" />
+                </>
+              )}
+            </button>
+          </form>
+
+          <div className="mt-8 text-center">
+            <p className="text-gray-600">
+              Don't have an account?{" "}
+              <Link href="/restaurant/form" className="text-[#1976d2] font-medium hover:underline">
+                Create a restaurant
+              </Link>
+            </p>
           </div>
-          <div className="flex flex-col items-center bg-white rounded-2xl shadow-lg p-8">
-            <Image src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=400&q=80" alt="Grow Your Reach" width={100} height={100} className="rounded-xl mb-4" />
-            <h3 className="text-xl font-semibold mb-2">Grow Your Reach</h3>
-            <p className="text-gray-600 text-center">Attract new customers and boost your restaurant’s visibility.</p>
+
+          <div className="mt-8 border-t border-gray-200 pt-6">
+            <h3 className="text-sm font-medium text-gray-700 mb-3">Test Account</h3>
+            <div>
+              <Link
+                href="/restaurant-dashboard/bella-napoli"
+                className="block w-full p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-center font-medium text-[#1976d2]"
+              >
+                Test Restaurant
+              </Link>
+            </div>
           </div>
         </div>
-      </section>
+      </main>
 
-      {/* Call to Action */}
-      <section className="w-full flex flex-col items-center py-12">
-        <a href="/restaurant-dashboard/signup" className="bg-[#FF9800] text-white px-10 py-4 rounded-full font-bold shadow-sm hover:bg-[#e65100] transition text-lg">Join Now</a>
-      </section>
-    </main>
+      {/* Footer */}
+      <footer className="bg-white py-4 px-6 border-t border-gray-200 relative z-10">
+        <div className="max-w-7xl mx-auto text-center text-gray-500 text-sm">
+          &copy; {new Date().getFullYear()} FoodHUB. All rights reserved.
+        </div>
+      </footer>
+    </div>
   );
 }

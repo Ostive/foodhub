@@ -1,14 +1,21 @@
 import { Injectable, ValidationPipe, UsePipes } from '@nestjs/common';
 import { CreateDishDto, UpdateDishDto } from '../dto/dish';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Dish } from 'libs/database/entities/dish.entity';
 
 @Injectable()
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 export class DishService {
-  // constructor(private readonly dishRepository: DishRepository) {}
 
-  createDish(restaurantId: string, createDishDto: CreateDishDto) {
-    // Implementation will go here
-    return { message: 'Dish created', restaurantId, dish: createDishDto };
+  constructor(
+    @InjectRepository(Dish)
+    private dishRepository: Repository<Dish>,
+  ) {}
+
+  createDish(createDishDto: CreateDishDto) {
+    const newDish = this.dishRepository.create({CreateDishDto});
+    return { message: 'Dish created', dish: createDishDto };
   }
 
   updateDish(restaurantId: string, dishId: string, updateDishDto: UpdateDishDto) {
