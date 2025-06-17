@@ -1,4 +1,4 @@
-import { Injectable, ValidationPipe, UsePipes } from '@nestjs/common';
+import { Injectable, ValidationPipe, UsePipes, NotFoundException } from '@nestjs/common';
 import { CreateDishDto, UpdateDishDto } from '../dto/dish';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -13,14 +13,28 @@ export class DishService {
     private dishRepository: Repository<Dish>,
   ) {}
 
-  createDish(createDishDto: CreateDishDto) {
+  async createDish(createDishDto: CreateDishDto) {
 
     const newDish = this.dishRepository.create({CreateDishDto});
     
     return { message: 'Dish created', newDish: createDishDto };
   }
 
-  updateDish(dishId: string, updateDishDto: UpdateDishDto) {
+  async findAllDishes() {
+        const dishes = await this.dishRepository.find( );
+
+    return { message: 'All dishes retrieved', dishes };
+  }
+
+  async findOne(dishId: string) {
+    const dish = await this.dishRepository.find({ where: { dishId } });
+    if (!dish) {
+      throw new NotFoundException(`Dish with ID ${dishId} not found`);
+    }
+    return { message: 'Dish retrieved', dish, dishId };
+  }
+
+  async updateDish(dishId: number, updateDishDto: UpdateDishDto) {
     const dish = this.dishRepository.findOne({ where: { id: dishId}});
     
     if (!dish) {
@@ -28,27 +42,12 @@ export class DishService {
     }
     // Update the dish with the provided updates
     this.dishRepository.update(dishId, updateDishDto);
-    
+
     return { message: 'Dish updated', dishId, updates: updateDishDto };
   }
 
-  deleteDish(restaurantId: string, dishId: string) {
+  async deleteDish(restaurantId: string, dishId: string) {
     // Implementation will go here
     return { message: 'Dish deleted', restaurantId, dishId };
-  }
-
-  getDishById(restaurantId: string, dishId: string) {
-    // Implementation will go here
-    return { message: 'Dish retrieved', restaurantId, dishId };
-  }
-
-  getAllDishes(restaurantId: string) {
-    // Implementation will go here
-    return { message: 'All dishes retrieved', restaurantId, dishes: [] };
-  }
-
-  getDishesByCategory(restaurantId: string, category: string) {
-    // Implementation will go here
-    return { message: 'Dishes by category retrieved', restaurantId, category, dishes: [] };
   }
 }
