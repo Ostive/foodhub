@@ -4,17 +4,32 @@
     "Content-Type": "application/json"
   },
   "body": {
-    "firstName": "Pierre",
-    "lastName": "Martin",
-    "email": "pierre.martin@restaurant.com",
-    "password": "RestaurantPass123!",
-    "phone": "+33687654321",
-    "address": "45 Avenue des Restaurants",
-    "homeLocalisation": "Lyon, France",
-    "website": "http://www.chezmartins.fr",
-    "role": "restaurateur",
-    "minimumPurchase": 15.00,
+    "firstName": "Bella Napoli",
+    "email": "contact@bellanapoli.com",
+    "password": "SecurePass123!",
+    "role": "restaurant",
+    "phone": "+33123456789",
+    "address": "123 Rue de la Pizza, 75001 Paris",
+    "website": "https://bellanapoli.com",
+    "minimumPurchase": 15,
     "deliveryRadius": 5.0,
-    "averagePreparationTime": 30
+    "averagePreparationTime": 30,
+    "profilePicture": "https://example.com/bella-napoli.jpg",
+    "planning": {
+      "mondayOpen": "10:00",
+      "mondayClose": "22:00",
+      "tuesdayOpen": "10:00",
+      "tuesdayClose": "22:00",
+      "wednesdayOpen": "10:00",
+      "wednesdayClose": "22:00",
+      "thursdayOpen": "10:00",
+      "thursdayClose": "22:00",
+      "fridayOpen": "10:00",
+      "fridayClose": "23:00",
+      "saturdayOpen": "11:00",
+      "saturdayClose": "23:00",
+      "sundayOpen": "11:00",
+      "sundayClose": "22:00"
+    }
   }
 }
