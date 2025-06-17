@@ -14,6 +14,6 @@ export class Allergen {
   @OneToMany(() => ToppingAllergen, ta => ta.allergen)
   toppingAllergens: ToppingAllergen[];
 
-  @OneToMany(() => DishAllergen, da => da.dish)
+  @OneToMany(() => DishAllergen, da => da.allergen)
   dishAllergens: DishAllergen[];
 }
