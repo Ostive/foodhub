@@ -13,6 +13,12 @@ import { Menu } from './entities/menu.entity';
 import { ToppingAllergen } from './entities/topping_allergen.entity';
 import { DishesTopping } from './entities/dish_topping.entity';
 import { DishAllergen } from './entities/dish_allergen.entity';
+import { Planning } from './entities/planning.entity';
+import { MenuDish } from './entities/menu_dish.entity';
+import { Order } from './entities/order.entity';
+import { OrderDish } from './entities/order_dish.entity';
+import { OrderMenu } from './entities/order_menu.entity';
+import { MenuTopping } from './entities/menu_topping.entity';
 
 @Module({
   imports: [
@@ -32,7 +38,7 @@ import { DishAllergen } from './entities/dish_allergen.entity';
           username: configService.get('POSTGRES_DB_USER') || 'postgres',
           password: configService.get('POSTGRES_DB_PASSWORD') || 'postgres',
           database: configService.get('POSTGRES_DB_NAME') || 'default_db',
-          entities: [User,CreditCard,PromoAvailableUser,Promo,Allergen,Topping,Dish,Menu,ToppingAllergen,DishesTopping,DishAllergen],
+          entities: [MenuTopping,OrderMenu,OrderDish,Order,User,CreditCard,PromoAvailableUser,Promo,Allergen,Topping,Dish,Menu,ToppingAllergen,DishesTopping,DishAllergen,Planning,MenuDish],
           synchronize: configService.get('POSTGRES_DB_SYNCHRONIZE') === 'true',
           autoLoadEntities: true,
         };

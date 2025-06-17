@@ -1,5 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { OneToMany } from "typeorm";
 import { User } from './user.entity';
+import { MenuDish } from './menu_dish.entity';
+import { Comment } from './comment.entity';
+import { OrderDish } from './order_dish.entity';
+import { OrderMenu } from './order_menu.entity';
+import { MenuTopping } from './menu_topping.entity';
+
 
 @Entity({ name: 'Menu' })
 export class Menu {
@@ -38,4 +45,19 @@ export class Menu {
 
   @Column({ type: 'varchar', length: 100, nullable: true })
   promo: string;
+
+  @OneToMany(() => MenuDish, md => md.dish)
+  menuDishes: MenuDish[];
+
+  @OneToMany(() => Comment, comment => comment.menu)
+  comments: Comment[];
+
+  @OneToMany(() => OrderDish, od => od.order)
+  orderDish: OrderDish[];
+
+  @OneToMany(() => OrderMenu, om => om.menu)
+  orderMenus: OrderMenu[];
+
+  @OneToMany(() => MenuTopping, mt => mt.menu)
+  menuToppings: MenuTopping[];
 }

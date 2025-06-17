@@ -1,11 +1,14 @@
 import * as bcrypt from 'bcrypt';
 import { Column, Entity, PrimaryGeneratedColumn, BeforeInsert } from 'typeorm';
 import { OneToMany } from 'typeorm';
+import { OneToOne } from 'typeorm';
 import { CreditCard } from './credit_card.entity';
 import { Topping } from './topping.entity';
 import { Dish } from './dish.entity';
 import { Menu } from './menu.entity';
-
+import { Planning } from './planning.entity';
+import { Order } from './order.entity';
+import { Comment } from './comment.entity';
 
 @Entity()
 export class User {
@@ -25,7 +28,7 @@ export class User {
     birthDate: Date;
 
     @Column({ type: 'varchar', length: 255, nullable: true })
-    homeLocalisation: string;
+    address: string;
 
     @Column({type: 'varchar', length: 255 })
     password: string;
@@ -42,6 +45,18 @@ export class User {
     @Column({ type: 'varchar', length: 50, nullable: true })
     transport: string;
 
+    @Column({ type: 'varchar', length: 50, nullable: true })
+    website: string;   
+
+    @Column({ type: 'float' })
+    minimumPurchase: string;   
+
+    @Column({ type: 'float' })
+    deliveryRadius: number;   
+
+    @Column({ type: 'int' })
+    averagePreparationTime: number;   
+
     @BeforeInsert()
     async hashPassword() {
         const salt = await bcrypt.genSalt();
@@ -55,8 +70,26 @@ export class User {
     toppings: Topping[];
 
     @OneToMany(() => Dish, dish => dish.user)
-    dish: Dish[];
+    dishes: Dish[];
 
     @OneToMany(() => Menu, menu => menu.user)
     menus: Menu[];
+
+    @OneToOne(() => Planning, planning => planning.user)
+    planning: Planning;
+
+    @OneToMany(() => Order, order => order.customer)
+    customerOrder: Order[];
+
+    @OneToMany(() => Order, order => order.restaurant)
+    restaurantOrder: Order[];
+
+    @OneToMany(() => Order, order => order.delevery)
+    deleveryOrder: Order[];
+
+    @OneToMany(() => Comment, comment => comment.customer)
+    customerComments: Comment[];
+
+    @OneToMany(() => Comment, comment => comment.restaurant)
+    restaurantComments: Comment[];
 }
