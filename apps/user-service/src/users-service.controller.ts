@@ -2,6 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UsersService } from './users-service.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { CreateDeliveryPersonDto } from './dto/create-delivery_person.dto';
+import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 
 @Controller('users')
 export class UsersController {
@@ -10,6 +13,21 @@ export class UsersController {
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
+  }
+
+  @Post('customer')
+  createCustomer(@Body() createCustomerDto: CreateCustomerDto) {
+    return this.usersService.createCustomer(createCustomerDto);
+  }
+
+  @Post('delivery-person')
+  createDeliveryPerson(@Body() createDeliveryPersonDto: CreateDeliveryPersonDto) {
+    return this.usersService.createDeliveryPerson(createDeliveryPersonDto);
+  }
+
+  @Post('restaurant')
+  createRestaurant(@Body() createRestaurantDto: CreateRestaurantDto) {
+    return this.usersService.createRestaurant(createRestaurantDto);
   }
 
   @Get()

@@ -1,30 +1,41 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateCustomerDto } from './dto/create-customer.dto';
+import { CreateDeliveryPersonDto } from './dto/create-delivery_person.dto';
+import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { User } from '../../../libs/database/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { Planning } from '../../../libs/database/entities/planning.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    @InjectRepository(Planning)
+    private readonly planningRepository: Repository<Planning>,
   ) {}
+
+  private async checkEmailExists(email: string): Promise<void> {
+    const existingUser = await this.userRepository.findOne({ where: { email } });
+    if (existingUser) {
+      throw new ConflictException('Email already exists');
+    }
+  }
+
+  private async hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, 10);
+  }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
     // Check if user with this email already exists
-    const existingUser = await this.userRepository.findOne({ 
-      where: { email: createUserDto.email } 
-    });
-    
-    if (existingUser) {
-      throw new BadRequestException('User with this email already exists');
-    }
+    await this.checkEmailExists(createUserDto.email);
     
     // Hash the password
-    const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+    const hashedPassword = await this.hashPassword(createUserDto.password);
     
     // Create new user with hashed password
     const newUser = this.userRepository.create({
@@ -35,6 +46,79 @@ export class UsersService {
     // Save and return the user (without the password)
     const savedUser = await this.userRepository.save(newUser);
     const { password, ...userWithoutPassword } = savedUser;
+    return userWithoutPassword as User;
+  }
+
+  async createCustomer(createCustomerDto: CreateCustomerDto): Promise<User> {
+    await this.checkEmailExists(createCustomerDto.email);
+
+    const hashedPassword = await this.hashPassword(createCustomerDto.password);
+    
+    const customer = this.userRepository.create({
+      ...createCustomerDto,
+      password: hashedPassword,
+    });
+
+    const savedUser = await this.userRepository.save(customer);
+    const { password, ...userWithoutPassword } = savedUser;
+    return userWithoutPassword as User;
+  }
+
+  async createDeliveryPerson(createDeliveryPersonDto: CreateDeliveryPersonDto): Promise<User> {
+    await this.checkEmailExists(createDeliveryPersonDto.email);
+
+    const hashedPassword = await this.hashPassword(createDeliveryPersonDto.password);
+    
+    const deliveryPerson = this.userRepository.create({
+      ...createDeliveryPersonDto,
+      password: hashedPassword,
+    });
+
+    const savedUser = await this.userRepository.save(deliveryPerson);
+    const { password, ...userWithoutPassword } = savedUser;
+    return userWithoutPassword as User;
+  }
+
+  async createRestaurant(createRestaurantDto: CreateRestaurantDto): Promise<User> {
+    await this.checkEmailExists(createRestaurantDto.email);
+
+    if (!createRestaurantDto.address) {
+      throw new BadRequestException('Restaurant address is required');
+    }
+
+    const hashedPassword = await this.hashPassword(createRestaurantDto.password);
+    
+    // Extract planning data
+    const { planning, ...restaurantData } = createRestaurantDto;
+    
+    // Create restaurant user
+    const restaurant = this.userRepository.create({
+      ...restaurantData,
+      password: hashedPassword,
+    });
+
+    // Save restaurant to get ID
+    const savedRestaurant = await this.userRepository.save(restaurant);
+    
+    // Create planning with restaurant ID
+    if (planning) {
+      const planningData = {
+        user: savedRestaurant,
+        monday: `${planning.mondayOpen}-${planning.mondayClose}`,
+        tuesday: `${planning.tuesdayOpen}-${planning.tuesdayClose}`,
+        wednesday: `${planning.wednesdayOpen}-${planning.wednesdayClose}`,
+        thursday: `${planning.thursdayOpen}-${planning.thursdayClose}`,
+        friday: `${planning.fridayOpen}-${planning.fridayClose}`,
+        saturday: `${planning.saturdayOpen}-${planning.saturdayClose}`,
+        sunday: `${planning.sundayOpen}-${planning.sundayClose}`,
+      };
+      
+      const newPlanning = this.planningRepository.create(planningData);
+      await this.planningRepository.save(newPlanning);
+    }
+
+    // Return user without password
+    const { password, ...userWithoutPassword } = savedRestaurant;
     return userWithoutPassword as User;
   }
 
