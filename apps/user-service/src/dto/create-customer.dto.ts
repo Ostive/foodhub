@@ -49,4 +49,10 @@ export class CreateCustomerDto {
   @IsDate({ message: 'Invalid birth date' })
   @Type(() => Date)
   birthDate?: Date;
+
+  @IsOptional()
+  @IsString({ message: 'Referral code must be a string' })
+  @Length(6, 10, { message: 'Referral code must be between 6 and 10 characters' })
+  @Matches(/^[A-Z0-9]+$/, { message: 'Referral code can only contain uppercase letters and numbers' })
+  referralCode?: string;
 }

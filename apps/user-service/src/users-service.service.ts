@@ -49,10 +49,25 @@ export class UsersService {
     return userWithoutPassword as User;
   }
 
+  private generateReferralCode(): string {
+    // Generate a random 8-character code with uppercase letters and numbers
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let result = '';
+    for (let i = 0; i < 8; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
+
   async createCustomer(createCustomerDto: CreateCustomerDto): Promise<User> {
     await this.checkEmailExists(createCustomerDto.email);
 
     const hashedPassword = await this.hashPassword(createCustomerDto.password);
+    
+    // If no referral code is provided, generate one
+    if (!createCustomerDto.referralCode) {
+      createCustomerDto.referralCode = this.generateReferralCode();
+    }
     
     const customer = this.userRepository.create({
       ...createCustomerDto,

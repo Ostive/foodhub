@@ -1,0 +1,16 @@
+### Create a new customer
+POST http://localhost:3003/api/users/customer
+Content-Type: application/json
+
+{
+  "role": "customer",
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "password": "Password123!",
+  "phone": "+33612345678",
+  "address": "123 Main Street, Paris, France",
+  "profilePicture": "https://example.com/profile.jpg",
+  "birthDate": "1990-01-01",
+  "referralCode": "ABC12345"
+}
