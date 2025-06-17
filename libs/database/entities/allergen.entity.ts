@@ -1,4 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { ToppingAllergen } from './topping_allergen.entity';
+import { OneToMany } from "typeorm";
 
 @Entity({ name: 'Allergen' })
 export class Allergen {
@@ -8,4 +10,6 @@ export class Allergen {
   @Column({ type: 'varchar', length: 100 })
   allergenName: string;
 
+  @OneToMany(() => ToppingAllergen, ta => ta.allergen)
+  toppingAllergens: ToppingAllergen[];
 }

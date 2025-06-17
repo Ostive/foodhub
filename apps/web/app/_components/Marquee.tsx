@@ -36,7 +36,7 @@ export function Marquee() {
     "https://assets.aceternity.com/world-map.webp",
   ];
   return (
-    <div className="relative mx-auto my-10 flex h-screen w-full  flex-col items-center justify-center overflow-hidden rounded-3xl">    
+    <div className="relative mx-auto flex h-screen w-full  flex-col items-center justify-center overflow-hidden rounded-3xl">    
       {/* overlay */}
       <div className="absolute inset-0 z-10 h-full w-full bg-black/80 dark:bg-black/40" />
       <ThreeDMarquee
