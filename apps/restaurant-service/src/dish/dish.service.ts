@@ -14,13 +14,22 @@ export class DishService {
   ) {}
 
   createDish(createDishDto: CreateDishDto) {
+
     const newDish = this.dishRepository.create({CreateDishDto});
-    return { message: 'Dish created', dish: createDishDto };
+    
+    return { message: 'Dish created', newDish: createDishDto };
   }
 
-  updateDish(restaurantId: string, dishId: string, updateDishDto: UpdateDishDto) {
-    // Implementation will go here
-    return { message: 'Dish updated', restaurantId, dishId, updates: updateDishDto };
+  updateDish(dishId: string, updateDishDto: UpdateDishDto) {
+    const dish = this.dishRepository.findOne({ where: { id: dishId}});
+    
+    if (!dish) {
+      throw new Error(`Dish with ID ${dishId} not found`);
+    }
+    // Update the dish with the provided updates
+    this.dishRepository.update(dishId, updateDishDto);
+    
+    return { message: 'Dish updated', dishId, updates: updateDishDto };
   }
 
   deleteDish(restaurantId: string, dishId: string) {
