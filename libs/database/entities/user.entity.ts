@@ -10,13 +10,10 @@ import { Planning } from './planning.entity';
 import { Order } from './order.entity';
 import { Comment } from './comment.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
     @PrimaryGeneratedColumn()
     userId: number;
-
-    @Column({ type: 'varchar', length: 500, nullable: true })
-    profilePicture: string;
 
     @Column({ type: 'varchar', length: 50 })
     firstName: string;
@@ -37,10 +34,16 @@ export class User {
     referralCode: number;
 
     @Column({ type: 'varchar', length: 255 })
-    role: 'customer' | 'delivery' | 'restaurateur' | 'developer' | 'manager' | 'admin' = 'customer';
+    role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin' = 'customer';
 
     @Column({ type: 'varchar', length: 255, unique: true })
     email: string;
+
+    @Column({ type: 'varchar', length: 50, nullable: true })
+    phone: string;
+
+    @Column({ type: 'varchar', length: 500, nullable: true })
+    profilePicture: string;
 
     @Column({ type: 'varchar', length: 50, nullable: true })
     transport: string;
