@@ -11,8 +11,6 @@
     "phone": "+33612345678",
     "birthDate": "1990-05-15",
     "address": "123 Rue de la Paix",
-    "homeLocalisation": "Paris, France",
-    "transport": "walking",
     "role": "customer"
   }
 }

@@ -18,26 +18,15 @@ export class User {
     @Column({ type: 'varchar', length: 500, nullable: true })
     profilePicture: string;
 
+    // For all users
     @Column({ type: 'varchar', length: 50 })
     firstName: string;
 
     @Column({ type: 'varchar', length: 50, nullable: true })
     lastName: string;
 
-    @Column({ type: 'date', nullable: true })
-    birthDate: Date;
-
-    @Column({ type: 'varchar', length: 255, nullable: true })
-    address: string;
-
-    @Column({type: 'varchar', length: 255 })
-    password: string;
-
-    @Column({ type: 'varchar', length: 255, nullable: true /* AUTO_RANDOM n'existe pas sur typeorm, générer côté code */ })
-    referralCode: number;
-
     @Column({ type: 'varchar', length: 255 })
-    role: 'customer' | 'delivery' | 'restaurateur' | 'developer' | 'manager' | 'admin' = 'customer';
+    password: string;
 
     @Column({ type: 'varchar', length: 255, unique: true })
     email: string;
@@ -46,25 +35,38 @@ export class User {
     phone: string;
 
     @Column({ type: 'varchar', length: 255, nullable: true })
-    homeLocalisation: string;
+    address: string;
 
+    // Role and referral
+    @Column({ type: 'varchar', length: 255 })
+    role: 'customer' | 'delivery' | 'restaurant' | 'developer' | 'manager' | 'admin' = 'customer';
+
+    @Column({ type: 'varchar', length: 255, nullable: true })
+    referralCode: string;
+
+    // Customer specific
+    @Column({ type: 'date', nullable: true })
+    birthDate: Date;
+
+    // Delivery specific
     @Column({ type: 'varchar', length: 50, nullable: true })
     transport: string;
 
+    // Restaurant specific
     @Column({ type: 'varchar', length: 50, nullable: true })
-    website: string;   
+    website: string;
 
-    @Column({ type: 'float' })
-    minimumPurchase: string;   
+    @Column({ type: 'int', nullable: true })
+    minimumPurchase: number;
 
-    @Column({ type: 'float' })
-    deliveryRadius: number;   
+    @Column({ type: 'float', nullable: true })
+    deliveryRadius: number;
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int', nullable: true })
     averagePreparationTime: number;
 
     @CreateDateColumn()
- createdAt: Date;
+    createdAt: Date;
 
     @BeforeInsert()
     async hashPassword() {
