@@ -48,7 +48,7 @@ export class UsersService {
   }
 
   async findOne(id: number): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({ where: { userId: id } });
     
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -69,7 +69,7 @@ export class UsersService {
     return user; // Return with password for auth purposes
   }
   async findById(id: number): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({ where: { userId: id } });
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
@@ -80,7 +80,7 @@ export class UsersService {
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
     // Check if user exists
-    const user = await this.userRepository.findOne({ where: { id } });
+    const user = await this.userRepository.findOne({ where: {userId: id } });
     
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -96,7 +96,7 @@ export class UsersService {
     await this.userRepository.update(id, updateUserDto);
     
     // Return updated user
-    const updatedUser = await this.userRepository.findOne({ where: { id } });
+    const updatedUser = await this.userRepository.findOne({ where: { userId: id } });
     if (!updatedUser) {
       throw new NotFoundException(`User with ID ${id} not found after update`);
     }
