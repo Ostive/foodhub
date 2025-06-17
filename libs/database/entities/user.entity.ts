@@ -10,7 +10,7 @@ import { Planning } from './planning.entity';
 import { Order } from './order.entity';
 import { Comment } from './comment.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
     @PrimaryGeneratedColumn()
     userId: number;
@@ -37,7 +37,7 @@ export class User {
     referralCode: number;
 
     @Column({ type: 'varchar', length: 255 })
-    role: 'customer' | 'delivery' | 'restaurateur' | 'developer' | 'manager' | 'admin' = 'customer';
+    role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin' = 'customer';
 
     @Column({ type: 'varchar', length: 255, unique: true })
     email: string;
