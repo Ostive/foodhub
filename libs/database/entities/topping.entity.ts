@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { Restaurant } from './restaurant.entity';
 import { ToppingAllergen } from './topping_allergen.entity';
 import { OneToMany } from "typeorm";
+import { DishesTopping } from './dishes_topping.entity';
 
 @Entity({ name: 'Toping' })
 export class Topping {
@@ -28,4 +29,7 @@ export class Topping {
 
   @OneToMany(() => ToppingAllergen, ta => ta.topping)
   toppingAllergens: ToppingAllergen[];
+
+  @OneToMany(() => DishesTopping, dt => dt.topping)
+ dishesToppings: DishesTopping[];
 }
