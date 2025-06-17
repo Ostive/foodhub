@@ -1,16 +1,27 @@
-import { IsString, IsEmail, IsNotEmpty, MinLength, Matches, IsOptional, Length } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, MinLength, Matches, IsOptional, Length, IsEnum } from 'class-validator';
 import { Transform } from 'class-transformer';
+import { UserRole } from './user-role.enum';
 
-export class CreateUserDto {
+export enum TransportType {
+  BIKE = 'bike',
+  SCOOTER = 'scooter',
+  CAR = 'car'
+}
+
+export class CreateDeliveryPersonDto {
+  @IsNotEmpty({ message: 'Role is required' })
+  @IsEnum(UserRole, { message: 'Invalid role' })
+  role: UserRole = UserRole.DELIVERY_PERSON;
+
   @IsNotEmpty({ message: 'First name is required' })
   @IsString({ message: 'First name must be a string' })
   @Length(1, 50, { message: 'First name must be between 1 and 50 characters' })
   firstName: string;
 
-  @IsOptional()
+  @IsNotEmpty({ message: 'Last name is required' })
   @IsString({ message: 'Last name must be a string' })
   @Length(1, 50, { message: 'Last name must be between 1 and 50 characters' })
-  lastName?: string;
+  lastName: string;
 
   @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Invalid email format' })
@@ -39,4 +50,8 @@ export class CreateUserDto {
   @IsString({ message: 'Profile picture URL must be a string' })
   @Matches(/^https?:\/\/.+/, { message: 'Profile picture must be a valid URL' })
   profilePicture?: string;
+
+  @IsNotEmpty({ message: 'Transport type is required' })
+  @IsEnum(TransportType, { message: 'Transport must be one of: bike, scooter, car' })
+  transport: TransportType;
 }

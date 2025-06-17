@@ -39,7 +39,7 @@ export class User {
 
     // Role and referral
     @Column({ type: 'varchar', length: 255 })
-    role: 'customer' | 'delivery' | 'restaurant' | 'developer' | 'manager' | 'admin' = 'customer';
+    role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin' = 'customer';
 
     @Column({ type: 'varchar', length: 255, nullable: true })
     referralCode: string;
@@ -77,9 +77,7 @@ export class User {
     @OneToMany(() => CreditCard, creditCard => creditCard.user)
     creditCards: CreditCard[];
 
-    @OneToMany(() => Topping, topping => topping.user)
-    toppings: Topping[];
-
+    
 
     //Restaurateur
     @OneToMany(() => Dish, dish => dish.user)
@@ -88,21 +86,31 @@ export class User {
     @OneToMany(() => Menu, menu => menu.user)
     menus: Menu[];
 
+    @OneToMany(() => Topping, topping => topping.user)
+    toppings: Topping[];
+
     @OneToOne(() => Planning, planning => planning.user)
     planning: Planning;
 
-    @OneToMany(() => Order, order => order.customer)
-    customerOrders: Order[];
+    
 
     @OneToMany(() => Order, order => order.restaurant)
     restaurantOrders: Order[];
 
-    @OneToMany(() => Order, order => order.delevery)
-    deleveryOrders: Order[];
+    @OneToMany(() => Order, order => order.customer)
+    customerOrders: Order[];
+
+    @OneToMany(() => Comment, comment => comment.restaurant)
+    restaurantComments: Comment[];
 
     @OneToMany(() => Comment, comment => comment.customer)
     customerComments: Comment[];
 
-    @OneToMany(() => Comment, comment => comment.restaurant)
-    restaurantComments: Comment[];
+    
+    @OneToMany(() => Order, order => order.delevery)
+    deleveryOrders: Order[];
+
+   
+
+    
 }

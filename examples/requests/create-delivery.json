@@ -4,13 +4,14 @@
     "Content-Type": "application/json"
   },
   "body": {
-    "firstName": "Sophie",
-    "lastName": "Dubois",
-    "email": "sophie.dubois@delivery.com",
+    "firstName": "Jean",
+    "lastName": "Dupont",
+    "email": "jean.dupont@delivery.com",
     "password": "DeliveryPass123!",
-    "phone": "+33678901234",
-    "homeLocalisation": "Marseille, France",
-    "transport": "scooter",
-    "role": "delivery"
+    "role": "delivery",
+    "phone": "+33612345678",
+    "address": "12 Rue des Livreurs, 75002 Paris",
+    "transport": "bike",
+    "profilePicture": "https://example.com/jean-dupont.jpg"
   }
 }

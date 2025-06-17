@@ -1,16 +1,21 @@
-import { IsString, IsEmail, IsNotEmpty, MinLength, Matches, IsOptional, Length } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsString, IsEmail, IsNotEmpty, MinLength, Matches, IsOptional, Length, IsDate, IsEnum } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { UserRole } from './user-role.enum';
 
-export class CreateUserDto {
+export class CreateCustomerDto {
+  @IsNotEmpty({ message: 'Role is required' })
+  @IsEnum(UserRole, { message: 'Invalid role' })
+  role: UserRole = UserRole.CUSTOMER;
+
   @IsNotEmpty({ message: 'First name is required' })
   @IsString({ message: 'First name must be a string' })
   @Length(1, 50, { message: 'First name must be between 1 and 50 characters' })
   firstName: string;
 
-  @IsOptional()
+  @IsNotEmpty({ message: 'Last name is required' })
   @IsString({ message: 'Last name must be a string' })
   @Length(1, 50, { message: 'Last name must be between 1 and 50 characters' })
-  lastName?: string;
+  lastName: string;
 
   @IsNotEmpty({ message: 'Email is required' })
   @IsEmail({}, { message: 'Invalid email format' })
@@ -39,4 +44,9 @@ export class CreateUserDto {
   @IsString({ message: 'Profile picture URL must be a string' })
   @Matches(/^https?:\/\/.+/, { message: 'Profile picture must be a valid URL' })
   profilePicture?: string;
+
+  @IsOptional()
+  @IsDate({ message: 'Invalid birth date' })
+  @Type(() => Date)
+  birthDate?: Date;
 }

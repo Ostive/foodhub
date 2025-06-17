@@ -4,13 +4,14 @@
     "Content-Type": "application/json"
   },
   "body": {
-    "firstName": "Jean",
-    "lastName": "Dupont",
-    "email": "jean.dupont@example.com",
-    "password": "SecurePass123!",
-    "phone": "+33612345678",
+    "firstName": "Marie",
+    "lastName": "Leroy",
+    "email": "marie.leroy@example.com",
+    "password": "CustomerPass123!",
+    "role": "customer",
+    "phone": "+33601234567",
+    "address": "34 Rue des Clients, 75003 Paris",
     "birthDate": "1990-05-15",
-    "address": "123 Rue de la Paix",
-    "role": "customer"
+    "profilePicture": "https://example.com/marie-leroy.jpg"
   }
 }
