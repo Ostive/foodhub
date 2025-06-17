@@ -61,7 +61,7 @@ export class Dish {
   comments: Comment[];
 
   @OneToMany(() => OrderDish, od => od.dish)
-  orderDish: OrderDish[];
+  orderDishes: OrderDish[];
 
 
 }

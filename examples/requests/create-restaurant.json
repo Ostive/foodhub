@@ -1,0 +1,20 @@
+{
+  "endpoint": "POST http://localhost:3000/api/users",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "firstName": "Pierre",
+    "lastName": "Martin",
+    "email": "pierre.martin@restaurant.com",
+    "password": "RestaurantPass123!",
+    "phone": "+33687654321",
+    "address": "45 Avenue des Restaurants",
+    "homeLocalisation": "Lyon, France",
+    "website": "http://www.chezmartins.fr",
+    "role": "restaurateur",
+    "minimumPurchase": 15.00,
+    "deliveryRadius": 5.0,
+    "averagePreparationTime": 30
+  }
+}

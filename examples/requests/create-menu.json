@@ -1,0 +1,20 @@
+{
+  "endpoint": "POST http://localhost:3000/api/menus",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_JWT_TOKEN"
+  },
+  "body": {
+    "name": "Menu Gourmand",
+    "tags": "French, Traditional",
+    "isVegetarian": false,
+    "spicyLevel": 1,
+    "description": "A delightful selection of traditional French dishes",
+    "price": 25.99,
+    "currency": "EUR",
+    "preparationTime": 30,
+    "available": true,
+    "imageUrl": "https://example.com/images/menu-gourmand.jpg",
+    "promo": "SUMMER2025"
+  }
+}

@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Dish } from './dish.entity';
 import { Allergen } from './allergen.entity';
 
-@Entity({ name: 'Dishes_Allergens' })
+@Entity({ name: 'dish_allergens' })
 export class DishAllergen {
   @PrimaryColumn()
   dishId: number;

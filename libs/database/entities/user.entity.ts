@@ -10,7 +10,7 @@ import { Planning } from './planning.entity';
 import { Order } from './order.entity';
 import { Comment } from './comment.entity';
 
-@Entity()
+@Entity({ name: 'users' })
 export class User {
     @PrimaryGeneratedColumn()
     userId: number;
@@ -21,7 +21,7 @@ export class User {
     @Column({ type: 'varchar', length: 50 })
     firstName: string;
 
-    @Column({ type: 'varchar', length: 50 })
+    @Column({ type: 'varchar', length: 50, nullable: true })
     lastName: string;
 
     @Column({ type: 'date', nullable: true })
@@ -87,13 +87,13 @@ export class User {
     planning: Planning;
 
     @OneToMany(() => Order, order => order.customer)
-    customerOrder: Order[];
+    customerOrders: Order[];
 
     @OneToMany(() => Order, order => order.restaurant)
-    restaurantOrder: Order[];
+    restaurantOrders: Order[];
 
     @OneToMany(() => Order, order => order.delevery)
-    deleveryOrder: Order[];
+    deleveryOrders: Order[];
 
     @OneToMany(() => Comment, comment => comment.customer)
     customerComments: Comment[];

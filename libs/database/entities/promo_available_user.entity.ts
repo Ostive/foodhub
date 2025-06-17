@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './user.entity';
 import { Promo } from './promo.entity';
 
-@Entity()
+@Entity({ name: 'promo_available_users' })
 export class PromoAvailableUser {
     @PrimaryColumn()
     userId: number;

@@ -4,7 +4,7 @@ import { Promo } from './promo.entity';
 import { OrderDish } from './order_dish.entity';
 import { OrderMenu } from './order_menu.entity';
 
-@Entity()
+@Entity({ name: 'orders' })
 export class Order {
   @PrimaryGeneratedColumn()
   orderId: number;
@@ -34,24 +34,24 @@ export class Order {
   state: string;
 
   // Relations utilisateurs, tous pointant vers User (mais différenciés par leur rôle l’app)
-  @ManyToOne(() => User, user => user.customerOrder, { onDelete: 'SET NULL' })
+  @ManyToOne(() => User, user => user.customerOrders, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'customerId' })
   customer: User;
 
-  @ManyToOne(() => User, user => user.restaurantOrder, { onDelete: 'SET NULL' })
+  @ManyToOne(() => User, user => user.restaurantOrders, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'restaurantId' })
   restaurant: User;
 
-  @ManyToOne(() => User, user => user.deleveryOrder, { onDelete: 'SET NULL' })
+  @ManyToOne(() => User, user => user.deleveryOrders, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'deleveryId' })
   delevery: User;
 
-  @ManyToOne(() => Promo, promo => promo.order, { onDelete: 'SET NULL' })
+  @ManyToOne(() => Promo, promo => promo.orders, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'promoId' })
   promo: Promo;
 
   @OneToMany(() => OrderDish, od => od.order)
-  orderDish: OrderDish[];
+  orderDishes: OrderDish[];
 
   @OneToMany(() => OrderMenu, om => om.order)
   orderMenus: OrderMenu[];

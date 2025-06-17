@@ -3,7 +3,7 @@ import { User } from './user.entity';
 import { Menu } from './menu.entity';
 import { Dish } from './dish.entity';
 
-@Entity('comment')
+@Entity('comments')
 export class Comment {
   @PrimaryGeneratedColumn()
   commentId: number;
@@ -18,7 +18,7 @@ export class Comment {
   menuId: number;
 
   @Column({ nullable: true })
-  dishesId: number;
+  dishId: number;
 
   @Column({ type: 'varchar', length: 500, nullable: true })
   comment: string;
@@ -40,6 +40,6 @@ export class Comment {
   menu: Menu;
 
   @ManyToOne(() => Dish, dish => dish.comments, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'dishesId' })
+  @JoinColumn({ name: 'dishId' })
   dish: Dish;
 }

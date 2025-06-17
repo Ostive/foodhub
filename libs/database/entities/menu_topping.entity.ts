@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Menu } from './menu.entity';
 import { Topping } from './topping.entity';
 
-@Entity({ name: 'Menu_Topping' })
+@Entity({ name: 'menu_toppings' })
 export class MenuTopping {
   @PrimaryColumn()
   toppingId: number;

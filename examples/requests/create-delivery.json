@@ -1,0 +1,16 @@
+{
+  "endpoint": "POST http://localhost:3000/api/users",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "body": {
+    "firstName": "Sophie",
+    "lastName": "Dubois",
+    "email": "sophie.dubois@delivery.com",
+    "password": "DeliveryPass123!",
+    "phone": "+33678901234",
+    "homeLocalisation": "Marseille, France",
+    "transport": "scooter",
+    "role": "delivery"
+  }
+}

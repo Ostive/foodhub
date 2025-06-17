@@ -46,14 +46,11 @@ export class Menu {
   @Column({ type: 'varchar', length: 100, nullable: true })
   promo: string;
 
-  @OneToMany(() => MenuDish, md => md.dish)
+  @OneToMany(() => MenuDish, md => md.menu)
   menuDishes: MenuDish[];
 
   @OneToMany(() => Comment, comment => comment.menu)
   comments: Comment[];
-
-  @OneToMany(() => OrderDish, od => od.order)
-  orderDish: OrderDish[];
 
   @OneToMany(() => OrderMenu, om => om.menu)
   orderMenus: OrderMenu[];

@@ -14,5 +14,5 @@ export class Promo {
     description: string;
 
     @OneToMany(() => Order, order => order.promo)
-    order: Order[];
+    orders: Order[];
 }

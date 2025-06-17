@@ -1,0 +1,35 @@
+{
+  "endpoint": "POST http://localhost:3000/api/orders",
+  "headers": {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_JWT_TOKEN"
+  },
+  "body": {
+    "restaurantId": 1,
+    "deliveryAddress": "123 Rue de la Paix, 75001 Paris",
+    "items": [
+      {
+        "type": "dish",
+        "id": 1,
+        "quantity": 2,
+        "toppings": [
+          {
+            "toppingId": 1,
+            "quantity": 1
+          }
+        ]
+      },
+      {
+        "type": "menu",
+        "id": 2,
+        "quantity": 1
+      }
+    ],
+    "paymentMethod": {
+      "type": "credit_card",
+      "creditCardId": 1
+    },
+    "specialInstructions": "Please ring the bell twice",
+    "promoCode": "SUMMER2025"
+  }
+}

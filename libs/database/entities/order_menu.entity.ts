@@ -2,7 +2,7 @@ import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
 import { Order } from './order.entity';
 import { Menu } from './menu.entity';
 
-@Entity({ name: 'Order_Menu' })
+@Entity({ name: 'order_menus' })
 export class OrderMenu {
   @PrimaryColumn()
   orderId: number;
