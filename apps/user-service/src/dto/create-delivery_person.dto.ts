@@ -47,6 +47,13 @@ export class CreateDeliveryPersonDto {
   address?: string;
 
   @IsOptional()
+  @IsString({ message: 'Address must be a string' })
+  @Length(5, 255, { message: 'Address must be between 5 and 255 characters' })
+  rib?: string;
+
+  
+
+  @IsOptional()
   @IsString({ message: 'Profile picture URL must be a string' })
   @Matches(/^https?:\/\/.+/, { message: 'Profile picture must be a valid URL' })
   profilePicture?: string;

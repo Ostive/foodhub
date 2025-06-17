@@ -21,6 +21,12 @@ export class User {
     @Column({ type: 'varchar', length: 50, nullable: true  })
     lastName: string;
 
+    @Column({ type: 'varchar', length: 255, unique: true })
+    email: string;
+
+    @Column({ type: 'varchar', length: 50, nullable: true })
+    phone: string;
+
     @Column({ type: 'date', nullable: true })
     birthDate: Date;
 
@@ -31,16 +37,10 @@ export class User {
     password: string;
 
     @Column({ type: 'varchar', length: 255, nullable: true /* AUTO_RANDOM n'existe pas sur typeorm, générer côté code */ })
-    referralCode: number;
+    referralCode: string;
 
     @Column({ type: 'varchar', length: 255 })
     role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin' = 'customer';
-
-    @Column({ type: 'varchar', length: 255, unique: true })
-    email: string;
-
-    @Column({ type: 'varchar', length: 50, nullable: true })
-    phone: string;
 
     @Column({ type: 'varchar', length: 500, nullable: true })
     profilePicture: string;
@@ -54,20 +54,14 @@ export class User {
     @Column({ type: 'varchar', length: 50, nullable: true })
     rib: string;   
 
-    @Column({ type: 'float' })
-    minimumPurchase: string;   
+    @Column({ type: 'float' , nullable: true })
+    minimumPurchase: number;   
 
-    @Column({ type: 'float' })
+    @Column({ type: 'float' , nullable: true })
     deliveryRadius: number;   
 
-    @Column({ type: 'int' })
+    @Column({ type: 'int' , nullable: true })
     averagePreparationTime: number;   
-
-    @BeforeInsert()
-    async hashPassword() {
-        const salt = await bcrypt.genSalt();
-        this.password = await bcrypt.hash(this.password, salt);
-    }
 
     @OneToMany(() => CreditCard, creditCard => creditCard.user)
     creditCards: CreditCard[];
