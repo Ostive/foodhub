@@ -61,7 +61,10 @@ export class User {
     deliveryRadius: number;   
 
     @Column({ type: 'int' })
-    averagePreparationTime: number;   
+    averagePreparationTime: number;
+    
+    @Column('text', { array: true, nullable: true })
+    tags: string[];
 
     @BeforeInsert()
     async hashPassword() {

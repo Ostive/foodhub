@@ -21,8 +21,8 @@ export class Dish {
   @Column({ type: 'boolean'})
   isSoldAlone: boolean;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  tags: string;
+  @Column('text', { array: true, nullable: true })
+  tags: string[];
 
   @Column({ type: 'boolean'})
   isVegetarian: boolean;

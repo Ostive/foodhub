@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import { Promo } from './promo.entity';
 import { OrderDish } from './order_dish.entity';
 import { OrderMenu } from './order_menu.entity';
+import { OrderStatus } from './order-status.enum';
 
 @Entity({ name: 'orders' })
 export class Order {
@@ -30,8 +31,8 @@ export class Order {
   @Column({ type: 'float' })
   cost: number;
 
-  @Column()
-  status: string;
+  @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.CREATED })
+  status: OrderStatus;
 
   // Relations utilisateurs, tous pointant vers User (mais différenciés par leur rôle l’app)
   @ManyToOne(() => User, user => user.customerOrders, { onDelete: 'SET NULL' })

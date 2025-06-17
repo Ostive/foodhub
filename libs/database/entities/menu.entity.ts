@@ -19,8 +19,8 @@ export class Menu {
   @Column({ type: 'varchar', length: 50 })
   name: string;
 
-  @Column({ type: 'varchar', length: 100, nullable: true })
-  tags: string;
+  @Column('text', { array: true, nullable: true })
+  tags: string[];
 
   @Column({ type: 'boolean', nullable: true })
   isVegetarian: boolean;
