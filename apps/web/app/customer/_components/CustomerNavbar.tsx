@@ -34,7 +34,7 @@ export default function CustomerNavbarNew() {
   // Use user data from auth context or fallback to default
   const userData = {
     name: user?.firstName ? `${user.firstName} ${user.lastName || ''}` : "User",
-    avatar: user?.profilePicture || "https://randomuser.me/api/portraits/men/32.jpg",
+    avatar: user?.profilePicture || "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png",
     address: user?.address || "123 Main St, New York",
   };
 

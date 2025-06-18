@@ -38,11 +38,11 @@ export default function OrdersPage() {
   const [expandedOrder, setExpandedOrder] = useState<string | null>(null);
   
   // Check authentication
-  useEffect(() => {
-    if (!isLoggedIn.value) {
-      router.push("/customer/login");
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   if (!isLoggedIn.value) {
+  //     router.push("/customer/login");
+  //   }
+  // }, [router]);
   
   // Mock orders data
   const orders: Order[] = [

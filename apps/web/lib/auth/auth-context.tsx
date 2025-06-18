@@ -78,6 +78,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Store in localStorage for persistence
     localStorage.setItem('auth_token', newToken);
     localStorage.setItem('auth_user', JSON.stringify(newUser));
+    
+    // Store in cookies for server-side access (middleware)
+    document.cookie = `auth_token=${newToken}; path=/; max-age=86400; samesite=strict`;
+    document.cookie = `auth_user=${JSON.stringify(newUser)}; path=/; max-age=86400; samesite=strict`;
   };
 
   // Logout function
@@ -90,6 +94,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Clear localStorage
     localStorage.removeItem('auth_token');
     localStorage.removeItem('auth_user');
+    
+    // Clear cookies
+    document.cookie = 'auth_token=; path=/; max-age=0; samesite=strict';
+    document.cookie = 'auth_user=; path=/; max-age=0; samesite=strict';
   };
 
   // Provide the auth context value

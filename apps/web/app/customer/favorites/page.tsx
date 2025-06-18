@@ -30,11 +30,11 @@ export default function FavoritesPage() {
   const [selectedToRemove, setSelectedToRemove] = useState<string[]>([]);
   
   // Check authentication
-  useEffect(() => {
-    if (!isLoggedIn.value) {
-      router.push("/customer/login");
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   if (!isLoggedIn.value) {
+  //     router.push("/customer/login");
+  //   }
+  // }, [router]);
   
   // Mock favorite restaurants data
   const [favoriteRestaurants, setFavoriteRestaurants] = useState<Restaurant[]>([
