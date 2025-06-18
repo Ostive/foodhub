@@ -24,7 +24,7 @@ export default function Navbar() {
               <Link href="/restaurant-dashboard" className="text-[#fff] hover:text-[#4CAF50] text-sm font-medium">
                 Restaurant
               </Link>
-              <Link href="/mobile" className="text-[#fff] hover:text-[#4CAF50] text-sm font-medium">
+              <Link href="/deliver" className="text-[#fff] hover:text-[#4CAF50] text-sm font-medium">
                 Deliver
               </Link>
               <Link 

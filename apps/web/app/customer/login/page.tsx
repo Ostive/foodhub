@@ -63,7 +63,7 @@ export default function LoginPage() {
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Welcome back</h2>
             <p className="mt-2 text-sm text-gray-600">
               Don't have an account?{" "}
-              <Link href="/customer/signup" className="font-medium text-[#4CAF50] hover:text-[#388e3c]">
+              <Link href="/customer/register" className="font-medium text-[#4CAF50] hover:text-[#388e3c]">
                 Sign up
               </Link>
             </p>
