@@ -20,7 +20,7 @@ export default function LoginPage() {
   
   // Use our login mutation hook
   const { mutate: login, isPending: isLoading, error: loginError } = useLogin();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

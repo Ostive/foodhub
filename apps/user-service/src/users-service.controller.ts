@@ -62,7 +62,8 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Returns all users' })
   @Get()
   findAll() {
-    return this.usersService.findAll();
+    return this.usersService.findAll()
+    ;
   }
 
   @ApiOperation({ summary: 'Find a user by email' })

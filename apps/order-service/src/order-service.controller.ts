@@ -124,5 +124,58 @@ export class OrderServiceController {
     return this.orderServiceService.getOrdersByStatus(status);
   }
 
+  @ApiOperation({ summary: 'Get orders assigned to a specific delivery person' })
+  @ApiParam({
+    name: 'deliveryPersonId',
+    description: 'ID of the delivery person',
+    example: '1'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all orders assigned to the specified delivery person',
+    type: [Order]
+  })
+  @Get('delivery-person/:deliveryPersonId')
+  getDeliveryPersonOrders(@Param('deliveryPersonId') deliveryPersonId: string) {
+    return this.orderServiceService.getDeliveryPersonOrders(+deliveryPersonId);
+  }
 
+  @ApiOperation({ summary: 'Get orders available for delivery' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all orders that have been accepted by restaurants but not yet assigned to delivery persons',
+    type: [Order]
+  })
+  @Get('available-for-delivery')
+  getOrdersAvailableForDelivery() {
+    return this.orderServiceService.getOrdersAvailableForDelivery();
+  }
+
+  @ApiOperation({ summary: 'Update order status with validation' })
+  @ApiParam({
+    name: 'id',
+    description: 'Order ID',
+    example: '1'
+  })
+  @ApiBody({
+    description: 'New status and optional delivery person ID',
+    schema: {
+      type: 'object',
+      properties: {
+        status: { type: 'string', enum: Object.values(OrderStatus), example: OrderStatus.ACCEPTED_DELIVERY },
+        deliveryPersonId: { type: 'number', example: 1, nullable: true }
+      },
+      required: ['status']
+    }
+  })
+  @ApiResponse({ status: 200, description: 'Order status updated successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid status transition' })
+  @ApiResponse({ status: 404, description: 'Order not found' })
+  @Patch(':id/status')
+  updateOrderStatus(
+    @Param('id') id: string,
+    @Body() body: { status: OrderStatus; deliveryPersonId?: number }
+  ) {
+    return this.orderServiceService.updateOrderStatus(id, body.status, body.deliveryPersonId);
+  }
 }
