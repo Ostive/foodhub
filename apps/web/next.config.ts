@@ -23,7 +23,10 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'example.com',
       },
-
+      {
+        protocol: 'https',
+        hostname: 'cdn.pixabay.com',
+      },
       // Add other domains as needed
     ],
   },

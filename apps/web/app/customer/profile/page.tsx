@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import CustomerNavbar from "../_components/CustomerNavbar";
 import Image from "next/image";
 import Link from "next/link";
 import { User, MapPin, Phone, Mail, Lock, Edit, Save, X, Camera, CreditCard, Bell, Shield, Clock, Heart, LogOut, Trash2, Plus, Calendar } from "lucide-react";
-import { isLoggedIn } from "../_utils/authState";
+import { useAuth } from "@/lib/auth/auth-context";
+import CustomerNavbar from "../_components/CustomerNavbar";
 
 type PaymentMethod = {
   id: string;
@@ -28,19 +28,22 @@ type ProfileTab = "personal" | "payment" | "notifications" | "security";
 
 export default function ProfilePage() {
   const router = useRouter();
+  const { user, logout } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [activeTab, setActiveTab] = useState<ProfileTab>("personal");
   const [showAddPaymentForm, setShowAddPaymentForm] = useState(false);
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [showEnableTwoFactorForm, setShowEnableTwoFactorForm] = useState(false);
   
-  // Mock user data
+  // We'll update the existing handleLogout function below
+  
+  // User data from auth context
   const [userData, setUserData] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567",
-    address: "123 Main St, New York, NY 10001",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg"
+    name: user ? `${user.firstName} ${user.lastName || ''}` : "User",
+    email: user?.email || "user@example.com",
+    phone: user?.phone || "+1 (555) 123-4567",
+    address: user?.address || "123 Main St, New York, NY 10001",
+    avatar: user?.profilePicture || "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
   });
   
   // Form state
@@ -119,12 +122,7 @@ export default function ProfilePage() {
     }
   ]);
   
-  // Check authentication
-  useEffect(() => {
-    if (!isLoggedIn.value) {
-      router.push("/customer/login");
-    }
-  }, [router]);
+  // Authentication is now handled by the ProtectedRoute component
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -168,7 +166,7 @@ export default function ProfilePage() {
   };
 
   const handleLogout = () => {
-    isLoggedIn.value = false;
+    logout();
     router.push("/customer/login");
   };
   
@@ -263,7 +261,7 @@ export default function ProfilePage() {
 
   return (
     <div className="bg-[#f8f9fa] min-h-svh">
-      <CustomerNavbar forceLight={true} />
+      <CustomerNavbar />
       <main className="pt-20 pb-20">
         <div className="max-w-6xl mx-auto px-4" style={{ marginTop: "30px" }}>
           <div className="flex flex-col md:flex-row gap-6">
