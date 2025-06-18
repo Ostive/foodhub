@@ -288,25 +288,25 @@ export default function ProfilePage() {
                 <nav className="p-2">
                   <button 
                     onClick={() => setActiveTab("personal")}
-                    className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "personal" ? 'bg-[#4CAF50]/10 text-[#4CAF50]' : 'text-gray-700 hover:bg-gray-100'}`}
+                    className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "personal" ? 'bg-[#009E73]/10 text-[#009E73]' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     <User className="h-5 w-5 mr-3" /> Personal Info
                   </button>
                   <button 
                     onClick={() => setActiveTab("payment")}
-                    className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "payment" ? 'bg-[#4CAF50]/10 text-[#4CAF50]' : 'text-gray-700 hover:bg-gray-100'}`}
+                    className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "payment" ? 'bg-[#009E73]/10 text-[#009E73]' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     <CreditCard className="h-5 w-5 mr-3" /> Payment Methods
                   </button>
                   <button 
                     onClick={() => setActiveTab("notifications")}
-                    className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "notifications" ? 'bg-[#4CAF50]/10 text-[#4CAF50]' : 'text-gray-700 hover:bg-gray-100'}`}
+                    className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "notifications" ? 'bg-[#009E73]/10 text-[#009E73]' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     <Bell className="h-5 w-5 mr-3" /> Notifications
                   </button>
                   <button 
                     onClick={() => setActiveTab("security")}
-                    className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "security" ? 'bg-[#4CAF50]/10 text-[#4CAF50]' : 'text-gray-700 hover:bg-gray-100'}`}
+                    className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "security" ? 'bg-[#009E73]/10 text-[#009E73]' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     <Shield className="h-5 w-5 mr-3" /> Security
                   </button>
@@ -365,7 +365,7 @@ export default function ProfilePage() {
                           />
                         </div>
                         {isEditing && (
-                          <button className="absolute bottom-0 right-0 bg-[#4CAF50] text-white p-2 rounded-full shadow-md hover:bg-[#388E3C] transition-colors">
+                          <button className="absolute bottom-0 right-0 bg-[#009E73] text-white p-2 rounded-full shadow-md hover:bg-[#388E3C] transition-colors">
                             <Camera className="h-4 w-4" />
                           </button>
                         )}
@@ -389,7 +389,7 @@ export default function ProfilePage() {
                               name="name"
                               value={formData.name}
                               onChange={handleInputChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                             />
                           ) : (
                             <p className="text-gray-900 py-2">{userData.name}</p>
@@ -407,7 +407,7 @@ export default function ProfilePage() {
                               name="email"
                               value={formData.email}
                               onChange={handleInputChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                             />
                           ) : (
                             <p className="text-gray-900 py-2">{userData.email}</p>
@@ -425,7 +425,7 @@ export default function ProfilePage() {
                               name="phone"
                               value={formData.phone}
                               onChange={handleInputChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                             />
                           ) : (
                             <p className="text-gray-900 py-2">{userData.phone}</p>
@@ -443,7 +443,7 @@ export default function ProfilePage() {
                               name="address"
                               value={formData.address}
                               onChange={handleInputChange}
-                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                             />
                           ) : (
                             <p className="text-gray-900 py-2">{userData.address}</p>
@@ -456,7 +456,7 @@ export default function ProfilePage() {
                         <div className="mt-6">
                           <button 
                             type="submit"
-                            className="px-6 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center"
+                            className="px-6 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center"
                           >
                             <Save className="h-4 w-4 mr-2" /> Save Changes
                           </button>
@@ -474,7 +474,7 @@ export default function ProfilePage() {
                     <h2 className="text-xl font-bold text-gray-900">Payment Methods</h2>
                     <button 
                       onClick={() => setShowAddPaymentForm(true)}
-                      className="px-4 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center text-sm font-medium"
+                      className="px-4 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center text-sm font-medium"
                     >
                       <CreditCard className="h-4 w-4 mr-1" /> Add New
                     </button>
@@ -522,7 +522,7 @@ export default function ProfilePage() {
                         <p className="mt-1 text-gray-500">Add a payment method to make checkout faster</p>
                         <button 
                           onClick={() => setShowAddPaymentForm(true)}
-                          className="mt-4 px-4 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#388E3C] transition-colors"
+                          className="mt-4 px-4 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors"
                         >
                           Add Payment Method
                         </button>
@@ -546,7 +546,7 @@ export default function ProfilePage() {
                               <button
                                 type="button"
                                 onClick={() => setNewPaymentForm(prev => ({ ...prev, type: "card" }))}
-                                className={`flex-1 py-3 px-4 rounded-lg border ${newPaymentForm.type === 'card' ? 'border-[#4CAF50] bg-[#4CAF50]/5' : 'border-gray-200'} flex items-center justify-center`}
+                                className={`flex-1 py-3 px-4 rounded-lg border ${newPaymentForm.type === 'card' ? 'border-[#009E73] bg-[#009E73]/5' : 'border-gray-200'} flex items-center justify-center`}
                               >
                                 <div className="h-6 w-10 relative mr-2">
                                   <Image 
@@ -556,12 +556,12 @@ export default function ProfilePage() {
                                     className="object-contain" 
                                   />
                                 </div>
-                                <span className={`font-medium ${newPaymentForm.type === 'card' ? 'text-[#4CAF50]' : 'text-gray-700'}`}>Credit Card</span>
+                                <span className={`font-medium ${newPaymentForm.type === 'card' ? 'text-[#009E73]' : 'text-gray-700'}`}>Credit Card</span>
                               </button>
                               <button
                                 type="button"
                                 onClick={() => setNewPaymentForm(prev => ({ ...prev, type: "paypal" }))}
-                                className={`flex-1 py-3 px-4 rounded-lg border ${newPaymentForm.type === 'paypal' ? 'border-[#4CAF50] bg-[#4CAF50]/5' : 'border-gray-200'} flex items-center justify-center`}
+                                className={`flex-1 py-3 px-4 rounded-lg border ${newPaymentForm.type === 'paypal' ? 'border-[#009E73] bg-[#009E73]/5' : 'border-gray-200'} flex items-center justify-center`}
                               >
                                 <div className="h-6 w-10 relative mr-2">
                                   <Image 
@@ -571,7 +571,7 @@ export default function ProfilePage() {
                                     className="object-contain" 
                                   />
                                 </div>
-                                <span className={`font-medium ${newPaymentForm.type === 'paypal' ? 'text-[#4CAF50]' : 'text-gray-700'}`}>PayPal</span>
+                                <span className={`font-medium ${newPaymentForm.type === 'paypal' ? 'text-[#009E73]' : 'text-gray-700'}`}>PayPal</span>
                               </button>
                             </div>
                           </div>
@@ -588,7 +588,7 @@ export default function ProfilePage() {
                                   name="cardNumber"
                                   value={newPaymentForm.cardNumber}
                                   onChange={(e) => setNewPaymentForm(prev => ({ ...prev, cardNumber: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                                 />
                               </div>
                               
@@ -602,7 +602,7 @@ export default function ProfilePage() {
                                   name="cardName"
                                   value={newPaymentForm.cardName}
                                   onChange={(e) => setNewPaymentForm(prev => ({ ...prev, cardName: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                                 />
                               </div>
                               
@@ -616,7 +616,7 @@ export default function ProfilePage() {
                                   name="expiryDate"
                                   value={newPaymentForm.expiryDate}
                                   onChange={(e) => setNewPaymentForm(prev => ({ ...prev, expiryDate: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                                 />
                               </div>
                               
@@ -630,7 +630,7 @@ export default function ProfilePage() {
                                   name="cvv"
                                   value={newPaymentForm.cvv}
                                   onChange={(e) => setNewPaymentForm(prev => ({ ...prev, cvv: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                                 />
                               </div>
                             </div>
@@ -650,7 +650,7 @@ export default function ProfilePage() {
                           <div className="mt-6">
                             <button 
                               type="submit"
-                              className="px-6 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center"
+                              className="px-6 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center"
                             >
                               <Save className="h-4 w-4 mr-2" /> Save Changes
                             </button>
@@ -685,7 +685,7 @@ export default function ProfilePage() {
                               onChange={() => toggleNotification(setting.id)} 
                               className="sr-only peer" 
                             />
-                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-[#4CAF50]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#4CAF50]"></div>
+                            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-hidden peer-focus:ring-4 peer-focus:ring-[#009E73]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#009E73]"></div>
                           </label>
                         </div>
                       ))}
@@ -742,7 +742,7 @@ export default function ProfilePage() {
                                     name="currentPassword"
                                     value={passwordForm.currentPassword}
                                     onChange={(e) => setPasswordForm(prev => ({ ...prev, currentPassword: e.target.value }))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                                   />
                                 </div>
                                 
@@ -756,7 +756,7 @@ export default function ProfilePage() {
                                     name="newPassword"
                                     value={passwordForm.newPassword}
                                     onChange={(e) => setPasswordForm(prev => ({ ...prev, newPassword: e.target.value }))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                                   />
                                 </div>
                                 
@@ -770,7 +770,7 @@ export default function ProfilePage() {
                                     name="confirmPassword"
                                     value={passwordForm.confirmPassword}
                                     onChange={(e) => setPasswordForm(prev => ({ ...prev, confirmPassword: e.target.value }))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                                   />
                                 </div>
                               </div>
@@ -779,7 +779,7 @@ export default function ProfilePage() {
                               <div className="mt-6">
                                 <button 
                                   type="submit"
-                                  className="px-6 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center"
+                                  className="px-6 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center"
                                 >
                                   <Save className="h-4 w-4 mr-2" /> Save Changes
                                 </button>
@@ -799,7 +799,7 @@ export default function ProfilePage() {
                           </div>
                           <button 
                             onClick={() => setShowEnableTwoFactorForm(true)}
-                            className="px-4 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#388E3C] transition-colors text-sm font-medium"
+                            className="px-4 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors text-sm font-medium"
                           >
                             Enable
                           </button>
@@ -827,7 +827,7 @@ export default function ProfilePage() {
                                     name="phoneNumber"
                                     value={twoFactorForm.phoneNumber}
                                     onChange={(e) => setTwoFactorForm(prev => ({ ...prev, phoneNumber: e.target.value }))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                                   />
                                 </div>
                                 
@@ -841,7 +841,7 @@ export default function ProfilePage() {
                                     name="verificationCode"
                                     value={twoFactorForm.verificationCode}
                                     onChange={(e) => setTwoFactorForm(prev => ({ ...prev, verificationCode: e.target.value }))}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                                   />
                                 </div>
                               </div>
@@ -850,7 +850,7 @@ export default function ProfilePage() {
                               <div className="mt-6">
                                 <button 
                                   type="submit"
-                                  className="px-6 py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center"
+                                  className="px-6 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center"
                                 >
                                   <Save className="h-4 w-4 mr-2" /> Save Changes
                                 </button>

@@ -223,7 +223,7 @@ export default function SearchPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for restaurants, dishes, or cuisines"
-                className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-300 focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-300 focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
               />
               {searchQuery && (
                 <button
@@ -243,25 +243,25 @@ export default function SearchPage() {
               <div className="flex items-center overflow-x-auto hide-scrollbar pb-2">
                 <button 
                   onClick={() => setSelectedFilter("all")} 
-                  className={`px-4 py-2 rounded-full text-sm font-medium mr-2 whitespace-nowrap ${selectedFilter === "all" ? 'bg-[#4CAF50] text-white' : 'bg-white text-gray-700'}`}
+                  className={`px-4 py-2 rounded-full text-sm font-medium mr-2 whitespace-nowrap ${selectedFilter === "all" ? 'bg-[#009E73] text-white' : 'bg-white text-gray-700'}`}
                 >
                   All
                 </button>
                 <button 
                   onClick={() => setSelectedFilter("restaurants")} 
-                  className={`px-4 py-2 rounded-full text-sm font-medium mr-2 whitespace-nowrap ${selectedFilter === "restaurants" ? 'bg-[#4CAF50] text-white' : 'bg-white text-gray-700'}`}
+                  className={`px-4 py-2 rounded-full text-sm font-medium mr-2 whitespace-nowrap ${selectedFilter === "restaurants" ? 'bg-[#009E73] text-white' : 'bg-white text-gray-700'}`}
                 >
                   Restaurants
                 </button>
                 <button 
                   onClick={() => setSelectedFilter("dishes")} 
-                  className={`px-4 py-2 rounded-full text-sm font-medium mr-2 whitespace-nowrap ${selectedFilter === "dishes" ? 'bg-[#4CAF50] text-white' : 'bg-white text-gray-700'}`}
+                  className={`px-4 py-2 rounded-full text-sm font-medium mr-2 whitespace-nowrap ${selectedFilter === "dishes" ? 'bg-[#009E73] text-white' : 'bg-white text-gray-700'}`}
                 >
                   Dishes
                 </button>
                 <button 
                   onClick={() => setSelectedFilter("cuisines")} 
-                  className={`px-4 py-2 rounded-full text-sm font-medium mr-2 whitespace-nowrap ${selectedFilter === "cuisines" ? 'bg-[#4CAF50] text-white' : 'bg-white text-gray-700'}`}
+                  className={`px-4 py-2 rounded-full text-sm font-medium mr-2 whitespace-nowrap ${selectedFilter === "cuisines" ? 'bg-[#009E73] text-white' : 'bg-white text-gray-700'}`}
                 >
                   Cuisines
                 </button>
@@ -272,7 +272,7 @@ export default function SearchPage() {
                   <div>
                     <button
                       type="button"
-                      className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-xs px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50]"
+                      className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-xs px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#009E73]"
                       id="sort-menu-button"
                       aria-expanded="true"
                       aria-haspopup="true"
@@ -296,7 +296,7 @@ export default function SearchPage() {
                           setSortOption("relevance");
                           document.getElementById('sort-dropdown')?.classList.add('hidden');
                         }}
-                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'relevance' ? 'text-[#4CAF50] font-medium' : 'text-gray-700'}`}
+                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'relevance' ? 'text-[#009E73] font-medium' : 'text-gray-700'}`}
                         role="menuitem"
                         tabIndex={-1}
                       >
@@ -307,7 +307,7 @@ export default function SearchPage() {
                           setSortOption("rating");
                           document.getElementById('sort-dropdown')?.classList.add('hidden');
                         }}
-                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'rating' ? 'text-[#4CAF50] font-medium' : 'text-gray-700'}`}
+                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'rating' ? 'text-[#009E73] font-medium' : 'text-gray-700'}`}
                         role="menuitem"
                         tabIndex={-1}
                       >
@@ -318,7 +318,7 @@ export default function SearchPage() {
                           setSortOption("delivery_time");
                           document.getElementById('sort-dropdown')?.classList.add('hidden');
                         }}
-                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'delivery_time' ? 'text-[#4CAF50] font-medium' : 'text-gray-700'}`}
+                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'delivery_time' ? 'text-[#009E73] font-medium' : 'text-gray-700'}`}
                         role="menuitem"
                         tabIndex={-1}
                       >
@@ -329,7 +329,7 @@ export default function SearchPage() {
                           setSortOption("distance");
                           document.getElementById('sort-dropdown')?.classList.add('hidden');
                         }}
-                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'distance' ? 'text-[#4CAF50] font-medium' : 'text-gray-700'}`}
+                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'distance' ? 'text-[#009E73] font-medium' : 'text-gray-700'}`}
                         role="menuitem"
                         tabIndex={-1}
                       >
@@ -381,7 +381,7 @@ export default function SearchPage() {
                           <div className="p-4">
                             <h3 className="text-lg font-bold text-gray-900 mb-1">{result.name}</h3>
                             <p className="text-sm text-gray-600 mb-2">{result.restaurant}</p>
-                            <p className="text-[#4CAF50] font-bold">{result.price}</p>
+                            <p className="text-[#009E73] font-bold">{result.price}</p>
                           </div>
                         </div>
                       </Link>

@@ -80,7 +80,7 @@ export default function CoordinateMapPage() {
       
       // Add marker for current location
       marker.current = new maplibregl.Marker({
-        color: '#4CAF50',
+        color: '#009E73',
         draggable: true
       })
         .setLngLat(coordinates)
@@ -405,7 +405,7 @@ export default function CoordinateMapPage() {
                   setTimeout(() => setShowSuggestions(false), 200);
                 }}
                 placeholder="e.g. 15 rue de Rivoli, Paris"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent outline-hidden transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#009E73] focus:border-transparent outline-hidden transition-colors"
                 disabled={isSearching}
                 autoComplete="off"
               />
@@ -415,7 +415,7 @@ export default function CoordinateMapPage() {
                 <div className="absolute z-10 w-full mt-1 bg-white shadow-lg rounded-lg border border-gray-200 max-h-60 overflow-y-auto">
                   {isLoadingSuggestions ? (
                     <div className="p-3 text-center text-gray-500">
-                      <div className="inline-block w-4 h-4 border-2 border-gray-300 border-t-[#4CAF50] rounded-full animate-spin mr-2"></div>
+                      <div className="inline-block w-4 h-4 border-2 border-gray-300 border-t-[#009E73] rounded-full animate-spin mr-2"></div>
                       Loading suggestions...
                     </div>
                   ) : suggestions.length > 0 ? (
@@ -444,7 +444,7 @@ export default function CoordinateMapPage() {
             <button
               type="submit"
               disabled={isSearching || !searchAddress.trim()}
-              className="w-full bg-[#4CAF50] hover:bg-[#388E3C] disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors"
+              className="w-full bg-[#009E73] hover:bg-[#388E3C] disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-3 rounded-lg font-medium transition-colors"
             >
               {isSearching ? (
                 <div className="flex items-center justify-center space-x-2">
@@ -480,7 +480,7 @@ export default function CoordinateMapPage() {
           <div>
             <div className="bg-white rounded-xl shadow-xs p-6 sticky top-4">
               <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
-                <MapPin className="w-5 h-5 text-[#4CAF50] mr-2" />
+                <MapPin className="w-5 h-5 text-[#009E73] mr-2" />
                 Pin Coordinates
               </h2>
               
@@ -503,7 +503,7 @@ export default function CoordinateMapPage() {
                 <div className="pt-4 border-t border-gray-100">
                   <button
                     onClick={copyCoordinates}
-                    className="w-full bg-[#4CAF50] hover:bg-[#388E3C] text-white py-3 rounded-lg font-medium transition-colors"
+                    className="w-full bg-[#009E73] hover:bg-[#388E3C] text-white py-3 rounded-lg font-medium transition-colors"
                   >
                     {copySuccess || "Copy Coordinates"}
                   </button>
@@ -521,7 +521,7 @@ export default function CoordinateMapPage() {
                   <h3 className="font-medium text-gray-900 mb-2">Address (OpenStreetMap)</h3>
                   {isLoadingAddress ? (
                     <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 border-2 border-[#4CAF50] border-t-transparent rounded-full animate-spin"></div>
+                      <div className="w-4 h-4 border-2 border-[#009E73] border-t-transparent rounded-full animate-spin"></div>
                       <p className="text-gray-600">Loading address...</p>
                     </div>
                   ) : address ? (
@@ -529,7 +529,7 @@ export default function CoordinateMapPage() {
                       <p className="text-sm text-gray-700 mb-3">{address}</p>
                       <button
                         onClick={copyAddress}
-                        className="w-full bg-[#4CAF50] hover:bg-[#388E3C] text-white py-2 rounded-lg font-medium transition-colors text-sm"
+                        className="w-full bg-[#009E73] hover:bg-[#388E3C] text-white py-2 rounded-lg font-medium transition-colors text-sm"
                       >
                         {copyAddressSuccess || "Copy Address"}
                       </button>

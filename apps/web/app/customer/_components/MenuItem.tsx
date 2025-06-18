@@ -85,7 +85,7 @@ export default function MenuItem({ item, restaurantId, onAddToCart }: MenuItemPr
           <div className="mt-3 flex justify-end">
             <button
               onClick={handleAddToCart}
-              className="px-3 py-1.5 bg-[#4CAF50] text-white rounded-lg text-sm font-medium flex items-center"
+              className="px-3 py-1.5 bg-[#009E73] text-white rounded-lg text-sm font-medium flex items-center"
             >
               <Plus className="h-4 w-4 mr-1" /> Add to Cart
             </button>

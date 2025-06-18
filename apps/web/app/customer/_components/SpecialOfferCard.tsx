@@ -116,7 +116,7 @@ export default function SpecialOfferCard({ offer }: SpecialOfferCardProps) {
               <span>{offer.delivery}</span>
             </div>
             <div className="flex items-center text-sm font-medium text-gray-900">
-              <Bike size={14} className="mr-1 text-[#4CAF50]" />
+              <Bike size={14} className="mr-1 text-[#009E73]" />
               <span>{offer.deliveryFee}</span>
             </div>
           </div>

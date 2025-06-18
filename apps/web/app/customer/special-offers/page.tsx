@@ -174,7 +174,7 @@ export default function SpecialOffersPage() {
             </div>
             <button 
               onClick={() => setFilterType("all")} 
-              className={`px-4 py-2 rounded-full text-sm font-medium mr-2 whitespace-nowrap ${filterType === "all" ? 'bg-[#4CAF50] text-white' : 'bg-white text-gray-700'}`}
+              className={`px-4 py-2 rounded-full text-sm font-medium mr-2 whitespace-nowrap ${filterType === "all" ? 'bg-[#009E73] text-white' : 'bg-white text-gray-700'}`}
             >
               All Offers
             </button>
@@ -212,7 +212,7 @@ export default function SpecialOffersPage() {
               <p className="text-gray-500 text-lg">No offers found for this category.</p>
               <button 
                 onClick={() => setFilterType("all")} 
-                className="mt-4 px-6 py-2 bg-[#4CAF50] text-white rounded-full font-medium"
+                className="mt-4 px-6 py-2 bg-[#009E73] text-white rounded-full font-medium"
               >
                 View All Offers
               </button>

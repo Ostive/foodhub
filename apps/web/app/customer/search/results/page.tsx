@@ -164,7 +164,7 @@ export default function SearchResultsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for restaurants, dishes, or cuisines"
-                className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-300 focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-300 focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
               />
               {searchQuery && (
                 <button
@@ -186,7 +186,7 @@ export default function SearchResultsPage() {
                   <div>
                     <button
                       type="button"
-                      className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-xs px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50]"
+                      className="inline-flex justify-center w-full rounded-full border border-gray-300 shadow-xs px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#009E73]"
                       id="sort-menu-button"
                       aria-expanded="true"
                       aria-haspopup="true"
@@ -210,7 +210,7 @@ export default function SearchResultsPage() {
                           setSortOption("relevance");
                           document.getElementById('sort-dropdown')?.classList.add('hidden');
                         }}
-                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'relevance' ? 'text-[#4CAF50] font-medium' : 'text-gray-700'}`}
+                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'relevance' ? 'text-[#009E73] font-medium' : 'text-gray-700'}`}
                         role="menuitem"
                         tabIndex={-1}
                       >
@@ -221,7 +221,7 @@ export default function SearchResultsPage() {
                           setSortOption("rating");
                           document.getElementById('sort-dropdown')?.classList.add('hidden');
                         }}
-                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'rating' ? 'text-[#4CAF50] font-medium' : 'text-gray-700'}`}
+                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'rating' ? 'text-[#009E73] font-medium' : 'text-gray-700'}`}
                         role="menuitem"
                         tabIndex={-1}
                       >
@@ -232,7 +232,7 @@ export default function SearchResultsPage() {
                           setSortOption("delivery_time");
                           document.getElementById('sort-dropdown')?.classList.add('hidden');
                         }}
-                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'delivery_time' ? 'text-[#4CAF50] font-medium' : 'text-gray-700'}`}
+                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'delivery_time' ? 'text-[#009E73] font-medium' : 'text-gray-700'}`}
                         role="menuitem"
                         tabIndex={-1}
                       >
@@ -243,7 +243,7 @@ export default function SearchResultsPage() {
                           setSortOption("distance");
                           document.getElementById('sort-dropdown')?.classList.add('hidden');
                         }}
-                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'distance' ? 'text-[#4CAF50] font-medium' : 'text-gray-700'}`}
+                        className={`block px-4 py-2 text-sm w-full text-left ${sortOption === 'distance' ? 'text-[#009E73] font-medium' : 'text-gray-700'}`}
                         role="menuitem"
                         tabIndex={-1}
                       >
@@ -286,14 +286,14 @@ export default function SearchResultsPage() {
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">No results found for "{searchQuery}"</p>
               <p className="text-gray-400 mt-2">Try a different search term or browse categories</p>
-              <Link href="/customer/search" className="mt-6 inline-block px-6 py-3 bg-[#4CAF50] text-white rounded-full font-medium">
+              <Link href="/customer/search" className="mt-6 inline-block px-6 py-3 bg-[#009E73] text-white rounded-full font-medium">
                 Browse Categories
               </Link>
             </div>
           ) : (
             <div className="text-center py-12">
               <p className="text-gray-500 text-lg">Enter a search term to find restaurants, dishes, or cuisines</p>
-              <Link href="/customer/search" className="mt-6 inline-block px-6 py-3 bg-[#4CAF50] text-white rounded-full font-medium">
+              <Link href="/customer/search" className="mt-6 inline-block px-6 py-3 bg-[#009E73] text-white rounded-full font-medium">
                 Browse Categories
               </Link>
             </div>

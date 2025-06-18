@@ -227,7 +227,7 @@ export default function RestaurantTestPage() {
               'line-cap': 'round'
             },
             'paint': {
-              'line-color': '#4CAF50',
+              'line-color': '#009E73',
               'line-width': 4, // Increased line width
               'line-dasharray': [2, 1]
             }
@@ -243,7 +243,7 @@ export default function RestaurantTestPage() {
           const labelStyle = document.createElement('style');
           labelStyle.textContent = `
             .distance-marker {
-              color: #4CAF50;
+              color: #009E73;
               font-size: 18px; /* Increased font size */
               font-weight: bold;
               text-shadow: 
@@ -356,7 +356,7 @@ export default function RestaurantTestPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="flex items-start">
-                  <MapPin className="w-5 h-5 text-[#4CAF50] mt-1 mr-3" />
+                  <MapPin className="w-5 h-5 text-[#009E73] mt-1 mr-3" />
                   <div>
                     <h3 className="font-medium text-gray-900">Address</h3>
                     <p className="text-gray-600">{restaurant.address}</p>
@@ -364,7 +364,7 @@ export default function RestaurantTestPage() {
                 </div>
                 
                 <div className="flex items-start">
-                  <Clock className="w-5 h-5 text-[#4CAF50] mt-1 mr-3" />
+                  <Clock className="w-5 h-5 text-[#009E73] mt-1 mr-3" />
                   <div>
                     <h3 className="font-medium text-gray-900">Opening Hours</h3>
                     <p className="text-gray-600">{restaurant.openingHours}</p>
@@ -372,7 +372,7 @@ export default function RestaurantTestPage() {
                 </div>
                 
                 <div className="flex items-start">
-                  <Phone className="w-5 h-5 text-[#4CAF50] mt-1 mr-3" />
+                  <Phone className="w-5 h-5 text-[#009E73] mt-1 mr-3" />
                   <div>
                     <h3 className="font-medium text-gray-900">Phone</h3>
                     <p className="text-gray-600">{restaurant.phoneNumber}</p>
@@ -380,7 +380,7 @@ export default function RestaurantTestPage() {
                 </div>
                 
                 <div className="flex items-start">
-                  <Globe className="w-5 h-5 text-[#4CAF50] mt-1 mr-3" />
+                  <Globe className="w-5 h-5 text-[#009E73] mt-1 mr-3" />
                   <div>
                     <h3 className="font-medium text-gray-900">Website</h3>
                     <a href={restaurant.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">
@@ -395,7 +395,7 @@ export default function RestaurantTestPage() {
             <div className="bg-white rounded-xl shadow-xs p-6 mb-8">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold">Popular Items</h2>
-                <Link href="/customer/restaurant/restaurant-1" className="text-[#4CAF50] font-medium hover:underline flex items-center">
+                <Link href="/customer/restaurant/restaurant-1" className="text-[#009E73] font-medium hover:underline flex items-center">
                   View Full Menu
                 </Link>
               </div>
@@ -414,7 +414,7 @@ export default function RestaurantTestPage() {
                     <div className="flex-1 p-3">
                       <h3 className="font-medium text-gray-900">{item.name}</h3>
                       <p className="text-gray-500 text-sm line-clamp-2">{item.description}</p>
-                      <p className="text-[#4CAF50] font-medium mt-1">{item.price}</p>
+                      <p className="text-[#009E73] font-medium mt-1">{item.price}</p>
                     </div>
                   </div>
                 ))}
@@ -432,14 +432,14 @@ export default function RestaurantTestPage() {
               />
               <div className="mt-4">
                 <div className="flex items-start mb-3">
-                  <MapPin className="w-5 h-5 text-[#4CAF50] mt-1 mr-3" />
+                  <MapPin className="w-5 h-5 text-[#009E73] mt-1 mr-3" />
                   <p className="text-gray-600">{restaurant.address}</p>
                 </div>
                 <a 
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(restaurant.address)}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block w-full bg-[#4CAF50] hover:bg-[#3d8b40] text-white text-center py-3 rounded-lg font-medium transition-colors"
+                  className="block w-full bg-[#009E73] hover:bg-[#3d8b40] text-white text-center py-3 rounded-lg font-medium transition-colors"
                 >
                   Get Directions
                 </a>

@@ -261,7 +261,7 @@ export default function OrdersPage() {
                 placeholder="Search orders by restaurant or item"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
               />
             </div>
           </div>
@@ -270,19 +270,19 @@ export default function OrdersPage() {
           <div className="flex border-b border-gray-200 mb-6">
             <button
               onClick={() => setActiveTab("all")}
-              className={`px-4 py-2 font-medium text-sm ${activeTab === "all" ? 'text-[#4CAF50] border-b-2 border-[#4CAF50]' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`px-4 py-2 font-medium text-sm ${activeTab === "all" ? 'text-[#009E73] border-b-2 border-[#009E73]' : 'text-gray-500 hover:text-gray-700'}`}
             >
               All Orders
             </button>
             <button
               onClick={() => setActiveTab("active")}
-              className={`px-4 py-2 font-medium text-sm ${activeTab === "active" ? 'text-[#4CAF50] border-b-2 border-[#4CAF50]' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`px-4 py-2 font-medium text-sm ${activeTab === "active" ? 'text-[#009E73] border-b-2 border-[#009E73]' : 'text-gray-500 hover:text-gray-700'}`}
             >
               Active Orders
             </button>
             <button
               onClick={() => setActiveTab("past")}
-              className={`px-4 py-2 font-medium text-sm ${activeTab === "past" ? 'text-[#4CAF50] border-b-2 border-[#4CAF50]' : 'text-gray-500 hover:text-gray-700'}`}
+              className={`px-4 py-2 font-medium text-sm ${activeTab === "past" ? 'text-[#009E73] border-b-2 border-[#009E73]' : 'text-gray-500 hover:text-gray-700'}`}
             >
               Past Orders
             </button>
@@ -307,7 +307,7 @@ export default function OrdersPage() {
                           />
                         </div>
                         <div>
-                          <Link href={`/customer/restaurant/${order.restaurantId}`} className="font-medium text-gray-900 hover:text-[#4CAF50]">
+                          <Link href={`/customer/restaurant/${order.restaurantId}`} className="font-medium text-gray-900 hover:text-[#009E73]">
                             {order.restaurantName}
                           </Link>
                           <div className="flex items-center text-sm text-gray-500">
@@ -381,7 +381,7 @@ export default function OrdersPage() {
                       </div>
                       {order.status === "delivered" && (
                         <div className="mt-4">
-                          <button className="w-full py-2 bg-[#4CAF50] text-white rounded-lg hover:bg-[#388E3C] transition-colors text-sm font-medium">
+                          <button className="w-full py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors text-sm font-medium">
                             Reorder
                           </button>
                         </div>
@@ -412,7 +412,7 @@ export default function OrdersPage() {
                   "Try a different search term or filter" : 
                   "You haven't placed any orders yet"}
               </p>
-              <Link href="/customer" className="mt-6 inline-block px-6 py-3 bg-[#4CAF50] text-white rounded-full font-medium">
+              <Link href="/customer" className="mt-6 inline-block px-6 py-3 bg-[#009E73] text-white rounded-full font-medium">
                 Browse Restaurants
               </Link>
             </div>
