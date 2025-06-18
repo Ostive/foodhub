@@ -52,7 +52,10 @@ export class User {
     website: string;   
 
     @Column({ type: 'varchar', length: 50, nullable: true })
-    rib: string;   
+    rib: string;
+    
+    @Column('text', { array: true, nullable: true })
+    tags: string[];
 
     @Column({ type: 'float' , nullable: true })
     minimumPurchase: number;   
