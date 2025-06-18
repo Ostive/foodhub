@@ -15,38 +15,54 @@ export const useLogin = () => {
   return useMutation({
     mutationFn: async (credentials: LoginCredentials): Promise<LoginResponse> => {
       try {
-        console.log('Attempting login with:', { email: credentials.email });
-        
-        console.log('Making login request to:', `${API_URL}/auth/login`);
+        // Attempt to make the login request
         const response = await fetch(`${API_URL}/auth/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify(credentials),
+        }).catch((fetchError) => {
+          // Handle network errors (offline, DNS failure, etc)
+          throw new Error('Network error. Please check your internet connection.');
         });
 
+        // If we got a response but it's not OK
         if (!response.ok) {
-          console.error('Login failed with status:', response.status);
-          const errorText = await response.text();
-          console.error('Error response:', errorText);
+          let errorMessage = `Authentication failed (${response.status})`;
           
-          let errorData: { message?: string } = {};
           try {
-            errorData = JSON.parse(errorText);
-          } catch (e) {
-            console.error('Failed to parse error response as JSON');
+            // Try to parse the error response as JSON
+            const errorData = await response.json();
+            errorMessage = errorData.message || errorMessage;
+          } catch (parseError) {
+            // If we can't parse JSON, try to get the text
+            try {
+              const errorText = await response.text();
+              if (errorText) errorMessage = errorText;
+            } catch (textError) {
+              // If we can't get text either, use the status code message
+              errorMessage = `Authentication failed: ${response.statusText || response.status}`;
+            }
           }
           
-          throw new Error(errorData.message || `Login failed with status ${response.status}`);
+          throw new Error(errorMessage);
         }
 
-        const data = await response.json();
-        console.log('Login successful:', { userId: data.user?.userId, role: data.user?.role });
-        return data;
+        // Parse the successful response
+        try {
+          const data = await response.json();
+          return data;
+        } catch (parseError) {
+          throw new Error('Invalid response from server. Please try again.');
+        }
       } catch (error) {
-        console.error('Login error:', error);
-        throw error;
+        // Ensure we always throw an Error object with a message
+        if (error instanceof Error) {
+          throw error;
+        } else {
+          throw new Error('An unexpected error occurred during login.');
+        }
       }
     },
     onSuccess: (data) => {
