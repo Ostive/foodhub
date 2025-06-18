@@ -121,7 +121,7 @@ export default function CustomerNavbarNew() {
                 <User className="w-5 h-5 mr-2" /> Login
               </Link>
               <Link
-                href="/customer/signup"
+                href="/customer/register"
                 className="px-5 py-2.5 rounded-full border border-[#4CAF50] text-[#4CAF50] font-medium hover:bg-[#f0f9f0] transition"
               >
                 Sign Up
