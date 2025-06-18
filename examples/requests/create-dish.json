@@ -5,30 +5,16 @@
     "Authorization": "Bearer YOUR_JWT_TOKEN"
   },
   "body": {
+    "userId": "USER_ID_EXEMPLE",
     "name": "Coq au Vin",
     "description": "Traditional French chicken braised with wine, mushrooms, and garlic",
-    "price": 18.50,
-    "currency": "EUR",
-    "preparationTime": 25,
-    "category": "Main Course",
+    "isSoldAlone": true,
+    "tags": ["French", "Chicken", "Wine"],
     "isVegetarian": false,
-    "isVegan": false,
-    "isGlutenFree": true,
     "spicyLevel": 0,
-    "calories": 650,
-    "imageUrl": "https://example.com/images/coq-au-vin.jpg",
-    "allergens": [
-      {
-        "allergenId": 1,
-        "name": "Sulfites"
-      }
-    ],
-    "toppings": [
-      {
-        "toppingId": 1,
-        "name": "Extra mushrooms",
-        "price": 2.50
-      }
-    ]
+    "cost": 18.50,
+    "additionalAllergens": "Sulfites",
+    "picture": "https://example.com/images/coq-au-vin.jpg",
+    "promo": "Plat du jour"
   }
 }
