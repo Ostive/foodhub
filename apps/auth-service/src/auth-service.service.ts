@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/common';
 import { LoginUserDto } from './dto/login-auth.dto';
 import { JwtService } from '@nestjs/jwt';
 import { UsersHttpService } from './users/users-http.service';
@@ -74,8 +74,44 @@ export class AuthService {
     }
 
     async register(createUserDto: any) {
-        return this.usersService.create(createUserDto);
+        try {
+            const newUser = await this.usersService.create(createUserDto);
+            
+            // Generate token for the newly registered user
+            const payload = { sub: newUser.userId, email: newUser.email, role: newUser.role };
+            const token = this.jwtService.sign(payload);
+            
+            // Return token and user info (without password)
+            const { password, ...userWithoutPassword } = newUser;
+            return {
+                access_token: token,
+                user: userWithoutPassword,
+                message: 'Registration successful'
+            };
+        } catch (error) {
+            if (error.code === '23505') { // PostgreSQL unique violation error code
+                throw new ConflictException('Email already exists');
+            }
+            throw error;
+        }
     }
     
-
+    async logout(token: string) {
+        try {
+            // Verify and decode the token
+            const decodedToken = this.jwtService.verify(token);
+            const userId = decodedToken.sub;
+            
+            // In a production app, you would add this token to a blacklist/revocation list
+            // For now, we'll just acknowledge the logout
+            
+            return {
+                message: 'Logout successful',
+                userId
+            };
+        } catch (error) {
+            // If token verification fails, it's likely invalid or expired
+            throw new UnauthorizedException('Invalid token');
+        }
+    }
 }

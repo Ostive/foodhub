@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Eye, EyeOff, Mail, Lock, ArrowRight, User } from "lucide-react";
@@ -47,10 +47,13 @@ export default function LoginPage() {
     );
   };
 
-  // Redirect if already authenticated
-  if (isAuthenticated) {
-    router.push("/customer");
-  }
+  // Redirect if already authenticated using useEffect instead of during render
+  // This prevents the "Cannot update a component while rendering a different component" error
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/customer");
+    }
+  }, [isAuthenticated, router]);
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white">

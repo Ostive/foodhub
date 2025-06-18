@@ -1,0 +1,27 @@
+"use client";
+
+import { AuthNavbar } from "@/components/ui/";
+import { useAuth } from "@/lib/auth/auth-context";
+
+export default function CustomerLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  // We can access auth context here since this is a client component
+  const { isAuthenticated } = useAuth();
+
+  return (
+    <div className="min-h-screen flex flex-col">
+      {/* Authentication-aware navbar */}
+      <AuthNavbar />
+      
+      {/* Main content with padding for navbar */}
+      <main className="flex-grow pt-24">
+        {children}
+      </main>
+      
+      {/* Footer could be added here */}
+    </div>
+  );
+}
