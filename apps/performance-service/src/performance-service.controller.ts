@@ -7,6 +7,11 @@ export class PerformanceServiceController {
 
   @Get()
   async getPerformanceMetrics(): Promise<PerformanceMetric[]> {
-    return await this.performanceServiceService.getPerformanceMetrics();
+    try {
+      return await this.performanceServiceService.getPerformanceMetrics();
+    } catch (error) {
+      console.error('❌ Error in PerformanceServiceController:', error);
+      throw error;
+    }
   }
 }
