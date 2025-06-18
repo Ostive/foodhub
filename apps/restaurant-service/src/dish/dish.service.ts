@@ -42,6 +42,11 @@ export class DishService {
       message: 'Dish created successfully', 
       dish: savedDish 
     };
+
+    const newDish = this.dishRepository.create({...createDishDto});
+    await this.dishRepository.save(newDish);
+    
+    return { message: 'Dish created', newDish: createDishDto };
   }
 
   async findAllDishes(restaurantId: string) {
