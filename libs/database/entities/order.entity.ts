@@ -3,7 +3,7 @@ import { User } from './user.entity';
 import { Promo } from './promo.entity';
 import { OrderDish } from './order_dish.entity';
 import { OrderMenu } from './order_menu.entity';
-import { OrderStatus } from './order-status.enum';
+import { OrderStatus } from './order_status.enum';
 
 @Entity({ name: 'orders' })
 export class Order {

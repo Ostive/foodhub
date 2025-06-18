@@ -37,7 +37,7 @@ export default function PopularRestaurantsPage() {
               <ArrowLeft className="h-6 w-6 text-gray-700" />
             </Link>
             <div className="flex items-center">
-              <TrendingUp className="h-7 w-7 text-[#4CAF50] mr-2" />
+              <TrendingUp className="h-7 w-7 text-[#009E73] mr-2" />
               <h1 className="text-3xl font-bold text-gray-900">Popular Restaurants</h1>
             </div>
           </div>

@@ -137,7 +137,7 @@ export default function CartPage() {
         
         // Add marker for current location
         marker.current = new maplibregl.Marker({
-          color: '#4CAF50',
+          color: '#009E73',
           draggable: true
         })
           .setLngLat([deliveryAddress.longitude || -74.006, deliveryAddress.latitude || 40.7128])
@@ -294,7 +294,7 @@ export default function CartPage() {
               <h1 className="text-2xl font-bold text-gray-900 mb-3">Your Cart is Empty</h1>
               <p className="text-gray-600 mb-8 max-w-md">Looks like you haven't added any items to your cart yet. Explore our restaurants and discover delicious meals!</p>
               <div className="space-y-4 w-full max-w-xs">
-                <Link href="/customer" className="bg-[#4CAF50] hover:bg-[#388E3C] text-white px-6 py-3 rounded-lg font-medium inline-flex items-center justify-center w-full transition-colors">
+                <Link href="/customer" className="bg-[#009E73] hover:bg-[#388E3C] text-white px-6 py-3 rounded-lg font-medium inline-flex items-center justify-center w-full transition-colors">
                   Browse Restaurants
                 </Link>
                 <Link href="/customer/popular-restaurants" className="border border-gray-300 bg-white hover:bg-gray-50 text-gray-800 px-6 py-3 rounded-lg font-medium inline-flex items-center justify-center w-full transition-colors">
@@ -343,7 +343,7 @@ export default function CartPage() {
                     
                     <div className="grow">
                       <h3 className="font-medium text-gray-900">{item.name}</h3>
-                      <p className="text-[#4CAF50] font-medium">{item.price}</p>
+                      <p className="text-[#009E73] font-medium">{item.price}</p>
                     </div>
                     
                     <div className="flex items-center">
@@ -356,7 +356,7 @@ export default function CartPage() {
                       <span className="mx-3 font-medium text-gray-800">{item.quantity}</span>
                       <button 
                         onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="bg-[#4CAF50] hover:bg-[#388E3C] text-white p-1 rounded-full"
+                        className="bg-[#009E73] hover:bg-[#388E3C] text-white p-1 rounded-full"
                       >
                         <Plus size={16} />
                       </button>
@@ -378,14 +378,14 @@ export default function CartPage() {
                 <h2 className="text-xl font-bold text-gray-900">Delivery Details</h2>
                 <button 
                   onClick={() => setShowLocationModal(true)}
-                  className="text-[#4CAF50] font-medium hover:underline"
+                  className="text-[#009E73] font-medium hover:underline"
                 >
                   Change
                 </button>
               </div>
               
               <div className="flex items-start mb-4">
-                <MapPin className="w-5 h-5 text-[#4CAF50] mt-1 mr-3" />
+                <MapPin className="w-5 h-5 text-[#009E73] mt-1 mr-3" />
                 <div>
                   <h3 className="font-medium text-gray-900">Delivery Address</h3>
                   <p className="text-gray-600">{deliveryAddress.address}</p>
@@ -399,7 +399,7 @@ export default function CartPage() {
                 <textarea
                   id="delivery-instructions"
                   rows={2}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                   placeholder="E.g., Ring doorbell, leave at door, call upon arrival, etc."
                   value={deliveryInstructions}
                   onChange={(e) => setDeliveryInstructions(e.target.value)}
@@ -415,12 +415,12 @@ export default function CartPage() {
                 {paymentMethods.map((method) => (
                   <div 
                     key={method.id}
-                    className={`flex items-center p-3 border rounded-lg cursor-pointer ${selectedPaymentMethod === method.id ? 'border-[#4CAF50] bg-[#4CAF50]/5' : 'border-gray-200 hover:border-gray-300'}`}
+                    className={`flex items-center p-3 border rounded-lg cursor-pointer ${selectedPaymentMethod === method.id ? 'border-[#009E73] bg-[#009E73]/5' : 'border-gray-200 hover:border-gray-300'}`}
                     onClick={() => setSelectedPaymentMethod(method.id)}
                   >
-                    <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3 ${selectedPaymentMethod === method.id ? 'border-[#4CAF50]' : 'border-gray-400'}">
+                    <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3 ${selectedPaymentMethod === method.id ? 'border-[#009E73]' : 'border-gray-400'}">
                       {selectedPaymentMethod === method.id && (
-                        <div className="w-3 h-3 rounded-full bg-[#4CAF50]"></div>
+                        <div className="w-3 h-3 rounded-full bg-[#009E73]"></div>
                       )}
                     </div>
                     
@@ -465,7 +465,7 @@ export default function CartPage() {
                 </div>
                 
                 {promoCodeApplied && (
-                  <div className="flex justify-between text-[#4CAF50]">
+                  <div className="flex justify-between text-[#009E73]">
                     <span>Discount (WELCOME10)</span>
                     <span className="font-medium">-${discount.toFixed(2)}</span>
                   </div>
@@ -489,14 +489,14 @@ export default function CartPage() {
                     <input
                       type="text"
                       id="promo-code"
-                      className="grow border border-gray-300 rounded-l-lg px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                      className="grow border border-gray-300 rounded-l-lg px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                       placeholder="Enter promo code"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value)}
                     />
                     <button
                       onClick={applyPromoCode}
-                      className="bg-[#4CAF50] hover:bg-[#388E3C] text-white px-4 py-2 rounded-r-lg font-medium transition-colors"
+                      className="bg-[#009E73] hover:bg-[#388E3C] text-white px-4 py-2 rounded-r-lg font-medium transition-colors"
                     >
                       Apply
                     </button>
@@ -504,9 +504,9 @@ export default function CartPage() {
                   <p className="text-xs text-gray-500 mt-1">Try "WELCOME10" for 10% off your first order</p>
                 </div>
               ) : (
-                <div className="mb-6 bg-[#4CAF50]/10 p-3 rounded-lg flex justify-between items-center">
+                <div className="mb-6 bg-[#009E73]/10 p-3 rounded-lg flex justify-between items-center">
                   <div>
-                    <span className="text-[#4CAF50] font-medium">WELCOME10</span>
+                    <span className="text-[#009E73] font-medium">WELCOME10</span>
                     <p className="text-xs text-gray-600">10% discount applied</p>
                   </div>
                   <button
@@ -531,7 +531,7 @@ export default function CartPage() {
               
               <button
                 onClick={handleCheckout}
-                className="w-full bg-[#4CAF50] hover:bg-[#388E3C] text-white py-3 rounded-lg font-medium transition-colors"
+                className="w-full bg-[#009E73] hover:bg-[#388E3C] text-white py-3 rounded-lg font-medium transition-colors"
               >
                 Place Order
               </button>
@@ -564,13 +564,13 @@ export default function CartPage() {
             {/* Selection Method Tabs */}
             <div className="flex border-b border-gray-100">
               <button
-                className={`flex-1 py-3 font-medium ${selectionMethod === 'text' ? 'text-[#4CAF50] border-b-2 border-[#4CAF50]' : 'text-gray-500'}`}
+                className={`flex-1 py-3 font-medium ${selectionMethod === 'text' ? 'text-[#009E73] border-b-2 border-[#009E73]' : 'text-gray-500'}`}
                 onClick={() => switchSelectionMethod('text')}
               >
                 Text Search
               </button>
               <button
-                className={`flex-1 py-3 font-medium ${selectionMethod === 'map' ? 'text-[#4CAF50] border-b-2 border-[#4CAF50]' : 'text-gray-500'}`}
+                className={`flex-1 py-3 font-medium ${selectionMethod === 'map' ? 'text-[#009E73] border-b-2 border-[#009E73]' : 'text-gray-500'}`}
                 onClick={() => switchSelectionMethod('map')}
               >
                 Map Selection
@@ -585,7 +585,7 @@ export default function CartPage() {
                     <input
                       ref={searchInputRef}
                       type="text"
-                      className="w-full border border-gray-300 rounded-lg pl-10 pr-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                      className="w-full border border-gray-300 rounded-lg pl-10 pr-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                       placeholder="Search for an address"
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
@@ -602,12 +602,12 @@ export default function CartPage() {
                           className="p-3 hover:bg-gray-50 rounded-lg cursor-pointer flex items-start"
                           onClick={() => handleSelectAddress(addr.address, addr.latitude, addr.longitude)}
                         >
-                          <MapPin className="w-5 h-5 text-[#4CAF50] mt-1 mr-3 shrink-0" />
+                          <MapPin className="w-5 h-5 text-[#009E73] mt-1 mr-3 shrink-0" />
                           <div>
                             <p className="text-gray-900">{addr.address}</p>
                           </div>
                           {addr.address === deliveryAddress.address && (
-                            <Check className="ml-auto text-[#4CAF50]" size={18} />
+                            <Check className="ml-auto text-[#009E73]" size={18} />
                           )}
                         </div>
                       ))}
@@ -641,7 +641,7 @@ export default function CartPage() {
             <div className="p-4 border-t border-gray-100">
               <button
                 onClick={handleAddNewAddress}
-                className="w-full bg-[#4CAF50] hover:bg-[#388E3C] text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+                className="w-full bg-[#009E73] hover:bg-[#388E3C] text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
               >
                 <span>Confirm Location</span>
               </button>

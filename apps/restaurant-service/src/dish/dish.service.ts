@@ -2,7 +2,7 @@ import { Injectable, ValidationPipe, UsePipes, NotFoundException } from '@nestjs
 import { CreateDishDto, UpdateDishDto } from '../dto/dish';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Dish } from 'libs/database/entities/dish.entity';
+import { Dish } from '../../../../libs/database/entities/dish.entity';
 
 @Injectable()
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))

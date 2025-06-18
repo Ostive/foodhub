@@ -243,7 +243,7 @@ export default function OrderTrackingPage() {
         <CustomerNavbar />
         <div className="max-w-4xl mx-auto px-4 pt-20 pb-6 flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <div className="w-16 h-16 border-4 border-[#4CAF50] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <div className="w-16 h-16 border-4 border-[#009E73] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-gray-600">Loading order details...</p>
           </div>
         </div>
@@ -259,7 +259,7 @@ export default function OrderTrackingPage() {
           <div className="bg-white rounded-xl shadow-md p-8 text-center">
             <h1 className="text-2xl font-bold text-gray-900 mb-4">Order Not Found</h1>
             <p className="text-gray-600 mb-6">We couldn't find the order you're looking for.</p>
-            <Link href="/customer/orders" className="bg-[#4CAF50] hover:bg-[#388E3C] text-white px-6 py-3 rounded-lg font-medium inline-flex items-center transition-colors">
+            <Link href="/customer/orders" className="bg-[#009E73] hover:bg-[#388E3C] text-white px-6 py-3 rounded-lg font-medium inline-flex items-center transition-colors">
               <ChevronLeft className="mr-2 h-5 w-5" />
               Back to Orders
             </Link>
@@ -287,7 +287,7 @@ export default function OrderTrackingPage() {
         <div className="bg-white rounded-xl shadow-md p-6 mb-6">
           <div className="flex items-center justify-between mb-4" >
             <h2 className="text-xl font-bold text-gray-900">Order Status</h2>
-            <div className="flex items-center text-[#4CAF50] font-medium">
+            <div className="flex items-center text-[#009E73] font-medium">
               <Clock className="w-4 h-4 mr-1" />
               <span>Order placed at {formatTime(order.placedAt)}</span>
             </div>
@@ -298,7 +298,7 @@ export default function OrderTrackingPage() {
             {/* Progress Line */}
             <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200">
               <div 
-                className="h-full bg-[#4CAF50] transition-all duration-500" 
+                className="h-full bg-[#009E73] transition-all duration-500" 
                 style={{ width: `${currentStatusIndex >= 0 ? (currentStatusIndex / (statusSteps.length - 1)) * 100 : 0}%` }}
               ></div>
             </div>
@@ -312,7 +312,7 @@ export default function OrderTrackingPage() {
                 return (
                   <div key={step.status} className="flex flex-col items-center">
                     <div 
-                      className={`w-10 h-10 rounded-full flex items-center justify-center ${isCurrent ? 'bg-[#4CAF50] text-white ring-4 ring-[#4CAF50]/20' : isActive ? 'bg-[#4CAF50] text-white' : 'bg-gray-200 text-gray-500'}`}
+                      className={`w-10 h-10 rounded-full flex items-center justify-center ${isCurrent ? 'bg-[#009E73] text-white ring-4 ring-[#009E73]/20' : isActive ? 'bg-[#009E73] text-white' : 'bg-gray-200 text-gray-500'}`}
                     >
                       {step.icon}
                     </div>
@@ -326,9 +326,9 @@ export default function OrderTrackingPage() {
           </div>
           
           {/* Estimated Delivery */}
-          <div className="text-center p-4 bg-[#4CAF50]/10 rounded-lg">
+          <div className="text-center p-4 bg-[#009E73]/10 rounded-lg">
             <h3 className="font-medium text-gray-900 mb-1">Estimated Delivery Time</h3>
-            <p className="text-[#4CAF50] text-xl font-bold">{order.delivery.estimatedTime}</p>
+            <p className="text-[#009E73] text-xl font-bold">{order.delivery.estimatedTime}</p>
           </div>
         </div>
         
@@ -359,12 +359,12 @@ export default function OrderTrackingPage() {
               <div className="flex space-x-2">
                 <a 
                   href={`tel:${order.delivery.driver.phone}`} 
-                  className="w-10 h-10 bg-[#4CAF50]/10 text-[#4CAF50] rounded-full flex items-center justify-center hover:bg-[#4CAF50]/20 transition-colors"
+                  className="w-10 h-10 bg-[#009E73]/10 text-[#009E73] rounded-full flex items-center justify-center hover:bg-[#009E73]/20 transition-colors"
                 >
                   <Phone className="w-5 h-5" />
                 </a>
                 <button 
-                  className="w-10 h-10 bg-[#4CAF50]/10 text-[#4CAF50] rounded-full flex items-center justify-center hover:bg-[#4CAF50]/20 transition-colors"
+                  className="w-10 h-10 bg-[#009E73]/10 text-[#009E73] rounded-full flex items-center justify-center hover:bg-[#009E73]/20 transition-colors"
                   onClick={() => alert('Messaging feature coming soon!')}
                 >
                   <MessageSquare className="w-5 h-5" />
@@ -464,7 +464,7 @@ export default function OrderTrackingPage() {
               className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center">
-                <Phone className="w-5 h-5 text-[#4CAF50] mr-3" />
+                <Phone className="w-5 h-5 text-[#009E73] mr-3" />
                 <span className="font-medium">Contact Restaurant</span>
               </div>
               <span className="text-gray-500">{order.restaurant.phone}</span>
@@ -475,7 +475,7 @@ export default function OrderTrackingPage() {
               className="w-full flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
             >
               <div className="flex items-center">
-                <MessageSquare className="w-5 h-5 text-[#4CAF50] mr-3" />
+                <MessageSquare className="w-5 h-5 text-[#009E73] mr-3" />
                 <span className="font-medium">Contact Support</span>
               </div>
               <span className="text-gray-500">24/7 Customer Service</span>

@@ -47,7 +47,7 @@ const AddressSelectionModal = ({ isOpen, onClose, onAddressSelected }: AddressSe
       
       // Add marker for current location
       marker.current = new maplibregl.Marker({
-        color: '#4CAF50',
+        color: '#009E73',
         draggable: true
       })
         .setLngLat(coordinates)
@@ -337,7 +337,7 @@ const AddressSelectionModal = ({ isOpen, onClose, onAddressSelected }: AddressSe
 
         {/* Header - removed tabs and made map the only option */}
         <div className="py-3 text-center border-b border-gray-200">
-          <h3 className="font-medium text-[#4CAF50] flex items-center justify-center">
+          <h3 className="font-medium text-[#009E73] flex items-center justify-center">
             <MapPin className="h-5 w-5 mr-2" />
             Set Your Delivery Address
           </h3>
@@ -371,7 +371,7 @@ const AddressSelectionModal = ({ isOpen, onClose, onAddressSelected }: AddressSe
               <div className="absolute z-10 w-full mt-1 bg-white shadow-xl rounded-lg border border-gray-200 max-h-72 overflow-y-auto">
                 {isLoadingSuggestions ? (
                   <div className="p-4 text-center text-gray-500">
-                    <div className="inline-block w-5 h-5 border-2 border-gray-300 border-t-[#4CAF50] rounded-full animate-spin mr-2"></div>
+                    <div className="inline-block w-5 h-5 border-2 border-gray-300 border-t-[#009E73] rounded-full animate-spin mr-2"></div>
                     <span>Loading suggestions...</span>
                   </div>
                 ) : suggestions.length > 0 ? (
@@ -383,7 +383,7 @@ const AddressSelectionModal = ({ isOpen, onClose, onAddressSelected }: AddressSe
                         onClick={() => handleSelectSuggestion(suggestion)}
                       >
                         <div className="flex items-start">
-                          <MapPin className="h-5 w-5 text-[#4CAF50] mr-2 mt-0.5 shrink-0" />
+                          <MapPin className="h-5 w-5 text-[#009E73] mr-2 mt-0.5 shrink-0" />
                           <div>
                             <div className="font-medium text-gray-800">{suggestion.properties.label}</div>
                             {suggestion.properties.context && (
@@ -444,7 +444,7 @@ const AddressSelectionModal = ({ isOpen, onClose, onAddressSelected }: AddressSe
             
             {/* Current address display */}
             <div className="mt-4 p-3 bg-gray-50 rounded-lg flex items-start">
-              <MapPin className="h-5 w-5 text-[#4CAF50] mr-2 mt-0.5 shrink-0" />
+              <MapPin className="h-5 w-5 text-[#009E73] mr-2 mt-0.5 shrink-0" />
               <div>
                 <div className="font-medium">Selected Address</div>
                 <div className="text-gray-600 break-words">{address || 'No address selected'}</div>

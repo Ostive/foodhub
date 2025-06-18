@@ -159,7 +159,7 @@ export default function FavoritesPage() {
                 placeholder="Search saved restaurants"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
               />
             </div>
             
@@ -167,7 +167,7 @@ export default function FavoritesPage() {
               <select
                 value={selectedCuisine || ''}
                 onChange={(e) => setSelectedCuisine(e.target.value || null)}
-                className="appearance-none w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent bg-white pr-10"
+                className="appearance-none w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent bg-white pr-10"
               >
                 <option value="">All Cuisines</option>
                 {cuisines.map(cuisine => (
@@ -200,7 +200,7 @@ export default function FavoritesPage() {
                   {isRemoving && (
                     <div 
                       onClick={() => toggleRestaurantSelection(restaurant.id)}
-                      className={`absolute top-2 right-2 z-10 h-6 w-6 rounded-full border-2 flex items-center justify-center cursor-pointer ${selectedToRemove.includes(restaurant.id) ? 'bg-[#4CAF50] border-[#4CAF50]' : 'bg-white/80 border-gray-300'}`}
+                      className={`absolute top-2 right-2 z-10 h-6 w-6 rounded-full border-2 flex items-center justify-center cursor-pointer ${selectedToRemove.includes(restaurant.id) ? 'bg-[#009E73] border-[#009E73]' : 'bg-white/80 border-gray-300'}`}
                     >
                       {selectedToRemove.includes(restaurant.id) && (
                         <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -224,7 +224,7 @@ export default function FavoritesPage() {
                   "Try a different search term or filter" : 
                   "You haven't saved any restaurants yet"}
               </p>
-              <Link href="/customer" className="mt-6 inline-block px-6 py-3 bg-[#4CAF50] text-white rounded-full font-medium">
+              <Link href="/customer" className="mt-6 inline-block px-6 py-3 bg-[#009E73] text-white rounded-full font-medium">
                 Browse Restaurants
               </Link>
             </div>

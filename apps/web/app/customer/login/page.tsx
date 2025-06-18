@@ -62,12 +62,12 @@ export default function LoginPage() {
         <div className="mx-auto w-full max-w-sm lg:max-w-md">
           <div className="text-center mb-8">
             <Link href="/customer" className="inline-block">
-              <span className="text-4xl font-bold text-[#4CAF50]">FoodHUB</span>
+              <span className="text-4xl font-bold text-[#009E73]">FoodHUB</span>
             </Link>
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Welcome back</h2>
             <p className="mt-2 text-sm text-gray-600">
               Don't have an account?{" "}
-              <Link href="/customer/register" className="font-medium text-[#4CAF50] hover:text-[#388e3c]">
+              <Link href="/customer/register" className="font-medium text-[#009E73] hover:text-[#388e3c]">
                 Sign up
               </Link> 
             </p>
@@ -96,7 +96,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-hidden focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
+                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-hidden focus:ring-[#009E73] focus:border-[#009E73] sm:text-sm"
                   placeholder="Enter your email"
                 />
               </div>
@@ -118,7 +118,7 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-hidden focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
+                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-hidden focus:ring-[#009E73] focus:border-[#009E73] sm:text-sm"
                   placeholder="Enter your password"
                 />
                 <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -145,7 +145,7 @@ export default function LoginPage() {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
-                  className="h-4 w-4 text-[#4CAF50] focus:ring-[#4CAF50] border-gray-300 rounded"
+                  className="h-4 w-4 text-[#009E73] focus:ring-[#009E73] border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
                   Remember me
@@ -153,7 +153,7 @@ export default function LoginPage() {
               </div>
 
               <div className="text-sm">
-                <Link href="/customer/forgot-password" className="font-medium text-[#4CAF50] hover:text-[#388e3c]">
+                <Link href="/customer/forgot-password" className="font-medium text-[#009E73] hover:text-[#388e3c]">
                   Forgot your password?
                 </Link>
               </div>
@@ -163,7 +163,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-xs text-sm font-medium text-white bg-[#4CAF50] hover:bg-[#388e3c] focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-xs text-sm font-medium text-white bg-[#009E73] hover:bg-[#388e3c] focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#009E73] transition-colors duration-200 disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <>
@@ -192,9 +192,9 @@ export default function LoginPage() {
             </div>
             <button
               onClick={() => login({ email: 'testcustomer@customer.com', password: 'Password123!' })}
-              className="mt-4 w-full flex justify-center items-center py-3 px-4 border border-gray-300 rounded-xl shadow-xs text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors duration-200"
+              className="mt-4 w-full flex justify-center items-center py-3 px-4 border border-gray-300 rounded-xl shadow-xs text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#009E73] transition-colors duration-200"
             >
-              <User className="mr-2 h-4 w-4 text-[#4CAF50]" />
+              <User className="mr-2 h-4 w-4 text-[#009E73]" />
               Login as Test User
             </button>
           </div>
