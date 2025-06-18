@@ -1,174 +1,10 @@
-import { Injectable, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '../../../libs/database/entities/user.entity';
 import * as bcrypt from 'bcrypt';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
-
-// Define DTOs for our service
-export class CreateDeliveryDriverDto {
-  @ApiProperty({
-    description: 'Email address of the delivery driver',
-    example: 'driver@example.com',
-    uniqueItems: true
-  })
-  @IsEmail({}, { message: 'Please provide a valid email address' })
-  @IsNotEmpty({ message: 'Email is required' })
-  email: string;
-
-  @ApiProperty({
-    description: 'Password for the delivery driver account',
-    example: 'StrongP@ssw0rd',
-    minLength: 8
-  })
-  @IsString()
-  @IsNotEmpty({ message: 'Password is required' })
-  @MinLength(8, { message: 'Password must be at least 8 characters long' })
-  password: string;
-
-  @ApiProperty({
-    description: 'First name of the delivery driver',
-    example: 'John'
-  })
-  @IsString()
-  @IsNotEmpty({ message: 'First name is required' })
-  firstName: string;
-
-  @ApiProperty({
-    description: 'Last name of the delivery driver',
-    example: 'Doe'
-  })
-  @IsString()
-  @IsNotEmpty({ message: 'Last name is required' })
-  lastName: string;
-
-  @ApiProperty({
-    description: 'Phone number of the delivery driver',
-    example: '+33612345678'
-  })
-  @IsString()
-  @IsNotEmpty({ message: 'Phone number is required' })
-  phone: string;
-
-  @ApiPropertyOptional({
-    description: 'Address of the delivery driver',
-    example: '123 Main St'
-  })
-  @IsString()
-  @IsOptional()
-  address?: string;
-
-  @ApiPropertyOptional({
-    description: 'Transport method used by the delivery driver',
-    example: 'bicycle',
-    enum: ['bicycle', 'scooter', 'car', 'motorcycle', 'on foot']
-  })
-  @IsString()
-  @IsOptional()
-  transport?: string;
-
-  @ApiPropertyOptional({
-    description: 'Profile picture of the delivery driver',
-    example: 'https://example.com/profile-picture.jpg'
-  })
-  @IsString()
-  @IsOptional()
-  profilePicture?: string;
-
-  @ApiPropertyOptional({
-    description: 'RIB of the delivery driver',
-    example: 'FR12345678901234567890123456789012'
-  })
-  @IsString()
-  @IsOptional()
-  rib?: string;
-}
-
-export class UpdateDeliveryDriverDto {
-  @ApiPropertyOptional({
-    description: 'Email address of the delivery driver',
-    example: 'driver@example.com',
-    uniqueItems: true
-  })
-  @IsEmail({}, { message: 'Please provide a valid email address' })
-  @IsOptional()
-  email?: string;
-
-  @ApiPropertyOptional({
-    description: 'Password for the delivery driver account',
-    example: 'NewStrongP@ssw0rd',
-    minLength: 8
-  })
-  @IsString()
-  @IsOptional()
-  @MinLength(8, { message: 'Password must be at least 8 characters long' })
-  password?: string;
-
-  @ApiPropertyOptional({
-    description: 'First name of the delivery driver',
-    example: 'John'
-  })
-  @IsString()
-  @IsOptional()
-  firstName?: string;
-
-  @ApiPropertyOptional({
-    description: 'Last name of the delivery driver',
-    example: 'Doe'
-  })
-  @IsString()
-  @IsOptional()
-  lastName?: string;
-
-  @ApiPropertyOptional({
-    description: 'Phone number of the delivery driver',
-    example: '+33612345678'
-  })
-  @IsString()
-  @IsOptional()
-  phone?: string;
-
-  @ApiPropertyOptional({
-    description: 'Address of the delivery driver',
-    example: '123 Main St'
-  })
-  @IsString()
-  @IsOptional()
-  address?: string;
-
-  @ApiPropertyOptional({
-    description: 'Transport method used by the delivery driver',
-    example: 'bicycle',
-    enum: ['bicycle', 'scooter', 'car', 'motorcycle', 'on foot']
-  })
-  @IsString()
-  @IsOptional()
-  transport?: string;
-
-  @ApiPropertyOptional({
-    description: 'Profile picture of the delivery driver',
-    example: 'https://example.com/profile-picture.jpg'
-  })
-  @IsString()
-  @IsOptional()
-  profilePicture?: string;
-
-  @ApiPropertyOptional({
-    description: 'RIB of the delivery driver',
-    example: 'FR12345678901234567890123456789012'
-  })
-  @IsString()
-  @IsOptional()
-  rib?: string;
-
-  @ApiPropertyOptional({
-    description: 'Whether the delivery driver account is active',
-    example: true
-  })
-  @IsOptional()
-  isActive?: boolean;
-}
+import { CreateDeliveryPersonDto } from './dto/create-delivery-person.dto';
+import { UpdateDeliveryPersonDto } from './dto/update-delivery-person.dto';
 
 @Injectable()
 export class DeliverServiceService {
@@ -178,9 +14,9 @@ export class DeliverServiceService {
   ) {}
 
   /**
-   * Create a new delivery driver
+   * Create a new delivery person
    */
-  async createDeliveryDriver(createDto: CreateDeliveryDriverDto): Promise<User> {
+  async create(createDto: CreateDeliveryPersonDto): Promise<User> {
     // Check if user with this email already exists
     const existingUser = await this.userRepository.findOne({
       where: { email: createDto.email }
@@ -202,9 +38,9 @@ export class DeliverServiceService {
   }
 
   /**
-   * Get all delivery drivers
+   * Get all delivery persons
    */
-  async getAllDeliveryDrivers(): Promise<User[]> {
+  async findAll(): Promise<User[]> {
     return this.userRepository.find({
       where: { role: 'delivery_person' },
       select: ['userId', 'firstName', 'lastName', 'email', 'phone', 'address', 'transport', 'profilePicture', 'rib']
@@ -212,9 +48,9 @@ export class DeliverServiceService {
   }
 
   /**
-   * Get delivery driver by ID
+   * Get delivery person by ID
    */
-  async getDeliveryDriverById(id: number): Promise<User> {
+  async findOne(id: number): Promise<User> {
     const driver = await this.userRepository.findOne({
       where: { userId: id, role: 'delivery_person' },
       select: ['userId', 'firstName', 'lastName', 'email', 'phone', 'address', 'transport', 'profilePicture', 'rib']
@@ -228,19 +64,19 @@ export class DeliverServiceService {
   }
 
   /**
-   * Update delivery driver
+   * Update delivery person
    */
-  async updateDeliveryDriver(id: number, updateDto: UpdateDeliveryDriverDto): Promise<User> {
-    const driver = await this.userRepository.findOne({
+  async update(id: number, updateDto: UpdateDeliveryPersonDto): Promise<User> {
+    const deliveryPerson = await this.userRepository.findOne({
       where: { userId: id, role: 'delivery_person' }
     });
 
-    if (!driver) {
-      throw new NotFoundException(`Delivery driver with ID ${id} not found`);
+    if (!deliveryPerson) {
+      throw new NotFoundException(`Delivery person with ID ${id} not found`);
     }
 
     // If updating email, check if it's already taken by another user
-    if (updateDto.email && updateDto.email !== driver.email) {
+    if (updateDto.email && updateDto.email !== deliveryPerson.email) {
       const existingUser = await this.userRepository.findOne({
         where: { email: updateDto.email }
       });
@@ -255,40 +91,40 @@ export class DeliverServiceService {
       updateDto.password = await bcrypt.hash(updateDto.password, 10);
     }
 
-    // Update driver
-    Object.assign(driver, updateDto);
-    return this.userRepository.save(driver);
+    // Update delivery person
+    Object.assign(deliveryPerson, updateDto);
+    return this.userRepository.save(deliveryPerson);
   }
 
   /**
-   * Delete delivery driver
+   * Delete delivery person
    */
-  async deleteDeliveryDriver(id: number): Promise<void> {
-    const driver = await this.userRepository.findOne({
+  async remove(id: number): Promise<void> {
+    const deliveryPerson = await this.userRepository.findOne({
       where: { userId: id, role: 'delivery_person' }
     });
 
-    if (!driver) {
-      throw new NotFoundException(`Delivery driver with ID ${id} not found`);
+    if (!deliveryPerson) {
+      throw new NotFoundException(`Delivery person with ID ${id} not found`);
     }
 
-    await this.userRepository.remove(driver);
+    await this.userRepository.remove(deliveryPerson);
   }
 
   /**
-   * Get delivery driver's orders
+   * Get delivery person's orders
    */
-  async getDeliveryDriverOrders(id: number): Promise<any[]> {
-    const driver = await this.userRepository.findOne({
+  async findOrders(id: number): Promise<any[]> {
+    const deliveryPerson = await this.userRepository.findOne({
       where: { userId: id, role: 'delivery_person' },
       relations: ['deliveryOrders']
     });
 
-    if (!driver) {
-      throw new NotFoundException(`Delivery driver with ID ${id} not found`);
+    if (!deliveryPerson) {
+      throw new NotFoundException(`Delivery person with ID ${id} not found`);
     }
 
-    return driver.deliveryOrders;
+    return deliveryPerson.deliveryOrders;
   }
 
   /**

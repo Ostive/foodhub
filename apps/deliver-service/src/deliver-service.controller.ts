@@ -1,20 +1,22 @@
 import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, HttpCode, HttpStatus, Query } from '@nestjs/common';
-import { DeliverServiceService, CreateDeliveryDriverDto, UpdateDeliveryDriverDto } from './deliver-service.service';
+import { DeliverServiceService } from './deliver-service.service';
+import { CreateDeliveryPersonDto } from './dto/create-delivery-person.dto';
+import { UpdateDeliveryPersonDto } from './dto/update-delivery-person.dto';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody, ApiQuery, ApiOkResponse, ApiCreatedResponse, ApiNoContentResponse, ApiNotFoundResponse, ApiConflictResponse } from '@nestjs/swagger';
 import { User } from '../../../libs/database/entities/user.entity';
 
-@ApiTags('delivery-drivers')
-@Controller('delivery-drivers')
+@ApiTags('delivery-person')
+@Controller('delivery-person')
 export class DeliverServiceController {
   constructor(private readonly deliverServiceService: DeliverServiceService) {}
 
   @Post()
   @ApiOperation({ 
-    summary: 'Create a new delivery driver',
-    description: 'Creates a new delivery driver account with the provided information. Automatically assigns the delivery_person role and generates a unique referral code.'
+    summary: 'Create a new delivery person',
+    description: 'Creates a new delivery person account with the provided information. Automatically assigns the delivery_person role and generates a unique referral code.'
   })
   @ApiCreatedResponse({ 
-    description: 'The delivery driver has been successfully created.',
+    description: 'The delivery person has been successfully created.',
     type: User,
     schema: {
       example: {
@@ -33,19 +35,19 @@ export class DeliverServiceController {
   })
   @ApiResponse({ status: 400, description: 'Bad request - Invalid input data.' })
   @ApiConflictResponse({ description: 'User with this email already exists.' })
-  @ApiBody({ type: CreateDeliveryDriverDto })
+  @ApiBody({ type: CreateDeliveryPersonDto })
   @HttpCode(HttpStatus.CREATED)
-  async createDeliveryDriver(@Body() createDto: CreateDeliveryDriverDto) {
-    return this.deliverServiceService.createDeliveryDriver(createDto);
+  async create(@Body() createDto: CreateDeliveryPersonDto) {
+    return this.deliverServiceService.create(createDto);
   }
 
   @Get()
   @ApiOperation({ 
-    summary: 'Get all delivery drivers',
-    description: 'Retrieves a list of all delivery drivers in the system.'
+    summary: 'Get all delivery persons',
+    description: 'Retrieves a list of all delivery persons in the system.'
   })
   @ApiOkResponse({ 
-    description: 'List of all delivery drivers retrieved successfully.',
+    description: 'List of all delivery persons retrieved successfully.',
     type: [User],
     schema: {
       example: [
@@ -70,14 +72,14 @@ export class DeliverServiceController {
       ]
     }
   })
-  async getAllDeliveryDrivers() {
-    return this.deliverServiceService.getAllDeliveryDrivers();
+  async findAll() {
+    return this.deliverServiceService.findAll();
   }
 
   @Get(':id')
   @ApiOperation({ 
-    summary: 'Get a delivery driver by ID',
-    description: 'Retrieves detailed information about a specific delivery driver.'
+    summary: 'Get a delivery person by ID',
+    description: 'Retrieves detailed information about a specific delivery person.'
   })
   @ApiParam({ 
     name: 'id', 
@@ -86,7 +88,7 @@ export class DeliverServiceController {
     example: 123
   })
   @ApiOkResponse({ 
-    description: 'Delivery driver information retrieved successfully.',
+    description: 'Delivery person information retrieved successfully.',
     type: User,
     schema: {
       example: {
@@ -103,14 +105,14 @@ export class DeliverServiceController {
     }
   })
   @ApiNotFoundResponse({ description: 'Delivery driver with the specified ID was not found.' })
-  async getDeliveryDriverById(@Param('id') id: string) {
-    return this.deliverServiceService.getDeliveryDriverById(+id);
+  async findOne(@Param('id') id: string) {
+    return this.deliverServiceService.findOne(+id);
   }
 
   @Put(':id')
   @ApiOperation({ 
-    summary: 'Update a delivery driver',
-    description: 'Updates information for an existing delivery driver. Only provided fields will be updated.'
+    summary: 'Update a delivery person',
+    description: 'Updates information for an existing delivery person. Only provided fields will be updated.'
   })
   @ApiParam({ 
     name: 'id', 
@@ -119,11 +121,11 @@ export class DeliverServiceController {
     example: 123
   })
   @ApiBody({ 
-    type: UpdateDeliveryDriverDto,
-    description: 'Fields to update for the delivery driver'
+    type: UpdateDeliveryPersonDto,
+    description: 'Fields to update for the delivery person'
   })
   @ApiOkResponse({ 
-    description: 'The delivery driver has been successfully updated.',
+    description: 'The delivery person has been successfully updated.',
     type: User,
     schema: {
       example: {
@@ -139,17 +141,17 @@ export class DeliverServiceController {
   })
   @ApiNotFoundResponse({ description: 'Delivery driver with the specified ID was not found.' })
   @ApiConflictResponse({ description: 'The provided email is already in use by another user.' })
-  async updateDeliveryDriver(
+  async update(
     @Param('id') id: string,
-    @Body() updateDto: UpdateDeliveryDriverDto,
+    @Body() updateDto: UpdateDeliveryPersonDto,
   ) {
-    return this.deliverServiceService.updateDeliveryDriver(+id, updateDto);
+    return this.deliverServiceService.update(+id, updateDto);
   }
 
   @Delete(':id')
   @ApiOperation({ 
-    summary: 'Delete a delivery driver',
-    description: 'Permanently removes a delivery driver from the system.'
+    summary: 'Delete a delivery person',
+    description: 'Permanently removes a delivery person from the system.'
   })
   @ApiParam({ 
     name: 'id', 
@@ -157,17 +159,17 @@ export class DeliverServiceController {
     type: 'number',
     example: 123
   })
-  @ApiNoContentResponse({ description: 'The delivery driver has been successfully deleted.' })
+  @ApiNoContentResponse({ description: 'The delivery person has been successfully deleted.' })
   @ApiNotFoundResponse({ description: 'Delivery driver with the specified ID was not found.' })
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteDeliveryDriver(@Param('id') id: string) {
-    await this.deliverServiceService.deleteDeliveryDriver(+id);
+  async remove(@Param('id') id: string) {
+    await this.deliverServiceService.remove(+id);
   }
 
   @Get(':id/orders')
   @ApiOperation({ 
-    summary: 'Get orders for a delivery driver',
-    description: 'Retrieves all orders assigned to a specific delivery driver.'
+    summary: 'Get orders for a delivery person',
+    description: 'Retrieves all orders assigned to a specific delivery person.'
   })
   @ApiParam({ 
     name: 'id', 
@@ -176,7 +178,7 @@ export class DeliverServiceController {
     example: 123
   })
   @ApiOkResponse({ 
-    description: 'Delivery driver orders retrieved successfully.',
+    description: 'Delivery person orders retrieved successfully.',
     schema: {
       example: [
         {
@@ -208,7 +210,7 @@ export class DeliverServiceController {
     }
   })
   @ApiNotFoundResponse({ description: 'Delivery driver with the specified ID was not found.' })
-  async getDeliveryDriverOrders(@Param('id') id: string) {
-    return this.deliverServiceService.getDeliveryDriverOrders(+id);
+  async findOrders(@Param('id') id: string) {
+    return this.deliverServiceService.findOrders(+id);
   }
 }

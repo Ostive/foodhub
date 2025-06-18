@@ -26,10 +26,10 @@ async function bootstrap() {
   
   // Setup Swagger documentation
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('Delivery Service API')
-    .setDescription('API for managing delivery drivers in the FoodHub platform')
+    .setTitle('Delivery Person Service API')
+    .setDescription('API for managing delivery persons in the FoodHub platform')
     .setVersion('1.0')
-    .addTag('delivery-drivers', 'Operations related to delivery drivers')
+    .addTag('delivery-person', 'Operations related to delivery persons')
     .addBearerAuth(
       {
         type: 'http',
