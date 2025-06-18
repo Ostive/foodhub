@@ -6,6 +6,7 @@ import { DishAllergen } from './dish_allergen.entity';
 import { MenuDish } from './menu_dish.entity';
 import { Comment } from './comment.entity';
 import { OrderDish } from './order_dish.entity';
+import { PersonalizationOption } from './personalization-option.entity';
 
 @Entity({ name: 'dishes' })
 export class Dish {
@@ -57,6 +58,9 @@ export class Dish {
 
   @OneToMany(() => MenuDish, md => md.menu)
   menuDishes: MenuDish[];
+  
+  @OneToMany(() => PersonalizationOption, po => po.dish, { cascade: true })
+  personalizationOptions: PersonalizationOption[];
 
   @OneToMany(() => Comment, comment => comment.dish)
   comments: Comment[];

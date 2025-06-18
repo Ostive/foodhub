@@ -1,0 +1,127 @@
+### Create a dish with personalization options
+POST http://localhost:3000/api/restaurant-service/1/dishes
+Content-Type: application/json
+
+{
+  "name": "Customizable Pizza",
+  "description": "Build your own pizza with your favorite toppings",
+  "cost": 10.99,
+  "category": "Pizza",
+  "picture": "pizza.jpg",
+  "personalizationOptions": [
+    {
+      "name": "Size",
+      "type": "single",
+      "required": true,
+      "choices": [
+        {
+          "name": "Small",
+          "additionalPrice": 0,
+          "isDefault": true
+        },
+        {
+          "name": "Medium",
+          "additionalPrice": 2.50,
+          "isDefault": false
+        },
+        {
+          "name": "Large",
+          "additionalPrice": 4.00,
+          "isDefault": false
+        }
+      ]
+    },
+    {
+      "name": "Toppings",
+      "type": "multiple",
+      "required": false,
+      "choices": [
+        {
+          "name": "Pepperoni",
+          "additionalPrice": 1.50,
+          "isDefault": false
+        },
+        {
+          "name": "Mushrooms",
+          "additionalPrice": 1.00,
+          "isDefault": false
+        },
+        {
+          "name": "Extra Cheese",
+          "additionalPrice": 1.25,
+          "isDefault": false
+        }
+      ]
+    }
+  ]
+}
+
+### Get dish with personalization options
+# Replace 123 with the actual dish ID returned from the create request
+GET http://localhost:3000/api/restaurant-service/1/dishes/123
+
+### Update dish with personalization options
+# Replace 123 with the actual dish ID
+PUT http://localhost:3000/api/restaurant-service/1/dishes/123
+Content-Type: application/json
+
+{
+  "name": "Deluxe Pizza",
+  "cost": 12.99,
+  "personalizationOptions": [
+    {
+      "name": "Size",
+      "type": "single",
+      "required": true,
+      "choices": [
+        {
+          "name": "Small",
+          "additionalPrice": 0,
+          "isDefault": false
+        },
+        {
+          "name": "Medium",
+          "additionalPrice": 2.50,
+          "isDefault": true
+        },
+        {
+          "name": "Large",
+          "additionalPrice": 5.00,
+          "isDefault": false
+        },
+        {
+          "name": "Extra Large",
+          "additionalPrice": 7.50,
+          "isDefault": false
+        }
+      ]
+    },
+    {
+      "name": "Toppings",
+      "type": "multiple",
+      "required": false,
+      "choices": [
+        {
+          "name": "Pepperoni",
+          "additionalPrice": 1.50,
+          "isDefault": false
+        },
+        {
+          "name": "Mushrooms",
+          "additionalPrice": 1.00,
+          "isDefault": false
+        },
+        {
+          "name": "Extra Cheese",
+          "additionalPrice": 1.25,
+          "isDefault": false
+        },
+        {
+          "name": "Bacon",
+          "additionalPrice": 2.00,
+          "isDefault": false
+        }
+      ]
+    }
+  ]
+}

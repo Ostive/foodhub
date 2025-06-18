@@ -23,6 +23,8 @@ import { Comment } from './entities/comment.entity';
 import { MongooseModule } from '@nestjs/mongoose';
 import { LogsFiles, LogsFilesSchema } from './schemas/logs_files.schema';
 import { Picture, PictureSchema } from './schemas/picture.schema';
+import { PersonalizationOption } from './entities/personalization-option.entity';
+import { PersonalizationOptionChoice } from './entities/personalization-option-choice.entity';
 
 @Module({
   imports: [
@@ -33,7 +35,7 @@ import { Picture, PictureSchema } from './schemas/picture.schema';
       useFactory: (configService: ConfigService) => {
         // Log environment variables to debug
         console.log({ db_name: configService.get('POSTGRES_DB_NAME') });
-        
+
         // Get database config from environment variables via ConfigService
         return {
           type: 'postgres',
@@ -42,11 +44,15 @@ import { Picture, PictureSchema } from './schemas/picture.schema';
           username: configService.get('POSTGRES_DB_USER') || 'postgres',
           password: configService.get('POSTGRES_DB_PASSWORD') || 'postgres',
           database: configService.get('POSTGRES_DB_NAME') || 'default_db',
-          entities: [MenuTopping,OrderMenu,OrderDish,Order,User,CreditCard,PromoAvailableUser,Promo,Allergen,Topping,Dish,Menu,ToppingAllergen,DishesTopping,DishAllergen,Planning,MenuDish,Comment],
+          entities: [MenuTopping, OrderMenu, OrderDish, Order, User, CreditCard,
+            PromoAvailableUser, Promo, Allergen, Topping, Dish, Menu, ToppingAllergen,
+            DishesTopping, DishAllergen, Planning, MenuDish, Comment,
+            PersonalizationOption, PersonalizationOptionChoice
+          ],
           synchronize: configService.get('POSTGRES_DB_SYNCHRONIZE') === 'true',
           autoLoadEntities: true,
         };
-        
+
       },
     }),
 
@@ -58,6 +64,6 @@ import { Picture, PictureSchema } from './schemas/picture.schema';
       { name: Picture.name, schema: PictureSchema },
     ]),
   ],
-  exports: [TypeOrmModule,MongooseModule],
+  exports: [TypeOrmModule, MongooseModule],
 })
-export class DatabaseModule {}
+export class DatabaseModule { }

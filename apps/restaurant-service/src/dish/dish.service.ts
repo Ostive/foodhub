@@ -4,6 +4,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, Between, Like, ILike, Raw } from 'typeorm';
 import { Dish } from '../../../../libs/database/entities/dish.entity';
 import { User } from '../../../../libs/database/entities/user.entity';
+import { PersonalizationOption } from '../../../../libs/database/entities/personalization-option.entity';
+import { PersonalizationOptionChoice } from '../../../../libs/database/entities/personalization-option-choice.entity';
 
 @Injectable()
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
@@ -17,39 +19,73 @@ export class DishService {
   ) {}
 
   async createDish(restaurantId: string, createDishDto: CreateDishDto) {
-    // Check if restaurant exists
-    const restaurant = await this.userRepository.findOne({
-      where: { userId: parseInt(restaurantId), role: 'restaurant' },
-    });
-    
-    if (!restaurant) {
-      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
-    }
-
-    // Create new dish entity
-    const dish = this.dishRepository.create({
-      ...createDishDto,
-      user: restaurant,
-    });
-
-    // Save dish to database
-    const savedDish = await this.dishRepository.save(dish);
-    
-    // Format the response
-    const { user, ...dishWithoutFullUser } = savedDish;
-    
-    return { 
-      success: true,
-      message: 'Dish created successfully', 
-      dish: {
-        ...dishWithoutFullUser,
-        restaurant: {
-          id: user.userId,
-          name: `${user.firstName} ${user.lastName}`,
-          email: user.email
-        }
+    try {
+      // Check if restaurant exists
+      const restaurant = await this.userRepository.findOne({
+        where: { userId: parseInt(restaurantId), role: 'restaurant' },
+      });
+      
+      if (!restaurant) {
+        throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
       }
-    };
+
+      // Create new dish entity
+      const dish = this.dishRepository.create({
+        ...createDishDto,
+        user: restaurant,
+      });
+
+      // Process personalization options if they exist
+      if (createDishDto.personalizationOptions && createDishDto.personalizationOptions.length > 0) {
+        // Create personalization options and choices
+        const personalizationOptions: Partial<PersonalizationOption>[] = [];
+        
+        for (const optionDto of createDishDto.personalizationOptions) {
+          const option = new PersonalizationOption();
+          option.name = optionDto.name;
+          option.type = optionDto.type;
+          option.required = optionDto.required;
+          option.choices = [];
+          
+          // Create choices for this option
+          if (optionDto.choices && optionDto.choices.length > 0) {
+            for (const choiceDto of optionDto.choices) {
+              const choice = new PersonalizationOptionChoice();
+              choice.name = choiceDto.name;
+              choice.additionalPrice = choiceDto.additionalPrice;
+              choice.isDefault = choiceDto.isDefault || false;
+              option.choices.push(choice);
+            }
+          }
+          
+          personalizationOptions.push(option);
+        }
+        
+        dish.personalizationOptions = personalizationOptions as PersonalizationOption[];
+      }
+
+      // Save dish to database
+      const savedDish = await this.dishRepository.save(dish);
+      
+      // Format the response
+      const { user, ...dishWithoutFullUser } = savedDish;
+      
+      return { 
+        success: true,
+        message: 'Dish created successfully', 
+        dish: {
+          ...dishWithoutFullUser,
+          restaurant: {
+            id: user.userId,
+            name: `${user.firstName} ${user.lastName}`,
+            email: user.email
+          }
+        }
+      };
+    } catch (error) {
+      console.error('Error creating dish with personalization options:', error);
+      throw error;
+    }
   }
 
   async findAllDishes(restaurantId: string, filterDto?: FilterDishDto) {
@@ -172,83 +208,148 @@ export class DishService {
   }
 
   async findOneDish(restaurantId: string, dishId: string) {
-    // Check if restaurant exists
-    const restaurant = await this.userRepository.findOne({
-      where: { userId: parseInt(restaurantId), role: 'restaurant' },
-    });
-    
-    if (!restaurant) {
-      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
-    }
-
-    // Find the specific dish for the restaurant
-    const dish = await this.dishRepository.findOne({
-      where: { dishId: parseInt(dishId), user: { userId: parseInt(restaurantId) } },
-      relations: ['user'],
-    });
-
-    if (!dish) {
-      throw new NotFoundException(`Dish with ID ${dishId} not found for restaurant ${restaurantId}`);
-    }
-    
-    // Format the response
-    const { user, ...dishWithoutFullUser } = dish;
-
-    return { 
-      success: true,
-      message: 'Dish retrieved successfully', 
-      dish: {
-        ...dishWithoutFullUser,
-        restaurant: {
-          id: user.userId,
-          name: `${user.firstName} ${user.lastName}`,
-          email: user.email
-        }
+    try {
+      console.log(`Finding dish ${dishId} for restaurant ${restaurantId}`);
+      
+      // Validate inputs
+      if (!restaurantId || isNaN(parseInt(restaurantId))) {
+        throw new BadRequestException(`Invalid restaurant ID: ${restaurantId}`);
       }
-    };
+      
+      if (!dishId || isNaN(parseInt(dishId))) {
+        throw new BadRequestException(`Invalid dish ID: ${dishId}`);
+      }
+      
+      // Check if restaurant exists
+      const restaurant = await this.userRepository.findOne({
+        where: { userId: parseInt(restaurantId), role: 'restaurant' },
+      });
+      
+      if (!restaurant) {
+        throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
+      }
+      
+      // Find dish with personalization options
+      const dish = await this.dishRepository.findOne({
+        where: { 
+          dishId: parseInt(dishId), 
+          userId: parseInt(restaurantId) 
+        },
+        relations: ['user', 'personalizationOptions', 'personalizationOptions.choices']
+      });
+      
+      if (!dish) {
+        throw new NotFoundException(`Dish with ID ${dishId} not found for restaurant ${restaurantId}`);
+      }
+      
+      console.log(`Found dish: ${dish.name}`);
+      console.log(`Personalization options: ${dish.personalizationOptions?.length || 0}`);
+      
+      // Format the response
+      const { user, ...dishWithoutFullUser } = dish;
+      
+      return {
+        success: true,
+        message: 'Dish retrieved successfully',
+        dish: {
+          ...dishWithoutFullUser,
+          restaurant: {
+            id: user.userId,
+            name: `${user.firstName} ${user.lastName}`,
+            email: user.email
+          }
+        }
+      };
+    } catch (error) {
+      console.error(`Error finding dish ${dishId} for restaurant ${restaurantId}:`, error);
+      throw error;
+    }
   }
 
   async updateDish(restaurantId: string, dishId: string, updateDishDto: UpdateDishDto) {
-    // Check if restaurant exists
-    const restaurant = await this.userRepository.findOne({
-      where: { userId: parseInt(restaurantId), role: 'restaurant' },
-    });
-    
-    if (!restaurant) {
-      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
-    }
-
-    // Check if dish exists and belongs to the restaurant
-    const dish = await this.dishRepository.findOne({
-      where: { dishId: parseInt(dishId), user: { userId: parseInt(restaurantId) } },
-      relations: ['user'],
-    });
-
-    if (!dish) {
-      throw new NotFoundException(`Dish with ID ${dishId} not found for restaurant ${restaurantId}`);
-    }
-
-    // Update dish properties
-    Object.assign(dish, updateDishDto);
-
-    // Save updated dish
-    const updatedDish = await this.dishRepository.save(dish);
-    
-    // Format the response
-    const { user, ...dishWithoutFullUser } = updatedDish;
-    
-    return { 
-      success: true,
-      message: 'Dish updated successfully', 
-      dish: {
-        ...dishWithoutFullUser,
-        restaurant: {
-          id: user.userId,
-          name: `${user.firstName} ${user.lastName}`,
-          email: user.email
-        }
+    try {
+      // Check if restaurant exists
+      const restaurant = await this.userRepository.findOne({
+        where: { userId: parseInt(restaurantId), role: 'restaurant' },
+      });
+      
+      if (!restaurant) {
+        throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
       }
-    };
+
+      // Check if dish exists and belongs to the restaurant
+      const dish = await this.dishRepository.findOne({
+        where: { dishId: parseInt(dishId), userId: parseInt(restaurantId) },
+        relations: ['personalizationOptions', 'personalizationOptions.choices']
+      });
+
+      if (!dish) {
+        throw new NotFoundException(`Dish with ID ${dishId} not found for restaurant ${restaurantId}`);
+      }
+
+      // Handle personalization options updates if provided
+      if (updateDishDto.personalizationOptions) {
+        // First, remove existing personalization options
+        if (dish.personalizationOptions && dish.personalizationOptions.length > 0) {
+          dish.personalizationOptions = [];
+        }
+        
+        // Create new personalization options
+        const personalizationOptions: Partial<PersonalizationOption>[] = [];
+        
+        for (const optionDto of updateDishDto.personalizationOptions) {
+          const option = new PersonalizationOption();
+          option.name = optionDto.name;
+          option.type = optionDto.type;
+          option.required = optionDto.required;
+          option.choices = [];
+          
+          // Create choices for this option
+          if (optionDto.choices && optionDto.choices.length > 0) {
+            for (const choiceDto of optionDto.choices) {
+              const choice = new PersonalizationOptionChoice();
+              choice.name = choiceDto.name;
+              choice.additionalPrice = choiceDto.additionalPrice;
+              choice.isDefault = choiceDto.isDefault || false;
+              option.choices.push(choice);
+            }
+          }
+          
+          personalizationOptions.push(option);
+        }
+        
+        dish.personalizationOptions = personalizationOptions as PersonalizationOption[];
+      }
+
+      // Update other dish properties
+      Object.keys(updateDishDto).forEach(key => {
+        if (key !== 'personalizationOptions') {
+          dish[key] = updateDishDto[key];
+        }
+      });
+
+      // Save updated dish
+      const updatedDish = await this.dishRepository.save(dish);
+      
+      // Format the response
+      const { user, ...dishWithoutFullUser } = updatedDish;
+      
+      return { 
+        success: true,
+        message: 'Dish updated successfully', 
+        dish: {
+          ...dishWithoutFullUser,
+          restaurant: {
+            id: user.userId,
+            name: `${user.firstName} ${user.lastName}`,
+            email: user.email
+          }
+        }
+      };
+    } catch (error) {
+      console.error(`Error updating dish ${dishId} for restaurant ${restaurantId}:`, error);
+      throw error;
+    }
   }
 
   async deleteDish(restaurantId: string, dishId: string) {
@@ -360,7 +461,7 @@ export class DishService {
       // Find dishes with search, pagination, and sorting
       const [dishes, totalCount] = await this.dishRepository.findAndCount({
         where: whereClause,
-        relations: ['user'],
+        relations: ['user', 'personalizationOptions', 'personalizationOptions.choices'],
         skip,
         take: limit,
         order

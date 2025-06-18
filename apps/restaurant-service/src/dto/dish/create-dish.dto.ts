@@ -1,4 +1,6 @@
-import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, Min, Max } from 'class-validator';
+import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, Min, Max, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { PersonalizationOptionDto } from './personalization-option.dto';
 
 export class CreateDishDto {
 
@@ -50,5 +52,9 @@ export class CreateDishDto {
   @IsString()
   promo?: string;
 
-
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => PersonalizationOptionDto)
+  personalizationOptions?: PersonalizationOptionDto[];
 }

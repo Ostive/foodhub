@@ -19,5 +19,5 @@ export class MenuDish {
   dish: Dish;
 
   @Column({ type: 'float', nullable: true })
-  differCost: number;
+  differCost: number | null;
 }
