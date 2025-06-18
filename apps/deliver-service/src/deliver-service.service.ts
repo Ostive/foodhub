@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../../libs/database/entities/user.entity';
+import { User } from '../../../libs/database/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
 // Define DTOs for our service

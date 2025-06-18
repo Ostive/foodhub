@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DeliverServiceController } from './deliver-service.controller';
 import { DeliverServiceService } from './deliver-service.service';
-import { DatabaseModule } from '../../libs/database/database.module';
-import { User } from '../../libs/database/entities/user.entity';
+import { DatabaseModule } from '../../../libs/database/database.module';
+import { User } from '../../../libs/database/entities/user.entity';
 
 @Module({
   imports: [
@@ -14,4 +14,4 @@ import { User } from '../../libs/database/entities/user.entity';
   providers: [DeliverServiceService],
   exports: [DeliverServiceService]
 })
-export class DeliverServiceModule {}
+export class DeliversModule {}

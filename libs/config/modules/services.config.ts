@@ -22,7 +22,9 @@ export interface ServicesConfig {
   userServicePort: number;
   authServicePort: number;
   performanceService: string; 
-  performanceServicePort: number; // Optional, if you want to add performance service later
+  performanceServicePort: number;
+  deliverService: string;
+  deliverServicePort: number;
 }
 
 export default registerAs('services', (): ServicesConfig => ({
@@ -30,10 +32,13 @@ export default registerAs('services', (): ServicesConfig => ({
   restaurantService: process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002',
   userService: process.env.USER_SERVICE_URL || 'http://localhost:3003',
   authService: process.env.AUTH_SERVICE_URL || 'http://localhost:3004',
+  performanceService: process.env.PERFORMANCE_SERVICE_URL || 'http://localhost:3005',
+  deliverService: process.env.DELIVER_SERVICE_URL || 'http://localhost:3006',
   orderServicePort: extractPortFromUrl(process.env.ORDER_SERVICE_URL || 'http://localhost:3001'),
   restaurantServicePort: extractPortFromUrl(process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002'),
   userServicePort: extractPortFromUrl(process.env.USER_SERVICE_URL || 'http://localhost:3003'),
   authServicePort: extractPortFromUrl(process.env.AUTH_SERVICE_URL || 'http://localhost:3004'),
-  performanceService: process.env.PERFORMANCE_SERVICE_URL || 'http://localhost:3005',
   performanceServicePort: extractPortFromUrl(process.env.PERFORMANCE_SERVICE_URL || 'http://localhost:3005'),
+  deliverServicePort: extractPortFromUrl(process.env.DELIVER_SERVICE_URL || 'http://localhost:3006'),
+
 }));

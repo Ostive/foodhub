@@ -23,6 +23,7 @@
     "start:user": "nest start user-service --watch",
     "start:auth": "nest start auth-service --watch",
     "start:performance": "nest start performance-service --watch",
+    "start:deliver": "nest start deliver-service --watch",
     "start:all": "npm run start:order & npm run start:restaurant & npm run start:user & cd apps/web && npm run dev",
     "start:web": "cd apps/web && npm run dev",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli",
