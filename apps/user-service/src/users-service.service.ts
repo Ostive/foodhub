@@ -214,6 +214,21 @@ export class UsersService {
     }
   }
 
+  async createDeveloper(createDeveloperDto: any): Promise<User> {
+    await this.checkEmailExists(createDeveloperDto.email);
 
+    const hashedPassword = await this.hashPassword(createDeveloperDto.password);
+    
+    const developer = this.userRepository.create({
+      ...createDeveloperDto,
+      role: 'developer',
+      referralCode: this.generateReferralCode(),
+      password: hashedPassword,
+    } as any);
 
+    const savedUser = await this.userRepository.save(developer);
+    // Using type assertion to handle the password removal correctly
+    const { password, ...userWithoutPassword } = savedUser as any;
+    return userWithoutPassword as unknown as User;
+  }
 }

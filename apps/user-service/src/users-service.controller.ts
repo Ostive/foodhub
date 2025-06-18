@@ -5,6 +5,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CreateDeliveryPersonDto } from './dto/create-delivery_person.dto';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { CreateDeveloperDto } from './dto/create-developer.dto';
 
 @Controller('users')
 export class UsersController {
@@ -28,6 +29,11 @@ export class UsersController {
   @Post('restaurant')
   createRestaurant(@Body() createRestaurantDto: CreateRestaurantDto) {
     return this.usersService.createRestaurant(createRestaurantDto);
+  }
+
+  @Post('developer')
+  createDeveloper(@Body() createDeveloperDto: CreateDeveloperDto) {
+    return this.usersService.createDeveloper(createDeveloperDto);
   }
 
   @Get()
