@@ -16,6 +16,7 @@ export class DishService {
   async createDish(createDishDto: CreateDishDto) {
 
     const newDish = this.dishRepository.create({...createDishDto});
+    await this.dishRepository.save(newDish);
     
     return { message: 'Dish created', newDish: createDishDto };
   }
