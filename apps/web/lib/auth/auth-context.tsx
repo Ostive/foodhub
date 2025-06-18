@@ -7,6 +7,18 @@ export interface User {
   firstName: string;
   lastName?: string;
   role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin';
+  phone?: string;
+  birthDate?: string;
+  address?: string;
+  referralCode?: string;
+  profilePicture?: string;
+  transport?: string | null;
+  website?: string | null;
+  rib?: string | null;
+  tags?: string | null;
+  minimumPurchase?: number | null;
+  deliveryRadius?: number | null;
+  averagePreparationTime?: number | null;
 }
 
 // Define authentication context type

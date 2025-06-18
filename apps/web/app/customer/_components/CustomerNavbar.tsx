@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -9,7 +9,6 @@ import {
   Search,
   ShoppingBag,
   User,
-  LogOut,
   Menu as IconMenu2,
   X as IconX,
 } from "lucide-react";
@@ -20,36 +19,23 @@ import {
   MobileNavHeader,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
-import { isLoggedIn } from "../_utils/authState";
+import { useAuth } from "@/lib/auth/auth-context";
+import { LogoutButton } from "@/components/auth/logout-button";
 
 export default function CustomerNavbarNew() {
   const router = useRouter();
-
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+  const { isAuthenticated, user } = useAuth();
+  
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const cartItemCount = 3;
 
+  // Use user data from auth context or fallback to default
   const userData = {
-    name: "John Doe",
-    avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-    address: "123 Main St, New York",
-  };
-
-  useEffect(() => {
-    setIsUserLoggedIn(isLoggedIn.value);
-    const interval = setInterval(() => {
-      if (isLoggedIn.value !== isUserLoggedIn) {
-        setIsUserLoggedIn(isLoggedIn.value);
-      }
-    }, 500);
-    return () => clearInterval(interval);
-  }, [isUserLoggedIn]);
-
-  const handleLogout = () => {
-    isLoggedIn.value = false;
-    router.refresh();
+    name: user?.firstName ? `${user.firstName} ${user.lastName || ''}` : "User",
+    avatar: user?.profilePicture || "https://randomuser.me/api/portraits/men/32.jpg",
+    address: user?.address || "123 Main St, New York",
   };
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -95,7 +81,7 @@ export default function CustomerNavbarNew() {
             )}
           </Link>
 
-          {isUserLoggedIn ? (
+          {isAuthenticated ? (
             <div className="relative group ml-4">
               <button className="flex items-center space-x-2">
                 <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-[#4CAF50]">
@@ -118,21 +104,29 @@ export default function CustomerNavbarNew() {
                 <Link href="/customer/profile" className="block py-2 text-sm text-gray-700 hover:text-[#4CAF50] flex items-center">
                   <User className="w-4 h-4 mr-2" /> My Profile
                 </Link>
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left py-2 text-sm text-red-600 hover:text-red-700 flex items-center"
-                >
-                  <LogOut className="w-4 h-4 mr-2" /> Sign Out
-                </button>
+                <div className="w-full text-left py-2">
+                  <LogoutButton 
+                    variant="text" 
+                    className="text-red-600 hover:text-red-700 flex items-center text-sm w-full" 
+                  />
+                </div>
               </div>
             </div>
           ) : (
-            <Link
-              href="/customer/login"
-              className="ml-4 px-5 py-2.5 rounded-full bg-[#4CAF50] text-white font-medium hover:bg-[#388e3c] transition flex items-center"
-            >
-              <User className="w-5 h-5 mr-2" /> Login
-            </Link>
+            <div className="flex items-center space-x-2 ml-4">
+              <Link
+                href="/customer/login"
+                className="px-5 py-2.5 rounded-full bg-[#4CAF50] text-white font-medium hover:bg-[#388e3c] transition flex items-center"
+              >
+                <User className="w-5 h-5 mr-2" /> Login
+              </Link>
+              <Link
+                href="/customer/signup"
+                className="px-5 py-2.5 rounded-full border border-[#4CAF50] text-[#4CAF50] font-medium hover:bg-[#f0f9f0] transition"
+              >
+                Sign Up
+              </Link>
+            </div>
           )}
         </NavBody>
 
@@ -170,7 +164,7 @@ export default function CustomerNavbarNew() {
               )}
             </Link>
 
-            {isUserLoggedIn ? (
+            {isAuthenticated ? (
               <>
                 <div className="flex items-center space-x-3 py-3 border-b border-gray-100">
                   <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-[#4CAF50]">
@@ -184,9 +178,12 @@ export default function CustomerNavbarNew() {
                 <Link href="/customer/profile" className="block py-3 text-[#4CAF50] font-semibold border-b border-gray-100">
                   My Profile
                 </Link>
-                <button onClick={handleLogout} className="w-full text-left py-3 text-red-600 font-semibold border-b border-gray-100">
-                  Sign Out
-                </button>
+                <div className="w-full py-3 border-b border-gray-100">
+                  <LogoutButton 
+                    variant="text" 
+                    className="text-red-600 font-semibold w-full text-left" 
+                  />
+                </div>
               </>
             ) : (
               <Link href="/customer/login" className="block py-3 text-[#4CAF50] font-semibold border-b border-gray-100">

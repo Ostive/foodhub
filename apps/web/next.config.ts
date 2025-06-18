@@ -19,6 +19,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'via.placeholder.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'example.com',
+      },
+
       // Add other domains as needed
     ],
   },
