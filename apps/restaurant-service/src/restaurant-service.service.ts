@@ -1,111 +1,139 @@
-import { Injectable, ValidationPipe, UsePipes } from '@nestjs/common';
+import { Injectable, ValidationPipe, UsePipes, BadRequestException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-import { User as Restaurant } from 'libs/database/entities/user.entity';
+import { User } from '../../../libs/database/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
+type RestaurantRole = 'restaurant';
 
 @Injectable()
 @UsePipes(new ValidationPipe({ transform: true, whitelist: true }))
 export class RestaurantService {
   constructor(
-    @InjectRepository(Restaurant)
-    private restaurantRepository: Repository<Restaurant>,
+    @InjectRepository(User)
+    private readonly restaurantRepository: Repository<User>,
   ) {}
 
   getHello(): string {
     return 'Hello World!';
   }
 
-async createRestaurant(createRestaurantDto: CreateRestaurantDto) {
+  async createRestaurant(createRestaurantDto: CreateRestaurantDto): Promise<Partial<User>> {
+    // Hash the password
     const hashedPassword = await bcrypt.hash(createRestaurantDto.password, 10);
-        
-        // Create new user with hashed password
-        const newUser = this.restaurantRepository.create({
-          ...createRestaurantDto,
-          password: hashedPassword,
-        });
-        
-        // Save and return the user (without the password)
-        const savedUser = await this.restaurantRepository.save(newUser);
-        const { password, ...userWithoutPassword } = savedUser;
-        return userWithoutPassword as Restaurant;
+    
+    // Create new restaurant with hashed password
+    const newRestaurant = this.restaurantRepository.create({
+      ...createRestaurantDto,
+      password: hashedPassword,
+      role: 'restaurant' as RestaurantRole,
+    } as any); // Using type assertion to bypass TypeScript's strict checking
+    
+    // Save and return the restaurant (without the password)
+    try {
+      const savedRestaurant = await this.restaurantRepository.save(newRestaurant);
+      // Using destructuring to remove password from response
+      const { password, ...restaurantWithoutPassword } = savedRestaurant as any;
+      return restaurantWithoutPassword;
+    } catch (error: any) { // Type error as any for better error handling
+      // Provide better error handling
+      if (error.code === '23505') { // PostgreSQL unique constraint violation
+        throw new ConflictException('Restaurant with this email already exists');
+      }
+      throw new BadRequestException(`Failed to create restaurant: ${error.message}`);
+    }
   }
 
-  async updateRestaurant(id: number, updateRestaurantDto: UpdateRestaurantDto) {
-    const restaurant = await this.restaurantRepository.findOne({ where: { userId:id } });
+  async updateRestaurant(id: number, updateRestaurantDto: UpdateRestaurantDto): Promise<Partial<User>> {
+    const restaurant = await this.restaurantRepository.findOne({ where: { userId: id } });
 
     if (!restaurant) {
-      throw new Error(`Restaurant with ID ${id} not found`);
+      throw new BadRequestException(`Restaurant with ID ${id} not found`);
     }
 
     // If password is being updated, hash it
-    if ('password' in updateRestaurantDto && updateRestaurantDto.password) {
-      const hashedPassword = await bcrypt.hash(updateRestaurantDto.password as string, 10);
-      updateRestaurantDto = { ...updateRestaurantDto, password: hashedPassword };
+    let updatedData = { ...updateRestaurantDto };
+    if (updateRestaurantDto.password) {
+      const hashedPassword = await bcrypt.hash(updateRestaurantDto.password, 10);
+      updatedData = { ...updatedData, password: hashedPassword };
     }
         
-    // Update restaurant
-    await this.restaurantRepository.update(id, updateRestaurantDto);
+    // Update restaurant - use type assertion to handle role field
+    await this.restaurantRepository.update({ userId: id }, updatedData as any);
         
     // Return updated restaurant
-    const updatedRestaurant = await this.restaurantRepository.findOne({ where: { userId:id } });
+    const updatedRestaurant = await this.restaurantRepository.findOne({ where: { userId: id } });
     if (!updatedRestaurant) {
-      throw new Error(`Restaurant with ID ${id} not found after update`);
+      throw new BadRequestException(`Restaurant with ID ${id} not found after update`);
     }
-    const { password, ...restaurantWithoutPassword } = updatedRestaurant;
-    return restaurantWithoutPassword as Restaurant;
+    
+    // Remove password from response
+    const { password, ...restaurantWithoutPassword } = updatedRestaurant as any;
+    return restaurantWithoutPassword;
   }
 
-  async findAll(): Promise<Restaurant[]> {
-    const restaurants = await this.restaurantRepository.find();
+  async findAll(): Promise<Partial<User>[]> {
+    // Find all restaurants
+    const restaurants = await this.restaurantRepository.find({ 
+      where: { role: 'restaurant' } 
+    });
+    
     // Remove passwords from the response
     return restaurants.map(restaurant => {
-      const { password, ...restaurantWithoutPassword } = restaurant;
-      return restaurantWithoutPassword as Restaurant;
+      const { password, ...restaurantWithoutPassword } = restaurant as any;
+      return restaurantWithoutPassword;
     });
   }
 
-  async findOne(id: number): Promise<Restaurant> {
-    const restaurant = await this.restaurantRepository.findOne({ where: { userId:id } });
+  async findOne(id: number): Promise<Partial<User>> {
+    const restaurant = await this.restaurantRepository.findOne({ 
+      where: { userId: id, role: 'restaurant' } 
+    });
 
     if (!restaurant) {
-      throw new Error(`Restaurant with ID ${id} not found`);
+      throw new BadRequestException(`Restaurant with ID ${id} not found`);
     }
 
     // Remove password from the response
-    const { password, ...restaurantWithoutPassword } = restaurant;
-    return restaurantWithoutPassword as Restaurant;
+    const { password, ...restaurantWithoutPassword } = restaurant as any;
+    return restaurantWithoutPassword;
   }
 
-  async findByEmail(email: string): Promise<Restaurant> {
-    const restaurant = await this.restaurantRepository.findOne({ where: { email } });
+  async findByEmail(email: string): Promise<User> {
+    const restaurant = await this.restaurantRepository.findOne({ 
+      where: { email, role: 'restaurant' } 
+    });
 
     if (!restaurant) {
-      throw new Error(`Restaurant with email ${email} not found`);
+      throw new BadRequestException(`Restaurant with email ${email} not found`);
     }
 
     return restaurant; // Return with password for auth purposes
   }
 
-  async findById(id: number): Promise<Restaurant> {
-    const restaurant = await this.restaurantRepository.findOne({ where: { userId:id } });
+  async findById(id: number): Promise<User> {
+    const restaurant = await this.restaurantRepository.findOne({ 
+      where: { userId: id, role: 'restaurant' } 
+    });
+    
     if (!restaurant) {
-      throw new Error(`Restaurant with ID ${id} not found`);
+      throw new BadRequestException(`Restaurant with ID ${id} not found`);
     }
+    
     return restaurant; // Return with password for auth purposes
   }
 
-    async remove(id: number): Promise<void> {
-    const restaurant = await this.restaurantRepository.findOne({ where: { userId:id } });
+  async remove(id: number): Promise<void> {
+    const restaurant = await this.restaurantRepository.findOne({ 
+      where: { userId: id, role: 'restaurant' } 
+    });
 
     if (!restaurant) {
-      throw new Error(`Restaurant with ID ${id} not found`);
+      throw new BadRequestException(`Restaurant with ID ${id} not found`);
     }
 
     await this.restaurantRepository.remove(restaurant);
   }
-  
 }

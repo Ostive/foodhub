@@ -1,0 +1,59 @@
+### Create a new test restaurant
+POST http://localhost:3002/restaurants
+Content-Type: application/json
+
+{
+  "role": "restaurant",
+  "firstName": "Test Pizza",
+  "lastName": "Restaurant",
+  "email": "test@testpizza.com",
+  "password": "Password123!",
+  "phone": "+33612345678",
+  "address": "123 Test Street, Paris, France",
+  "profilePicture": "https://example.com/test-profile.jpg",
+  "website": "https://testpizza.com",
+  "rib": "FR7630001007941234567890185",
+  "minimumPurchase": 10,
+  "deliveryRadius": 3,
+  "averagePreparationTime": 25,
+  "tags": ["pizza", "italian", "pasta"],
+  "planning": {
+    "mondayOpen": "11:00",
+    "mondayClose": "22:00",
+    "tuesdayOpen": "11:00",
+    "tuesdayClose": "22:00",
+    "wednesdayOpen": "11:00",
+    "wednesdayClose": "22:00",
+    "thursdayOpen": "11:00",
+    "thursdayClose": "22:00",
+    "fridayOpen": "11:00",
+    "fridayClose": "23:00",
+    "saturdayOpen": "12:00",
+    "saturdayClose": "23:00",
+    "sundayOpen": "12:00",
+    "sundayClose": "21:00"
+  }
+}
+
+### Update the restaurant (replace ID with the actual ID returned from the creation)
+PUT http://localhost:3002/restaurants/1
+Content-Type: application/json
+
+{
+  "firstName": "Updated Pizza",
+  "website": "https://updatedpizza.com",
+  "minimumPurchase": 15,
+  "tags": ["pizza", "italian", "pasta", "delivery"],
+  "planning": {
+    "fridayOpen": "10:00",
+    "fridayClose": "00:00",
+    "saturdayOpen": "10:00",
+    "saturdayClose": "00:00"
+  }
+}
+
+### Get restaurant by ID (replace ID with the actual ID)
+GET http://localhost:3002/restaurants/1
+
+### Get all restaurants
+GET http://localhost:3002/restaurants

@@ -2,7 +2,8 @@ import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/
 import { RestaurantService } from './restaurant-service.service';
 import { MenuService } from './menu/menu.service';
 import { DishService } from './dish/dish.service';
-import { CreateRestaurantDto, UpdateRestaurantDto } from './dto/menu';
+import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { MenuItemDto } from './dto/menu';
 import { CreateDishDto, UpdateDishDto } from './dto/dish';
 
