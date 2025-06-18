@@ -4,6 +4,7 @@ import { CreateOrderDto, UpdateOrderDto } from './dto/order.dto';
 import { OrderStatus } from 'libs/database/entities/order_status.enum';
 import { Order } from 'libs/database/entities/order.entity';
 import { NotFoundException } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @Controller('orders')
 export class OrderServiceController {
