@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { User } from './user.entity';
 import { OneToMany } from "typeorm";
 import { DishesTopping } from './dish_topping.entity';
@@ -12,7 +12,11 @@ export class Dish {
   @PrimaryGeneratedColumn()
   dishId: number;
 
-  @ManyToOne(() => User, user => user.dishes)
+  @Column()
+  userId: number;
+
+  @ManyToOne(() => User, user => user.creditCards, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
   user: User;
 
   @Column({ type: 'varchar', length: 500, nullable: true })

@@ -3,8 +3,8 @@ import { IsArray, IsBoolean, IsNotEmpty, IsNumber, IsOptional, IsString, IsUrl, 
 export class CreateDishDto {
 
   @IsNotEmpty()
-  @IsString()
-  userId: string;
+  @IsNumber()
+  userId: number;
 
   @IsNotEmpty()
   @IsString()
@@ -49,4 +49,6 @@ export class CreateDishDto {
   @IsOptional()
   @IsString()
   promo?: string;
+
+
 }

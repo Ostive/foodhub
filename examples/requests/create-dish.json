@@ -1,5 +1,5 @@
 {
-  "endpoint": "POST http://localhost:3000/api/dishes",
+  "endpoint": "POST http://localhost:3002/api/restaurants/:restaurants_id/dishes",
   "headers": {
     "Content-Type": "application/json",
     "Authorization": "Bearer YOUR_JWT_TOKEN"
@@ -16,5 +16,6 @@
     "additionalAllergens": "Sulfites",
     "picture": "https://example.com/images/coq-au-vin.jpg",
     "promo": "Plat du jour"
+    
   }
 }
