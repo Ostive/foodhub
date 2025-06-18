@@ -182,8 +182,8 @@ export default function CustomersPage() {
   const renderSortIndicator = (field) => {
     if (sortField !== field) return <ArrowUpDown className="h-4 w-4 ml-1 text-gray-400" />;
     return sortDirection === "asc" ? 
-      <ArrowUpDown className="h-4 w-4 ml-1 text-[#FF9800]" /> : 
-      <ArrowUpDown className="h-4 w-4 ml-1 text-[#FF9800]" />;
+      <ArrowUpDown className="h-4 w-4 ml-1 text-[#D55E00]" /> : 
+      <ArrowUpDown className="h-4 w-4 ml-1 text-[#D55E00]" />;
   };
 
   return (
@@ -200,17 +200,17 @@ export default function CustomersPage() {
           <input 
             type="text" 
             placeholder="Search customers..." 
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#D55E00] focus:border-transparent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </div>
         <div className="flex space-x-2">
-          <button className="flex items-center space-x-1 text-gray-700 hover:text-[#FF9800] text-sm font-medium px-4 py-2 bg-white rounded-lg shadow-xs border border-gray-200">
+          <button className="flex items-center space-x-1 text-gray-700 hover:text-[#D55E00] text-sm font-medium px-4 py-2 bg-white rounded-lg shadow-xs border border-gray-200">
             <Filter className="h-4 w-4" />
             <span>Filter</span>
           </button>
-          <button className="bg-[#FF9800] hover:bg-[#e65100] text-white px-4 py-2 rounded-lg text-sm font-medium">
+          <button className="bg-[#D55E00] hover:bg-[#e65100] text-white px-4 py-2 rounded-lg text-sm font-medium">
             Export Customers
           </button>
         </div>
@@ -310,7 +310,7 @@ export default function CustomersPage() {
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <div className="flex space-x-2">
-                        <button className="text-[#FF9800] hover:text-orange-700 font-medium">View</button>
+                        <button className="text-[#D55E00] hover:text-orange-700 font-medium">View</button>
                         <button className="text-gray-500 hover:text-gray-700 font-medium">Contact</button>
                       </div>
                     </td>
@@ -332,17 +332,17 @@ export default function CustomersPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Total Customers</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">{customers.length}</p>
+          <p className="text-3xl font-bold text-[#D55E00]">{customers.length}</p>
           <p className="text-sm text-green-600 mt-1">+12% from last month</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Active Customers</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">{customers.filter(c => c.status === 'active').length}</p>
+          <p className="text-3xl font-bold text-[#D55E00]">{customers.filter(c => c.status === 'active').length}</p>
           <p className="text-sm text-green-600 mt-1">87.5% active rate</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Avg. Lifetime Value</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">
+          <p className="text-3xl font-bold text-[#D55E00]">
             ${(customers.reduce((sum, c) => sum + c.totalSpent, 0) / customers.length).toFixed(2)}
           </p>
           <p className="text-sm text-green-600 mt-1">+5% from last month</p>
@@ -350,7 +350,7 @@ export default function CustomersPage() {
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Avg. Rating</h3>
           <div className="flex items-center">
-            <p className="text-3xl font-bold text-[#FF9800]">
+            <p className="text-3xl font-bold text-[#D55E00]">
               {(customers.reduce((sum, c) => sum + c.avgRating, 0) / customers.length).toFixed(1)}
             </p>
             <Star className="h-6 w-6 text-yellow-400 ml-2" />

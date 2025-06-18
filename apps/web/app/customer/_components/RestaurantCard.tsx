@@ -42,7 +42,7 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
           
           {/* Like button */}
           <button 
-            className={`absolute top-3 right-3 z-20 p-2 rounded-full shadow-md transition-colors ${liked ? 'bg-[#FF9800]/90 text-white' : 'bg-white/90 text-gray-700 hover:text-[#FF9800]'}`}
+            className={`absolute top-3 right-3 z-20 p-2 rounded-full shadow-md transition-colors ${liked ? 'bg-[#D55E00]/90 text-white' : 'bg-white/90 text-gray-700 hover:text-[#D55E00]'}`}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -54,7 +54,7 @@ export default function RestaurantCard({ restaurant }: RestaurantCardProps) {
           
           {/* Rating badge */}
           <div className="absolute bottom-3 left-3 z-20 bg-white/90 backdrop-blur-xs rounded-full px-2 py-1 shadow-md flex items-center">
-            <Star size={14} className="mr-1 text-[#FF9800] fill-[#FF9800]" />
+            <Star size={14} className="mr-1 text-[#D55E00] fill-[#D55E00]" />
             <span className="text-xs font-medium text-gray-800">{restaurant.rating}</span>
             <span className="text-xs text-gray-500 ml-1">({restaurant.reviewCount})</span>
           </div>

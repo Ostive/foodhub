@@ -80,13 +80,13 @@ layer(base);
   --primary: oklch(0.205 0 0); /* #4CAF50 - Green */
   --primary-foreground: oklch(0.985 0 0);
 
-  --secondary: oklch(0.97 0 0); /* #FF9800 - Orange */
+  --secondary: oklch(0.97 0 0); /* #D55E00 - Orange */
   --secondary-foreground: oklch(0.205 0 0);
 
   --muted: oklch(0.97 0 0);
   --muted-foreground: oklch(0.556 0 0); /* #757575 */
 
-  --accent: oklch(0.97 0 0); /* #FF9800 - Orange */
+  --accent: oklch(0.97 0 0); /* #D55E00 - Orange */
   --accent-foreground: oklch(0.205 0 0);
 
   --card: oklch(1 0 0);

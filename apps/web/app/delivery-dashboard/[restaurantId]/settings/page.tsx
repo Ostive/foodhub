@@ -57,11 +57,11 @@ export default function SettingsPage() {
                   <li key={tab.id}>
                     <button
                       onClick={() => setActiveTab(tab.id)}
-                      className={`w-full flex items-center px-4 py-3 text-left ${activeTab === tab.id ? 'bg-orange-50 text-[#FF9800] border-l-4 border-[#FF9800]' : 'text-gray-700 hover:bg-gray-50'}`}
+                      className={`w-full flex items-center px-4 py-3 text-left ${activeTab === tab.id ? 'bg-orange-50 text-[#D55E00] border-l-4 border-[#D55E00]' : 'text-gray-700 hover:bg-gray-50'}`}
                     >
                       <Icon className="h-5 w-5 mr-3" />
                       <span>{tab.name}</span>
-                      <ChevronRight className={`h-4 w-4 ml-auto ${activeTab === tab.id ? 'text-[#FF9800]' : 'text-gray-400'}`} />
+                      <ChevronRight className={`h-4 w-4 ml-auto ${activeTab === tab.id ? 'text-[#D55E00]' : 'text-gray-400'}`} />
                     </button>
                   </li>
                 );
@@ -122,7 +122,7 @@ export default function SettingsPage() {
                       <input
                         type="text"
                         id="restaurantName"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                         defaultValue={restaurantProfile.name}
                       />
                     </div>
@@ -132,7 +132,7 @@ export default function SettingsPage() {
                       <textarea
                         id="description"
                         rows={3}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                         defaultValue={restaurantProfile.description}
                       ></textarea>
                     </div>
@@ -151,7 +151,7 @@ export default function SettingsPage() {
                     </label>
                     <input
                       type="text"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       defaultValue={restaurantProfile.address}
                     />
                   </div>
@@ -163,7 +163,7 @@ export default function SettingsPage() {
                     </label>
                     <input
                       type="tel"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       defaultValue={restaurantProfile.phone}
                     />
                   </div>
@@ -175,7 +175,7 @@ export default function SettingsPage() {
                     </label>
                     <input
                       type="email"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       defaultValue={restaurantProfile.email}
                     />
                   </div>
@@ -187,7 +187,7 @@ export default function SettingsPage() {
                     </label>
                     <input
                       type="url"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       defaultValue={restaurantProfile.website}
                     />
                   </div>
@@ -205,7 +205,7 @@ export default function SettingsPage() {
                         <Clock className="h-4 w-4 mr-2 text-gray-400" />
                         <input
                           type="text"
-                          className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800] text-sm"
+                          className="px-3 py-1 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00] text-sm"
                           defaultValue={schedule.hours}
                         />
                       </div>
@@ -222,7 +222,7 @@ export default function SettingsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Delivery Radius (miles)</label>
                     <input
                       type="number"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       defaultValue={restaurantProfile.deliveryRadius}
                     />
                   </div>
@@ -231,7 +231,7 @@ export default function SettingsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Minimum Order ($)</label>
                     <input
                       type="number"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       defaultValue={restaurantProfile.minimumOrder}
                     />
                   </div>
@@ -240,7 +240,7 @@ export default function SettingsPage() {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Avg. Preparation Time (min)</label>
                     <input
                       type="number"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       defaultValue={restaurantProfile.averagePreparationTime}
                     />
                   </div>
@@ -249,7 +249,7 @@ export default function SettingsPage() {
               
               {/* Save Button */}
               <div className="flex justify-end">
-                <button className="bg-[#FF9800] hover:bg-[#e65100] text-white px-6 py-2 rounded-lg flex items-center">
+                <button className="bg-[#D55E00] hover:bg-[#e65100] text-white px-6 py-2 rounded-lg flex items-center">
                   <Save className="h-5 w-5 mr-2" />
                   Save Changes
                 </button>

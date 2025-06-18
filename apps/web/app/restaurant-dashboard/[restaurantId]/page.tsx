@@ -104,9 +104,9 @@ export default function RestaurantDashboard() {
         <CardHeader className="pb-4">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="flex items-center">
-              <Avatar className="h-16 w-16 border-2 border-[#FF9800] mr-4">
+              <Avatar className="h-16 w-16 border-2 border-[#D55E00] mr-4">
                 <AvatarImage src={restaurant.avatar} alt={restaurant.name} />
-                <AvatarFallback className="bg-orange-100 text-[#FF9800] text-lg font-bold">
+                <AvatarFallback className="bg-orange-100 text-[#D55E00] text-lg font-bold">
                   {restaurant.name.split(' ').map(word => word[0]).join('')}
                 </AvatarFallback>
               </Avatar>
@@ -114,11 +114,11 @@ export default function RestaurantDashboard() {
                 <CardTitle className="text-2xl md:text-3xl">{restaurant.name}</CardTitle>
                 <div className="flex items-center mt-1">
                   <div className="flex items-center mr-4">
-                    <MapPin className="h-3 w-3 text-[#FF9800] mr-1" />
+                    <MapPin className="h-3 w-3 text-[#D55E00] mr-1" />
                     <span className="text-xs text-gray-600">{restaurant.address}</span>
                   </div>
                   <div className="flex items-center">
-                    <Star className="h-3 w-3 text-[#FF9800] mr-1" />
+                    <Star className="h-3 w-3 text-[#D55E00] mr-1" />
                     <span className="text-xs text-gray-600">{restaurant.rating}/5</span>
                   </div>
                 </div>
@@ -128,11 +128,11 @@ export default function RestaurantDashboard() {
             <div className="flex items-center space-x-4 self-end md:self-auto">
               <div className="flex flex-col items-end">
                 <p className="text-gray-600 flex items-center text-sm">
-                  <Calendar className="h-4 w-4 mr-2 text-[#FF9800]" />
+                  <Calendar className="h-4 w-4 mr-2 text-[#D55E00]" />
                   {formattedDate}
                 </p>
                 <p className="text-gray-600 flex items-center text-sm mt-1">
-                  <Clock className="h-4 w-4 mr-2 text-[#FF9800]" />
+                  <Clock className="h-4 w-4 mr-2 text-[#D55E00]" />
                   {currentTime}
                 </p>
               </div>
@@ -150,21 +150,21 @@ export default function RestaurantDashboard() {
                 <DropdownMenuContent align="end" className="w-80">
                   <div className="p-4 border-b border-gray-100 flex justify-between items-center">
                     <DropdownMenuLabel className="p-0">Notifications</DropdownMenuLabel>
-                    <span className="text-xs text-[#FF9800] cursor-pointer">Mark all as read</span>
+                    <span className="text-xs text-[#D55E00] cursor-pointer">Mark all as read</span>
                   </div>
                   <div className="max-h-80 overflow-y-auto py-0">
                     {notifications.map(notification => (
                       <div key={notification.id} className={`p-4 border-b border-gray-100 hover:bg-gray-50 ${notification.read ? '' : 'bg-orange-50'}`}>
                         <div className="flex justify-between items-start">
                           <p className="text-sm font-medium">{notification.message}</p>
-                          {!notification.read && <div className="h-2 w-2 bg-[#FF9800] rounded-full"></div>}
+                          {!notification.read && <div className="h-2 w-2 bg-[#D55E00] rounded-full"></div>}
                         </div>
                         <p className="text-xs text-gray-500 mt-1">{notification.time}</p>
                       </div>
                     ))}
                   </div>
                   <div className="p-3 text-center border-t border-gray-100">
-                    <Link href={`/restaurant-dashboard/${restaurantId}/notifications`} className="text-sm text-[#FF9800] hover:underline">
+                    <Link href={`/restaurant-dashboard/${restaurantId}/notifications`} className="text-sm text-[#D55E00] hover:underline">
                       View all notifications
                     </Link>
                   </div>
@@ -176,7 +176,7 @@ export default function RestaurantDashboard() {
         
         {/* Quick action buttons using shadcn Button */}
         <CardFooter className="flex flex-wrap gap-2 pt-0">
-          <Button variant="default" className="bg-[#FF9800] hover:bg-orange-700">
+          <Button variant="default" className="bg-[#D55E00] hover:bg-orange-700">
             <Package className="h-4 w-4 mr-2" />
             New Order
           </Button>
@@ -269,7 +269,7 @@ export default function RestaurantDashboard() {
                     <h3 className="text-2xl font-bold mt-1">{todayStats.topItem}</h3>
                   </div>
                   <div className="p-2 bg-orange-100 rounded-full">
-                    <Utensils className="h-5 w-5 text-[#FF9800]" />
+                    <Utensils className="h-5 w-5 text-[#D55E00]" />
                   </div>
                 </div>
                 <div className="flex items-center mt-4 text-xs text-gray-600">
@@ -310,7 +310,7 @@ export default function RestaurantDashboard() {
                             <div className="flex items-center">
                               <Avatar className="h-8 w-8 mr-2">
                                 <AvatarImage src={order.avatar} alt={order.customer} />
-                                <AvatarFallback className="bg-orange-100 text-[#FF9800] text-xs">
+                                <AvatarFallback className="bg-orange-100 text-[#D55E00] text-xs">
                                   {order.customer.split(' ').map(word => word[0]).join('')}
                                 </AvatarFallback>
                               </Avatar>
@@ -324,7 +324,7 @@ export default function RestaurantDashboard() {
                             <span className="font-medium">{order.total}</span>
                           </td>
                           <td className="py-3">
-                            <span className={`px-2 py-1 text-xs rounded-full ${order.status === 'New' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-[#FF9800]'}`}>
+                            <span className={`px-2 py-1 text-xs rounded-full ${order.status === 'New' ? 'bg-blue-100 text-blue-600' : 'bg-orange-100 text-[#D55E00]'}`}>
                               {order.status}
                             </span>
                           </td>
@@ -341,7 +341,7 @@ export default function RestaurantDashboard() {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center border-t border-gray-100 pt-4">
-                <Link href={`/restaurant-dashboard/${restaurantId}/orders`} className="text-sm text-[#FF9800] hover:underline flex items-center">
+                <Link href={`/restaurant-dashboard/${restaurantId}/orders`} className="text-sm text-[#D55E00] hover:underline flex items-center">
                   View all orders
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Link>
@@ -372,7 +372,7 @@ export default function RestaurantDashboard() {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-center border-t border-gray-100 pt-4">
-                <Link href={`/restaurant-dashboard/${restaurantId}/activity`} className="text-sm text-[#FF9800] hover:underline flex items-center">
+                <Link href={`/restaurant-dashboard/${restaurantId}/activity`} className="text-sm text-[#D55E00] hover:underline flex items-center">
                   View all activity
                   <ChevronRight className="h-4 w-4 ml-1" />
                 </Link>
@@ -410,7 +410,7 @@ export default function RestaurantDashboard() {
                     return (
                       <div key={index} className="flex flex-col items-center">
                         <div 
-                          className="w-12 bg-[#FF9800] rounded-t-md" 
+                          className="w-12 bg-[#D55E00] rounded-t-md" 
                           style={{ height: `${height}%` }}
                         ></div>
                         <div className="mt-2 text-xs font-medium">{day.day}</div>

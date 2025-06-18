@@ -70,11 +70,11 @@ export default function RestaurantDashboardLayout({
           {sidebarOpen ? (
             <Link href="/" className="text-xl font-bold">
               <span className="text-gray-800">Food</span>
-              <span className="text-[#FF9800]">You</span>
+              <span className="text-[#D55E00]">You</span>
             </Link>
           ) : (
             <Link href="/" className="text-2xl font-bold">
-              <span className="text-[#FF9800]">FY</span>
+              <span className="text-[#D55E00]">FY</span>
             </Link>
           )}
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:block hidden">
@@ -90,7 +90,7 @@ export default function RestaurantDashboardLayout({
                 <li key={item.path}>
                   <button 
                     onClick={() => handleNavigation(item.path)}
-                    className={`w-full flex items-center space-x-3 rounded-lg p-3 transition-colors ${isActive(item.path) ? 'text-[#FF9800] bg-orange-50' : 'text-gray-700 hover:bg-orange-50 hover:text-[#FF9800]'}`}
+                    className={`w-full flex items-center space-x-3 rounded-lg p-3 transition-colors ${isActive(item.path) ? 'text-[#D55E00] bg-orange-50' : 'text-gray-700 hover:bg-orange-50 hover:text-[#D55E00]'}`}
                     disabled={isLoading}
                   >
                     {isLoading && pathname !== item.path ? (
@@ -141,9 +141,9 @@ export default function RestaurantDashboardLayout({
             {/* Profile Dropdown using shadcn/ui */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="h-10 w-10 rounded-full p-0 overflow-hidden border-2 border-[#FF9800] hover:border-orange-600 transition-colors">
+                <Button variant="outline" size="icon" className="h-10 w-10 rounded-full p-0 overflow-hidden border-2 border-[#D55E00] hover:border-orange-600 transition-colors">
                   <Avatar>
-                    <AvatarFallback className="bg-orange-100 text-[#FF9800]">AD</AvatarFallback>
+                    <AvatarFallback className="bg-orange-100 text-[#D55E00]">AD</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
@@ -176,7 +176,7 @@ export default function RestaurantDashboardLayout({
           {isLoading && (
             <div className="fixed inset-0 bg-white/50 backdrop-blur-xs flex items-center justify-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
-                <Loader2 className="h-10 w-10 animate-spin text-[#FF9800]" />
+                <Loader2 className="h-10 w-10 animate-spin text-[#D55E00]" />
                 <p className="mt-4 text-gray-600">Loading...</p>
               </div>
             </div>

@@ -44,7 +44,7 @@ export default function RestaurantSignup() {
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
         <div className="flex flex-col md:flex-row">
           {/* Left Side - Image */}
-          <div className="md:w-1/2 bg-[#FF9800] relative hidden md:block">
+          <div className="md:w-1/2 bg-[#D55E00] relative hidden md:block">
             <div className="absolute inset-0 bg-black opacity-20"></div>
             <Image 
               src="https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80" 
@@ -62,7 +62,7 @@ export default function RestaurantSignup() {
           {/* Right Side - Form */}
           <div className="md:w-1/2 p-8">
             <div className="mb-6 flex items-center">
-              <Link href="/restaurant" className="text-gray-500 hover:text-[#FF9800] mr-4">
+              <Link href="/restaurant" className="text-gray-500 hover:text-[#D55E00] mr-4">
                 <ArrowLeft size={20} />
               </Link>
               <h1 className="text-2xl font-bold text-gray-900">Restaurant Registration</h1>
@@ -79,7 +79,7 @@ export default function RestaurantSignup() {
                       name="restaurantName"
                       value={formData.restaurantName}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       placeholder="Your restaurant name"
                       required
                     />
@@ -93,7 +93,7 @@ export default function RestaurantSignup() {
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       placeholder="you@example.com"
                       required
                     />
@@ -107,7 +107,7 @@ export default function RestaurantSignup() {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       placeholder="(123) 456-7890"
                       required
                     />
@@ -122,7 +122,7 @@ export default function RestaurantSignup() {
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                         placeholder="Create a secure password"
                         required
                       />
@@ -139,13 +139,13 @@ export default function RestaurantSignup() {
                 
                 <button 
                   type="submit" 
-                  className="w-full bg-[#FF9800] text-white py-2 px-4 rounded-lg mt-6 hover:bg-[#e65100] transition-colors font-medium"
+                  className="w-full bg-[#D55E00] text-white py-2 px-4 rounded-lg mt-6 hover:bg-[#e65100] transition-colors font-medium"
                 >
                   Continue
                 </button>
                 
                 <p className="mt-4 text-sm text-gray-600 text-center">
-                  Already have an account? <a href="/restaurant-dashboard" className="text-[#FF9800] font-medium hover:underline">Sign in</a>
+                  Already have an account? <a href="/restaurant-dashboard" className="text-[#D55E00] font-medium hover:underline">Sign in</a>
                 </p>
               </form>
             )}
@@ -161,7 +161,7 @@ export default function RestaurantSignup() {
                       name="address"
                       value={formData.address}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       placeholder="123 Main St"
                       required
                     />
@@ -176,7 +176,7 @@ export default function RestaurantSignup() {
                         name="city"
                         value={formData.city}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                         placeholder="City"
                         required
                       />
@@ -190,7 +190,7 @@ export default function RestaurantSignup() {
                         name="zipCode"
                         value={formData.zipCode}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                         placeholder="12345"
                         required
                       />
@@ -204,7 +204,7 @@ export default function RestaurantSignup() {
                       name="cuisineType"
                       value={formData.cuisineType}
                       onChange={handleChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       required
                     >
                       <option value="" disabled>Select cuisine type</option>
@@ -226,7 +226,7 @@ export default function RestaurantSignup() {
                       value={formData.description}
                       onChange={handleChange}
                       rows="3"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#FF9800] focus:border-[#FF9800]"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-[#D55E00] focus:border-[#D55E00]"
                       placeholder="Tell customers about your restaurant..."
                       required
                     ></textarea>
@@ -244,7 +244,7 @@ export default function RestaurantSignup() {
                   
                   <button 
                     type="submit" 
-                    className="bg-[#FF9800] text-white py-2 px-6 rounded-lg hover:bg-[#e65100] transition-colors font-medium"
+                    className="bg-[#D55E00] text-white py-2 px-6 rounded-lg hover:bg-[#e65100] transition-colors font-medium"
                   >
                     Continue
                   </button>
@@ -273,7 +273,7 @@ export default function RestaurantSignup() {
                         name="acceptTerms"
                         checked={formData.acceptTerms}
                         onChange={handleChange}
-                        className="mt-1 h-4 w-4 text-[#FF9800] focus:ring-[#FF9800] rounded"
+                        className="mt-1 h-4 w-4 text-[#D55E00] focus:ring-[#D55E00] rounded"
                         required
                       />
                       <label htmlFor="acceptTerms" className="ml-2 text-sm text-gray-700">
@@ -294,7 +294,7 @@ export default function RestaurantSignup() {
                   
                   <button 
                     type="submit" 
-                    className="bg-[#FF9800] text-white py-2 px-6 rounded-lg hover:bg-[#e65100] transition-colors font-medium"
+                    className="bg-[#D55E00] text-white py-2 px-6 rounded-lg hover:bg-[#e65100] transition-colors font-medium"
                     disabled={!formData.acceptTerms}
                   >
                     Complete Registration
@@ -313,7 +313,7 @@ export default function RestaurantSignup() {
                 <p className="text-sm text-gray-500 mb-6">We'll review your information and get back to you within 24-48 hours to complete the onboarding process.</p>
                 <Link 
                   href="/restaurant-dashboard" 
-                  className="inline-block bg-[#FF9800] text-white py-2 px-6 rounded-lg hover:bg-[#e65100] transition-colors font-medium"
+                  className="inline-block bg-[#D55E00] text-white py-2 px-6 rounded-lg hover:bg-[#e65100] transition-colors font-medium"
                 >
                   Go to Dashboard
                 </Link>
