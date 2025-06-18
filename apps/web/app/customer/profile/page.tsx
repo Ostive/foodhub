@@ -265,7 +265,7 @@ export default function ProfilePage() {
     <div className="bg-[#f8f9fa] min-h-svh">
       <CustomerNavbar forceLight={true} />
       <main className="pt-20 pb-20">
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-4" style={{ marginTop: "30px" }}>
           <div className="flex flex-col md:flex-row gap-6">
             {/* Sidebar */}
             <div className="md:w-64">

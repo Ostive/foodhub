@@ -228,14 +228,34 @@ export default function DriverDashboard() {
     <div className="min-h-svh bg-gray-50 flex flex-col">
       {/* Header */}
       <header className="bg-white shadow-xs py-4 px-6 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">       
+        <div className="max-w-7xl mx-auto flex justify-between items-center">
+          <div className="flex items-center">
+            <Link href="/deliver" className="text-2xl font-bold text-[#1976d2]">Food'EM</Link>
+            <span className="ml-2 text-sm bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Driver</span>
+          </div>
+          
           <div className="flex items-center space-x-4">
+            <div className="relative">
+              <button className="text-gray-600 hover:text-gray-900">
+                <Bell className="h-6 w-6" />
+              </button>
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">2</span>
+            </div>
+            
             <div className="flex items-center space-x-2">
               <div className="h-10 w-10 rounded-full overflow-hidden">
                 <Image src={driver.image} alt={driver.name} width={40} height={40} />
               </div>
               <span className="font-medium text-gray-900">{driver.name}</span>
             </div>
+            
+            <button
+              onClick={handleLogout}
+              className="text-gray-600 hover:text-gray-900"
+              title="Logout"
+            >
+              <LogOut className="h-6 w-6" />
+            </button>
           </div>
         </div>
       </header>

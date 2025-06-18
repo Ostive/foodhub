@@ -142,7 +142,7 @@ export default function OrdersPage() {
                         </button>
                         {order.status === "New" && (
                           <button className="text-yellow-600 hover:text-yellow-800" title="Start Preparing">
-                            <Truck className="h-4 w-4" />
+                            <CheckCircle className="h-4 w-4" />
                           </button>
                         )}
                         {(order.status === "New" || order.status === "Preparing") && (
@@ -152,7 +152,8 @@ export default function OrdersPage() {
                         )}
                         {order.status === "Preparing" && (
                           <button className="text-green-600 hover:text-green-800" title="Mark as Ready for Delivery">
-                            <CheckCircle className="h-4 w-4" />
+                            <Truck className="h-4 w-4" />
+                            
                           </button>
                         )}
                       </div>
