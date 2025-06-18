@@ -63,12 +63,12 @@ const data = {
     {
       title: "System",
       url: "../admin/admin-system",
-      icon: IconUsers,
+      icon: IconReport,
     },
     {
       title: "Components",
       url: "../admin/admin-component",
-      icon: IconUsers,
+      icon: IconFileWord,
     },
   ],
   navClouds: [
