@@ -21,8 +21,8 @@ export interface ServicesConfig {
   restaurantServicePort: number;
   userServicePort: number;
   authServicePort: number;
-  userMicroservicePort: number;
-  authMicroservicePort: number;
+  performanceService: string; 
+  performanceServicePort: number; // Optional, if you want to add performance service later
 }
 
 export default registerAs('services', (): ServicesConfig => ({
@@ -34,6 +34,6 @@ export default registerAs('services', (): ServicesConfig => ({
   restaurantServicePort: extractPortFromUrl(process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002'),
   userServicePort: extractPortFromUrl(process.env.USER_SERVICE_URL || 'http://localhost:3003'),
   authServicePort: extractPortFromUrl(process.env.AUTH_SERVICE_URL || 'http://localhost:3004'),
-  userMicroservicePort: parseInt(process.env.USER_MICROSERVICE_PORT || '3010'),
-  authMicroservicePort: parseInt(process.env.AUTH_MICROSERVICE_PORT || '3012'),
+  performanceService: process.env.PERFORMANCE_SERVICE_URL || 'http://localhost:3005',
+  performanceServicePort: extractPortFromUrl(process.env.PERFORMANCE_SERVICE_URL || 'http://localhost:3005'),
 }));
