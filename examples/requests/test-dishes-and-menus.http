@@ -1,0 +1,86 @@
+### Create a dish for a restaurant
+# Replace RESTAURANT_ID with an actual restaurant ID (e.g., 1)
+POST http://localhost:3002/api/restaurants/RESTAURANT_ID/dishes
+Content-Type: application/json
+
+{
+  "userId": "RESTAURANT_ID",
+  "name": "Beef Bourguignon",
+  "description": "Classic French beef stew with red wine, mushrooms, and pearl onions",
+  "isSoldAlone": true,
+  "tags": ["beef", "stew", "french", "dinner"],
+  "isVegetarian": false,
+  "spicyLevel": 1,
+  "cost": 18.50,
+  "additionalAllergens": "Contains alcohol",
+  "picture": "https://example.com/images/beef-bourguignon.jpg",
+  "promo": "Chef's special"
+}
+
+### Create another dish
+# Replace RESTAURANT_ID with an actual restaurant ID (e.g., 1)
+POST http://localhost:3002/api/restaurants/RESTAURANT_ID/dishes
+Content-Type: application/json
+
+{
+  "userId": "RESTAURANT_ID",
+  "name": "Ratatouille",
+  "description": "Traditional French Provençal vegetable stew",
+  "isSoldAlone": true,
+  "tags": ["vegetarian", "stew", "french", "dinner"],
+  "isVegetarian": true,
+  "spicyLevel": 0,
+  "cost": 12.50,
+  "picture": "https://example.com/images/ratatouille.jpg"
+}
+
+### Get all dishes for a restaurant
+# Replace RESTAURANT_ID with an actual restaurant ID (e.g., 1)
+GET http://localhost:3002/api/restaurants/RESTAURANT_ID/dishes
+
+### Get a specific dish
+# Replace RESTAURANT_ID and DISH_ID with actual IDs
+GET http://localhost:3002/api/restaurants/RESTAURANT_ID/dishes/DISH_ID
+
+### Update a dish
+# Replace RESTAURANT_ID and DISH_ID with actual IDs
+PUT http://localhost:3002/api/restaurants/RESTAURANT_ID/dishes/DISH_ID
+Content-Type: application/json
+
+{
+  "cost": 19.95,
+  "description": "Updated: Classic French beef stew with red wine, mushrooms, and pearl onions, served with mashed potatoes",
+  "promo": "Weekend special"
+}
+
+### Create a menu for a restaurant
+# Replace RESTAURANT_ID with an actual restaurant ID (e.g., 1)
+POST http://localhost:3002/api/restaurants/RESTAURANT_ID/menu
+Content-Type: application/json
+
+{
+  "name": "French Classics Menu",
+  "description": "A selection of classic French dishes",
+  "price": 29.99,
+  "imageUrl": "https://example.com/images/french-classics-menu.jpg",
+  "categories": ["dinner", "french"]
+}
+
+### Get all menus for a restaurant
+# Replace RESTAURANT_ID with an actual restaurant ID (e.g., 1)
+GET http://localhost:3002/api/restaurants/RESTAURANT_ID/menu
+
+### Get a specific menu
+# Replace RESTAURANT_ID and MENU_ID with actual IDs
+GET http://localhost:3002/api/restaurants/RESTAURANT_ID/menu/MENU_ID
+
+### Update a menu
+# Replace RESTAURANT_ID and MENU_ID with actual IDs
+PUT http://localhost:3002/api/restaurants/RESTAURANT_ID/menu/MENU_ID
+Content-Type: application/json
+
+{
+  "name": "French Classics Deluxe Menu",
+  "price": 34.99,
+  "categories": ["dinner", "french", "premium"]
+}

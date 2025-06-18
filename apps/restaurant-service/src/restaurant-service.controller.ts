@@ -30,9 +30,40 @@ export class RestaurantServiceController {
     return this.restaurantServiceService.updateRestaurant(id, updateRestaurantDto);
   }
 
+  // Menu management endpoints
   @Post(':id/menu')
   addMenuItem(@Param('id') id: string, @Body() menuItemDto: MenuItemDto) {
     return this.menuService.addMenuItem(id, menuItemDto);
+  }
+
+  @Get(':id/menu')
+  getAllMenuItems(@Param('id') id: string) {
+    return this.menuService.getAllMenuItems(id);
+  }
+
+  @Get(':id/menu/:menuId')
+  getMenuItemById(
+    @Param('id') id: string,
+    @Param('menuId') menuId: string
+  ) {
+    return this.menuService.getMenuItemById(id, menuId);
+  }
+
+  @Put(':id/menu/:menuId')
+  updateMenuItem(
+    @Param('id') id: string,
+    @Param('menuId') menuId: string,
+    @Body() menuItemDto: MenuItemDto
+  ) {
+    return this.menuService.updateMenuItem(id, menuId, menuItemDto);
+  }
+
+  @Delete(':id/menu/:menuId')
+  deleteMenuItem(
+    @Param('id') id: string,
+    @Param('menuId') menuId: string
+  ) {
+    return this.menuService.deleteMenuItem(id, menuId);
   }
 
   @Get(':id')
@@ -45,35 +76,41 @@ export class RestaurantServiceController {
   // Dish management endpoints
   @Post(':restaurantId/dishes')
   createDish(
+    @Param('restaurantId') restaurantId: string,
     @Body() createDishDto: CreateDishDto
   ) {
-    return this.dishService.createDish( createDishDto);
+    return this.dishService.createDish(createDishDto);
   }
 
   @Put(':restaurantId/dishes/:dishId')
   updateDish(
+    @Param('restaurantId') restaurantId: string,
     @Param('dishId') dishId: number,
     @Body() updateDishDto: UpdateDishDto
   ) {
-    return this.dishService.updateDish(dishId, updateDishDto);
+    return this.dishService.updateDish(restaurantId, dishId, updateDishDto);
   }
 
   @Delete(':restaurantId/dishes/:dishId')
   deleteDish(
+    @Param('restaurantId') restaurantId: string,
     @Param('dishId') dishId: number
   ) {
-    return this.dishService.deleteDish(dishId);
+    return this.dishService.deleteDish(restaurantId, dishId);
   }
 
   @Get(':restaurantId/dishes/:dishId')
   getDishById(
+    @Param('restaurantId') restaurantId: string,
     @Param('dishId') dishId: number
   ) {
-    return this.dishService.findOne(dishId);
+    return this.dishService.findOne(restaurantId, dishId);
   }
 
   @Get(':restaurantId/dishes')
-  getAllDishes(  ) {
-    return this.dishService.findAllDishes();
+  getAllDishes(
+    @Param('restaurantId') restaurantId: string
+  ) {
+    return this.dishService.findAllDishes(restaurantId);
   }
 }

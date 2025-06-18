@@ -1,0 +1,53 @@
+### Create a dish for Bella Napoli Restaurant (userId: 9)
+POST http://localhost:3002/api/restaurants/9/dishes
+Content-Type: application/json
+
+{
+  "userId": "9",
+  "name": "Pizza Margherita",
+  "description": "Classic Italian pizza with tomato sauce, mozzarella, and fresh basil",
+  "isSoldAlone": true,
+  "tags": ["pizza", "italian", "vegetarian", "classic"],
+  "isVegetarian": true,
+  "spicyLevel": 0,
+  "cost": 12.99,
+  "additionalAllergens": "Contains gluten, dairy",
+  "picture": "https://example.com/images/margherita.jpg",
+  "promo": "Signature dish"
+}
+
+### Create another dish for Bella Napoli
+POST http://localhost:3002/api/restaurants/9/dishes
+Content-Type: application/json
+
+{
+  "userId": "9",
+  "name": "Pasta Carbonara",
+  "description": "Creamy pasta with pancetta, eggs, Pecorino Romano cheese, and black pepper",
+  "isSoldAlone": true,
+  "tags": ["pasta", "italian", "dinner"],
+  "isVegetarian": false,
+  "spicyLevel": 0,
+  "cost": 14.99,
+  "additionalAllergens": "Contains gluten, dairy, eggs",
+  "picture": "https://example.com/images/carbonara.jpg",
+  "promo": "Chef's recommendation"
+}
+
+### Get all dishes for Bella Napoli
+GET http://localhost:3002/api/restaurants/9/dishes
+
+### Create a menu for Bella Napoli
+POST http://localhost:3002/api/restaurants/9/menu
+Content-Type: application/json
+
+{
+  "name": "Italian Classics Menu",
+  "description": "A selection of classic Italian dishes",
+  "price": 24.99,
+  "imageUrl": "https://example.com/images/italian-classics-menu.jpg",
+  "categories": ["dinner", "italian"]
+}
+
+### Get all menus for Bella Napoli
+GET http://localhost:3002/api/restaurants/9/menu
