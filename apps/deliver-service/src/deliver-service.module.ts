@@ -14,4 +14,4 @@ import { User } from '../../../libs/database/entities/user.entity';
   providers: [DeliverServiceService],
   exports: [DeliverServiceService]
 })
-export class DeliversModule {}
+export class DeliverServiceModule {}

@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { loadEnvConfig, getConfig } from '../../../libs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { DeliversModule } from './deliver-service.module';
+import { DeliverServiceModule } from './deliver-service.module';
 
 
 async function bootstrap() {
@@ -13,7 +13,7 @@ async function bootstrap() {
   const config = getConfig();
   
   // Create the HTTP application
-  const app = await NestFactory.create(DeliversModule);
+  const app = await NestFactory.create(DeliverServiceModule);
   
   // Configure CORS
   app.enableCors();
@@ -26,11 +26,21 @@ async function bootstrap() {
   
   // Setup Swagger documentation
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('User Service API')
-    .setDescription('The user service API documentation')
+    .setTitle('Delivery Service API')
+    .setDescription('API for managing delivery drivers in the FoodHub platform')
     .setVersion('1.0')
-    .addTag('users')
-    .addBearerAuth()
+    .addTag('delivery-drivers', 'Operations related to delivery drivers')
+    .addBearerAuth(
+      {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Enter JWT token',
+        in: 'header',
+      },
+      'JWT-auth',
+    )
     .build();
   
   const document = SwaggerModule.createDocument(app, swaggerConfig);
@@ -47,7 +57,8 @@ async function bootstrap() {
   const httpPort = config.services.deliverServicePort;
   await app.listen(httpPort);
   
-  console.log(`User service HTTP running on ${config.api.protocol}://${config.api.host}:${httpPort}`);
+  console.log(`Delivery service HTTP running on ${config.api.protocol}://${config.api.host}:${httpPort}`);
+  console.log(`Swagger documentation available at ${config.api.protocol}://${config.api.host}:${httpPort}/api/docs`);
   console.log(`Swagger documentation available at http://localhost:${httpPort}/api/docs`);
 }
 bootstrap();
