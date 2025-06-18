@@ -178,4 +178,31 @@ export class OrderServiceController {
   ) {
     return this.orderServiceService.updateOrderStatus(id, body.status, body.deliveryPersonId);
   }
+
+  @ApiOperation({ summary: 'Verify delivery code' })
+  @ApiParam({
+    name: 'id',
+    description: 'Order ID',
+    example: '1'
+  })
+  @ApiBody({
+    description: 'Verification code provided by customer',
+    schema: {
+      type: 'object',
+      properties: {
+        code: { type: 'string', example: '123456' }
+      },
+      required: ['code']
+    }
+  })
+  @ApiResponse({ status: 200, description: 'Code verified successfully' })
+  @ApiResponse({ status: 400, description: 'Invalid verification code' })
+  @ApiResponse({ status: 404, description: 'Order not found' })
+  @Post(':id/verify-code')
+  verifyDeliveryCode(
+    @Param('id') id: string,
+    @Body() body: { code: string }
+  ) {
+    return this.orderServiceService.verifyDeliveryCode(id, body.code);
+  }
 }

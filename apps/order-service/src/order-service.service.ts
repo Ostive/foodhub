@@ -20,15 +20,19 @@ export class OrderServiceService {
   }
 
   async createOrder(createOrderDto: CreateOrderDto) {
-    const newOrder = this.orderRepository.create({
-      customerId: parseInt(createOrderDto.userId),
-      restaurantId: parseInt(createOrderDto.restaurantId),
-      deliveryLocalisation: createOrderDto.deliveryAddress || '',
-      time: new Date(),
-      cost: 0, // Will be calculated based on items
-      status: OrderStatus.CREATED,
-      // Items will be handled separately
-    });
+    // Generate a 6-digit verification code
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // Create a new order with proper typing
+    const newOrder = new Order();
+    newOrder.customerId = parseInt(createOrderDto.userId);
+    newOrder.restaurantId = parseInt(createOrderDto.restaurantId);
+    newOrder.deliveryLocalisation = createOrderDto.deliveryAddress || '';
+    newOrder.time = new Date();
+    newOrder.cost = 0; // Will be calculated based on items
+    newOrder.status = OrderStatus.CREATED;
+    newOrder.verificationCode = verificationCode;
+    // Items will be handled separately
     
     return this.orderRepository.save(newOrder);
   }
@@ -133,5 +137,21 @@ export class OrderServiceService {
     };
     
     return transitions[currentStatus] || [];
+  }
+  
+  /**
+   * Verify the delivery code provided by the customer
+   */
+  async verifyDeliveryCode(orderId: string, code: string): Promise<{ valid: boolean }> {
+    const order = await this.orderRepository.findOneBy({ orderId: +orderId });
+    
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
+    }
+    
+    // Check if the verification code matches
+    const isValid = order.verificationCode === code;
+    
+    return { valid: isValid };
   }
 }
