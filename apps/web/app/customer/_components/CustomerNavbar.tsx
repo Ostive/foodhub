@@ -50,7 +50,7 @@ export default function CustomerNavbarNew() {
     <>
       <Navbar className="bg-transparent">
         <NavBody>
-          <Link href="/customer" className="font-display text-3xl font-bold text-[#4CAF50]">
+          <Link href="/customer" className="font-display text-3xl font-bold text-[#009E73]">
             FoodHUB
           </Link>
 
@@ -75,7 +75,7 @@ export default function CustomerNavbarNew() {
             <ShoppingBag className="w-5 h-5 mr-2" />
             Cart
             {cartItemCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#4CAF50] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-[#009E73] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 {cartItemCount}
               </span>
             )}
@@ -84,7 +84,7 @@ export default function CustomerNavbarNew() {
           {isAuthenticated ? (
             <div className="relative group ml-4">
               <button className="flex items-center space-x-2">
-                <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-[#4CAF50]">
+                <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-[#009E73]">
                   <Image src={userData.avatar} alt="User" width={40} height={40} />
                 </div>
               </button>
@@ -101,7 +101,7 @@ export default function CustomerNavbarNew() {
                     </div>
                   </div>
                 </div>
-                <Link href="/customer/profile" className="block py-2 text-sm text-gray-700 hover:text-[#4CAF50] flex items-center">
+                <Link href="/customer/profile" className="block py-2 text-sm text-gray-700 hover:text-[#009E73] flex items-center">
                   <User className="w-4 h-4 mr-2" /> My Profile
                 </Link>
                 <div className="w-full text-left py-2">
@@ -116,7 +116,7 @@ export default function CustomerNavbarNew() {
             <div className="flex items-center space-x-2 ml-4">
               <Link
                 href="/customer/login"
-                className="px-5 py-2.5 rounded-full bg-[#4CAF50] text-white font-medium hover:bg-[#388e3c] transition flex items-center"
+                className="px-5 py-2.5 rounded-full bg-[#009E73] text-white font-medium hover:bg-[#388e3c] transition flex items-center"
               >
                 <User className="w-5 h-5 mr-2" /> Login
               </Link>
@@ -129,7 +129,7 @@ export default function CustomerNavbarNew() {
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="p-2 rounded-full bg-gray-200">
               {mobileMenuOpen ? <IconX /> : <IconMenu2 />}
             </button>
-            <Link href="/customer" className="font-display text-2xl font-bold text-[#4CAF50]">
+            <Link href="/customer" className="font-display text-2xl font-bold text-[#009E73]">
               FoodHub
             </Link>
           </MobileNavHeader>
@@ -149,10 +149,10 @@ export default function CustomerNavbarNew() {
             </form>
 
             <Link href="/customer/cart" className="flex items-center py-3 border-b border-gray-100">
-              <ShoppingBag className="w-5 h-5 mr-3 text-[#4CAF50]" />
+              <ShoppingBag className="w-5 h-5 mr-3 text-[#009E73]" />
               Cart
               {cartItemCount > 0 && (
-                <span className="ml-auto bg-[#4CAF50] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="ml-auto bg-[#009E73] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {cartItemCount}
                 </span>
               )}
@@ -161,7 +161,7 @@ export default function CustomerNavbarNew() {
             {isAuthenticated ? (
               <>
                 <div className="flex items-center space-x-3 py-3 border-b border-gray-100">
-                  <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-[#4CAF50]">
+                  <div className="h-10 w-10 rounded-full overflow-hidden border-2 border-[#009E73]">
                     <Image src={userData.avatar} alt="User" width={40} height={40} />
                   </div>
                   <div>
@@ -169,7 +169,7 @@ export default function CustomerNavbarNew() {
                     <p className="text-xs text-gray-600 truncate max-w-xs">{userData.address}</p>
                   </div>
                 </div>
-                <Link href="/customer/profile" className="block py-3 text-[#4CAF50] font-semibold border-b border-gray-100">
+                <Link href="/customer/profile" className="block py-3 text-[#009E73] font-semibold border-b border-gray-100">
                   My Profile
                 </Link>
                 <div className="w-full py-3 border-b border-gray-100">
@@ -180,7 +180,7 @@ export default function CustomerNavbarNew() {
                 </div>
               </>
             ) : (
-              <Link href="/customer/login" className="block py-3 text-[#4CAF50] font-semibold border-b border-gray-100">
+              <Link href="/customer/login" className="block py-3 text-[#009E73] font-semibold border-b border-gray-100">
                 Login
               </Link>
             )}

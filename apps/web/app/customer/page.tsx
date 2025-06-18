@@ -495,14 +495,14 @@ export default function CustomerPage() {
             <div className="max-w-2xl">
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 drop-shadow-lg">
                 Delicious food, <br/>
-                <span className="text-[#4CAF50]">delivered fast.</span>
+                <span className="text-[#009E73]">delivered fast.</span>
               </h1>
               <p className="text-xl text-white/90 mb-8 drop-shadow-md max-w-lg">Order from your favorite local restaurants with free delivery on your first order.</p>
               
               {/* Search bar */}
               <div className="bg-white p-1.5 rounded-xl shadow-xl flex items-center w-full max-w-xl">
                 <form onSubmit={handleSearch} className="flex-1 flex items-center" id="search-form">
-                  <MapPin className="ml-4 h-5 w-5 text-[#4CAF50]" />
+                  <MapPin className="ml-4 h-5 w-5 text-[#009E73]" />
                   <input
                     type="text"
                     value={searchQuery}
@@ -514,7 +514,7 @@ export default function CustomerPage() {
                 <button 
                   type="submit"
                   form="search-form"
-                  className="bg-[#4CAF50] hover:bg-[#388E3C] text-white font-medium px-6 py-3 rounded-lg transition-all duration-300 flex items-center"
+                  className="bg-[#009E73] hover:bg-[#388E3C] text-white font-medium px-6 py-3 rounded-lg transition-all duration-300 flex items-center"
                 >
                   <Search className="h-5 w-5 mr-2" />
                   Find Food
@@ -576,7 +576,7 @@ export default function CustomerPage() {
                   <div className="rounded-2xl shadow-md mb-2 overflow-hidden bg-white p-1 transform group-hover:scale-105 transition-all duration-300 group-hover:shadow-lg">
                     <Image src={cat.image} alt={cat.name} width={80} height={80} className="rounded-xl h-16 w-16 object-cover" />
                   </div>
-                  <span className="text-xs font-medium text-gray-700 group-hover:text-[#4CAF50] transition-colors text-center">{cat.name}</span>
+                  <span className="text-xs font-medium text-gray-700 group-hover:text-[#009E73] transition-colors text-center">{cat.name}</span>
                 </div>
               ))}
             </div>
@@ -590,7 +590,7 @@ export default function CustomerPage() {
                 <h2 className="text-2xl font-bold text-gray-900">Special Offers</h2>
               </div>
               <div className="flex items-center">
-                <Link href="/customer/special-offers" className="flex items-center text-[#4CAF50] hover:text-[#388E3C] mr-4 font-medium transition-colors">
+                <Link href="/customer/special-offers" className="flex items-center text-[#009E73] hover:text-[#388E3C] mr-4 font-medium transition-colors">
                   View All
                   <ArrowRight className="h-4 w-4 ml-1" />
                 </Link>
@@ -633,7 +633,7 @@ export default function CustomerPage() {
                 <h2 className="text-2xl font-bold text-gray-900">Popular Restaurants</h2>
               </div>
               <div className="flex items-center">
-                <Link href="/customer/popular-restaurants" className="flex items-center text-[#4CAF50] hover:text-[#388E3C] mr-4 font-medium transition-colors">
+                <Link href="/customer/popular-restaurants" className="flex items-center text-[#009E73] hover:text-[#388E3C] mr-4 font-medium transition-colors">
                   View All
                   <ArrowRight className="h-4 w-4 ml-1" />
                 </Link>
@@ -676,7 +676,7 @@ export default function CustomerPage() {
                 <h2 className="text-2xl font-bold text-gray-900">Order Again</h2>
               </div>
               <div className="flex items-center">
-                <Link href="/customer/order-again" className="flex items-center text-[#4CAF50] hover:text-[#388E3C] mr-4 font-medium transition-colors">
+                <Link href="/customer/order-again" className="flex items-center text-[#009E73] hover:text-[#388E3C] mr-4 font-medium transition-colors">
                   View All
                   <ArrowRight className="h-4 w-4 ml-1" />
                 </Link>
@@ -719,7 +719,7 @@ export default function CustomerPage() {
                 <h2 className="text-2xl font-bold text-gray-900">Near You</h2>
               </div>
               <div className="flex items-center">
-                <Link href="/customer/near-you" className="flex items-center text-[#4CAF50] hover:text-[#388E3C] mr-4 font-medium transition-colors">
+                <Link href="/customer/near-you" className="flex items-center text-[#009E73] hover:text-[#388E3C] mr-4 font-medium transition-colors">
                   View All
                   <ArrowRight className="h-4 w-4 ml-1" />
                 </Link>
@@ -758,7 +758,7 @@ export default function CustomerPage() {
           <section className="mb-12" ref={allRestaurantsRef}>
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-center">
-                <Bookmark className="h-6 w-6 text-[#4CAF50] mr-2" />
+                <Bookmark className="h-6 w-6 text-[#009E73] mr-2" />
                 <h2 className="text-2xl font-bold text-gray-900">All Restaurants</h2>
               </div>
               <div className="flex items-center">
@@ -795,13 +795,13 @@ export default function CustomerPage() {
             <div ref={loadingRef} className="mt-8 flex justify-center">
               {isLoading ? (
                 <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-full border-4 border-[#4CAF50]/20 border-t-[#4CAF50] animate-spin"></div>
+                  <div className="w-12 h-12 rounded-full border-4 border-[#009E73]/20 border-t-[#009E73] animate-spin"></div>
                   <p className="mt-4 text-gray-600">Loading more restaurants...</p>
                 </div>
               ) : hasMore ? (
                 <button 
                   onClick={loadMoreRestaurants}
-                  className="bg-white hover:bg-gray-50 text-[#4CAF50] font-medium px-6 py-3 rounded-lg shadow-xs border border-gray-200 transition-all duration-300 flex items-center"
+                  className="bg-white hover:bg-gray-50 text-[#009E73] font-medium px-6 py-3 rounded-lg shadow-xs border border-gray-200 transition-all duration-300 flex items-center"
                 >
                   Load More Restaurants
                   <ChevronDown className="h-4 w-4 ml-2" />

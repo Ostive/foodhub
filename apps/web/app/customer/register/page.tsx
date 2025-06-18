@@ -135,7 +135,7 @@ export default function RegisterPage() {
             <p className="text-gray-600 mb-6">Your account has been created. You can now sign in with your credentials.</p>
             <Link 
               href="/customer/login" 
-              className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-xs text-sm font-medium text-white bg-[#4CAF50] hover:bg-[#388e3c] focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors"
+              className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-xs text-sm font-medium text-white bg-[#009E73] hover:bg-[#388e3c] focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#009E73] transition-colors"
             >
               Go to Login <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
@@ -152,12 +152,12 @@ export default function RegisterPage() {
         <div className="mx-auto w-full max-w-sm lg:max-w-md">
           <div className="text-center mb-8">
             <Link href="/customer" className="inline-block">
-              <span className="text-4xl font-bold text-[#4CAF50]">Foodyou</span>
+              <span className="text-4xl font-bold text-[#009E73]">Foodyou</span>
             </Link>
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Create your account</h2>
             <p className="mt-2 text-sm text-gray-600">
               Already have an account?{" "}
-              <Link href="/customer/login" className="font-medium text-[#4CAF50] hover:text-[#388e3c]">
+              <Link href="/customer/login" className="font-medium text-[#009E73] hover:text-[#388e3c]">
                 Sign in
               </Link>
             </p>
@@ -187,7 +187,7 @@ export default function RegisterPage() {
                     required
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
+                    className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#009E73] focus:border-[#009E73] sm:text-sm"
                     placeholder="John"
                   />
                 </div>
@@ -209,7 +209,7 @@ export default function RegisterPage() {
                     required
                     value={formData.lastName}
                     onChange={handleChange}
-                    className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
+                    className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#009E73] focus:border-[#009E73] sm:text-sm"
                     placeholder="Doe"
                   />
                 </div>
@@ -232,7 +232,7 @@ export default function RegisterPage() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
+                  className="appearance-none block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#009E73] focus:border-[#009E73] sm:text-sm"
                   placeholder="you@example.com"
                 />
               </div>
@@ -254,7 +254,7 @@ export default function RegisterPage() {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
+                  className="appearance-none block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#009E73] focus:border-[#009E73] sm:text-sm"
                   placeholder="u2022u2022u2022u2022u2022u2022u2022u2022"
                 />
                 <button
@@ -302,7 +302,7 @@ export default function RegisterPage() {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#4CAF50] focus:border-[#4CAF50] sm:text-sm"
+                  className="appearance-none block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl shadow-xs placeholder-gray-400 focus:outline-hidden focus:ring-[#009E73] focus:border-[#009E73] sm:text-sm"
                   placeholder="u2022u2022u2022u2022u2022u2022u2022u2022"
                 />
                 <button
@@ -327,15 +327,15 @@ export default function RegisterPage() {
                 required
                 checked={formData.agreeToTerms}
                 onChange={handleChange}
-                className="h-4 w-4 text-[#4CAF50] focus:ring-[#4CAF50] border-gray-300 rounded"
+                className="h-4 w-4 text-[#009E73] focus:ring-[#009E73] border-gray-300 rounded"
               />
               <label htmlFor="agreeToTerms" className="ml-2 block text-sm text-gray-700">
                 I agree to the{" "}
-                <Link href="#" className="font-medium text-[#4CAF50] hover:text-[#388e3c]">
+                <Link href="#" className="font-medium text-[#009E73] hover:text-[#388e3c]">
                   Terms of Service
                 </Link>{" "}
                 and{" "}
-                <Link href="#" className="font-medium text-[#4CAF50] hover:text-[#388e3c]">
+                <Link href="#" className="font-medium text-[#009E73] hover:text-[#388e3c]">
                   Privacy Policy
                 </Link>
               </label>
@@ -345,7 +345,7 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-xs text-sm font-medium text-white bg-[#4CAF50] hover:bg-[#388e3c] focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-xs text-sm font-medium text-white bg-[#009E73] hover:bg-[#388e3c] focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#009E73] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 {isLoading ? (
                   <span className="flex items-center">
@@ -377,7 +377,7 @@ export default function RegisterPage() {
             <div className="mt-6 grid grid-cols-2 gap-3">
               <button
                 type="button"
-                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-xl shadow-xs bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50]"
+                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-xl shadow-xs bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#009E73]"
               >
                 <svg className="h-5 w-5 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M22.56 12.25C22.56 11.47 22.49 10.72 22.36 10H12V14.26H17.92C17.66 15.63 16.88 16.79 15.71 17.57V20.34H19.28C21.36 18.42 22.56 15.6 22.56 12.25Z" fill="#4285F4"/>
@@ -390,7 +390,7 @@ export default function RegisterPage() {
 
               <button
                 type="button"
-                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-xl shadow-xs bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50]"
+                className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-xl shadow-xs bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#009E73]"
               >
                 <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                   <path fillRule="evenodd" d="M10 0C4.477 0 0 4.477 0 10c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0110 4.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.026 2.747-1.026.546 1.378.203 2.397.1 2.65.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.934.359.31.678.92.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C17.14 18.163 20 14.418 20 10 20 4.477 15.523 0 10 0z" clipRule="evenodd" />
@@ -404,7 +404,7 @@ export default function RegisterPage() {
 
       {/* Right side - Image */}
       <div className="hidden md:block md:flex-1 relative">
-        <div className="absolute inset-0 bg-linear-to-r from-[#4CAF50]/90 to-[#2E7D32]/90 z-10"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-[#009E73]/90 to-[#2E7D32]/90 z-10"></div>
         <Image
           src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1740&auto=format&fit=crop"
           alt="Food delivery"
