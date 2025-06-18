@@ -1,5 +1,5 @@
 import { Cart, CartItem } from "./types";
-import { getCart, clearCart } from "./cart-storage";
+import { getCart, clearCart } from "./cart_storage";
 
 // Peut recevoir des infos de livraison en paramètres
 export async function sendOrder({

@@ -15,7 +15,7 @@ export function saveCart(cart: Cart) {
 
 export function addToCart(item: CartItem) {
     const cart = getCart();
-    const idx = cart.findIndex(i => i.itemId === item.itemId && i.type === item.type);
+    const idx = cart.findIndex(i => i.id === item.id && i.type === item.type);
     if (idx > -1) {
         cart[idx].quantity += item.quantity;
     } else {
@@ -24,8 +24,8 @@ export function addToCart(item: CartItem) {
     saveCart(cart);
 }
 
-export function removeFromCart(itemId: string, type: 'dish' | 'menu') {
-    const cart = getCart().filter(i => !(i.itemId === itemId && i.type === type));
+export function removeFromCart(id: string, type: 'dish' | 'menu') {
+    const cart = getCart().filter(i => !(i.id === id && i.type === type));
     saveCart(cart);
 }
 
@@ -34,14 +34,14 @@ export function clearCart() {
     localStorage.removeItem(CART_KEY);
 }
 
-export function updateCartItemQuantity(itemId: string, type: 'dish' | 'menu', quantity: number) {
+export function updateCartItemQuantity(id: string, type: 'dish' | 'menu', quantity: number) {
     const cart = getCart();
-    const idx = cart.findIndex(i => i.itemId === itemId && i.type === type);
-    if (idx > -1) {
+    const index = cart.findIndex(i => i.id === id && i.type === type);
+    if (index > -1) {
         if (quantity > 0) {
-            cart[idx].quantity = quantity;
+            cart[index].quantity = quantity;
         } else {
-            cart.splice(idx, 1);
+            cart.splice(index, 1);
         }
         saveCart(cart);
     }

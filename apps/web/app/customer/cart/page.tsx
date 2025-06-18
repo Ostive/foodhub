@@ -8,15 +8,18 @@ import { ChevronLeft, Minus, Plus, Trash2, CreditCard, Clock, MapPin, X, Search,
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import CustomerNavbar from "../_components/CustomerNavbar";
+import { getCart, addToCart, removeFromCart, updateCartItemQuantity, clearCart } from '@/lib/api/cart_storage';
 
 interface CartItem {
   id: string;
+  type: 'dish' | 'menu';
   name: string;
   price: string;
   image: string;
   quantity: number;
   restaurantId: string;
   restaurantName: string;
+  specialInstructions?: string;
 }
 
 interface DeliveryAddress {
@@ -74,6 +77,7 @@ export default function CartPage() {
       {
         id: "margherita-pizza",
         name: "Margherita Pizza",
+        type: 'dish',
         price: "$12.99",
         image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80",
         quantity: 1,
@@ -83,6 +87,7 @@ export default function CartPage() {
       {
         id: "pepperoni-pizza",
         name: "Pepperoni Pizza",
+        type: 'dish',
         price: "$14.99",
         image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80",
         quantity: 2,
@@ -92,6 +97,7 @@ export default function CartPage() {
       {
         id: "garlic-bread",
         name: "Garlic Bread",
+        type: 'dish',
         price: "$5.99",
         image: "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?auto=format&fit=crop&w=600&q=80",
         quantity: 1,
@@ -100,7 +106,14 @@ export default function CartPage() {
       }
     ]);
   }, []);
+
+  useEffect(() => {
+    setCartItems(getCart());
+  }, []);
   
+  
+
+
   // Filter addresses when search query changes
   useEffect(() => {
     if (searchQuery.trim() === "") {
@@ -174,21 +187,21 @@ export default function CartPage() {
     };
   }, [showLocationModal, selectionMethod, deliveryAddress.longitude, deliveryAddress.latitude]);
   
-  const updateQuantity = (itemId: string, newQuantity: number) => {
+  const updateQuantity = (itemId: string, newQuantity: number, type: 'dish'|'menu') => {
     if (newQuantity < 1) {
-      removeItem(itemId);
+      removeItem(itemId, type);
       return;
     }
-    
-    setCartItems(prev => 
-      prev.map(item => 
-        item.id === itemId ? { ...item, quantity: newQuantity } : item
-      )
-    );
+    setCartItems(prev => prev.map(item =>
+      (item.id === itemId && item.type === type) ? { ...item, quantity: newQuantity } : item
+    ));
+    updateCartItemQuantity(itemId, type, newQuantity); // <-- MAJ localStorage
   };
   
-  const removeItem = (itemId: string) => {
-    setCartItems(prev => prev.filter(item => item.id !== itemId));
+  
+  const removeItem = (itemId: string, type: 'dish'|'menu') => {
+    setCartItems(prev => prev.filter(item => !(item.id === itemId && item.type === type)));
+    removeFromCart(itemId, type); // <-- MAJ localStorage
   };
   
   const applyPromoCode = () => {
@@ -225,6 +238,8 @@ export default function CartPage() {
     // For now, we'll simulate order creation and redirect to tracking
     const orderId = cartItems[0]?.restaurantId === 'pizza-palace' ? 'order-456' : 'order-123';
     router.push(`/customer/order-tracking/${orderId}`);
+    clearCart();
+    setCartItems([]);
   };
   
   const handleSelectAddress = (address: string, lat?: number, lng?: number) => {
@@ -348,20 +363,20 @@ export default function CartPage() {
                     
                     <div className="flex items-center">
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() => updateQuantity(item.id, item.quantity - 1, item.type)}
                         className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-1 rounded-full"
                       >
                         <Minus size={16} />
                       </button>
                       <span className="mx-3 font-medium text-gray-800">{item.quantity}</span>
                       <button 
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() => updateQuantity(item.id, item.quantity - 1, item.type)}
                         className="bg-[#009E73] hover:bg-[#388E3C] text-white p-1 rounded-full"
                       >
                         <Plus size={16} />
                       </button>
                       <button 
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeItem(item.id, item.type)}
                         className="ml-4 text-gray-400 hover:text-red-500"
                       >
                         <Trash2 size={18} />
