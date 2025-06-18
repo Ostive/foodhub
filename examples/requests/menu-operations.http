@@ -1,0 +1,48 @@
+### Create a menu item for Bella Napoli Restaurant (userId: 9)
+POST http://localhost:3002/api/restaurants/9/menu
+Content-Type: application/json
+
+{
+  "name": "Italian Feast",
+  "description": "A complete Italian dining experience with appetizers, main course, and dessert",
+  "price": 39.99,
+  "imageUrl": "https://example.com/images/italian-feast.jpg",
+  "categories": ["italian", "special", "dinner", "family"]
+}
+
+### Get all menu items for Bella Napoli
+GET http://localhost:3002/restaurants/9/menu
+
+### Get menu items with pagination (page 1, 5 items per page)
+GET http://localhost:3002/restaurants/9/menu?page=1&limit=5
+
+### Get menu items filtered by name
+GET http://localhost:3002/restaurants/9/menu?name=italian
+
+### Get menu items filtered by tag
+GET http://localhost:3002/restaurants/9/menu?tag=dinner
+
+### Get menu items filtered by price range
+GET http://localhost:3002/restaurants/9/menu?minPrice=30&maxPrice=50
+
+### Get menu items sorted by name ascending
+GET http://localhost:3002/restaurants/9/menu?sortBy=name&sortOrder=ASC
+
+### Get menu items with multiple filters
+GET http://localhost:3002/restaurants/9/menu?tag=dinner&minPrice=30&page=1&limit=10
+
+### Get a specific menu item by ID
+GET http://localhost:3002/api/restaurants/9/menu/1
+
+### Update a menu item - CORRECT WAY (don't include menuId in the body)
+PUT http://localhost:3002/api/restaurants/9/menu/1
+Content-Type: application/json
+
+{
+  "description": "Updated: A complete Italian dining experience with premium appetizers, authentic main course, and homemade dessert",
+  "price": 42.99,
+  "categories": ["italian", "special", "dinner", "family", "premium"]
+}
+
+### Delete a menu item
+DELETE http://localhost:3002/api/restaurants/9/menu/1

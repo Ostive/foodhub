@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { RestaurantService } from './restaurant-service.service';
-import { MenuService } from './menu/menu.service';
 import { DishService } from './dish/dish.service';
-import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { MenuService } from './menu/menu.service';
+import { CreateDishDto, UpdateDishDto, FilterDishDto, SearchDishDto } from './dto/dish';
+import { MenuItemDto, AddDishesToMenuDto, FilterMenuDto, SearchMenuDto } from './dto/menu';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-import { MenuItemDto } from './dto/menu';
-import { CreateDishDto, UpdateDishDto } from './dto/dish';
+import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 
 @Controller('restaurants')
 export class RestaurantServiceController {
@@ -30,48 +30,20 @@ export class RestaurantServiceController {
     return this.restaurantServiceService.updateRestaurant(id, updateRestaurantDto);
   }
 
-  // Menu management endpoints
-  @Post(':id/menu')
-  addMenuItem(@Param('id') id: string, @Body() menuItemDto: MenuItemDto) {
-    return this.menuService.addMenuItem(id, menuItemDto);
-  }
-
-  @Get(':id/menu')
-  getAllMenuItems(@Param('id') id: string) {
-    return this.menuService.getAllMenuItems(id);
-  }
-
-  @Get(':id/menu/:menuId')
-  getMenuItemById(
-    @Param('id') id: string,
-    @Param('menuId') menuId: string
-  ) {
-    return this.menuService.getMenuItemById(id, menuId);
-  }
-
-  @Put(':id/menu/:menuId')
-  updateMenuItem(
-    @Param('id') id: string,
-    @Param('menuId') menuId: string,
-    @Body() menuItemDto: MenuItemDto
-  ) {
-    return this.menuService.updateMenuItem(id, menuId, menuItemDto);
-  }
-
-  @Delete(':id/menu/:menuId')
-  deleteMenuItem(
-    @Param('id') id: string,
-    @Param('menuId') menuId: string
-  ) {
-    return this.menuService.deleteMenuItem(id, menuId);
-  }
-
   @Get(':id')
   getRestaurantById(
     @Param('id') id: number
   ) {
     return this.restaurantServiceService.findOne(id);
   }
+  @Get(':restaurantId/dishes')
+  getAllDishes(
+    @Param('restaurantId') restaurantId: string,
+    @Query() filterDto: FilterDishDto
+  ) {
+    return this.dishService.findAllDishes(restaurantId, filterDto);
+  }
+
 
   // Dish management endpoints
   @Post(':restaurantId/dishes')
@@ -81,6 +53,9 @@ export class RestaurantServiceController {
   ) {
     return this.dishService.createDish(restaurantId, createDishDto);
   }
+
+  
+  
 
   @Put(':restaurantId/dishes/:dishId')
   updateDish(
@@ -107,10 +82,81 @@ export class RestaurantServiceController {
     return this.dishService.findOneDish(restaurantId, dishId);
   }
 
-  @Get(':restaurantId/dishes')
-  getAllDishes(
-    @Param('restaurantId') restaurantId: string
+  @Get(':restaurantId/dishes/search')
+  searchDishes(
+    @Param('restaurantId') restaurantId: string,
+    @Query() searchDto: SearchDishDto
   ) {
-    return this.dishService.findAllDishes(restaurantId);
+    return this.dishService.searchDishes(restaurantId, searchDto);
+  }
+  
+ 
+  // Menu management endpoints
+  @Post(':restaurantId/menu')
+  createMenuItem(
+    @Param('restaurantId') restaurantId: string,
+    @Body() menuItemDto: MenuItemDto
+  ) {
+    return this.menuService.addMenuItem(restaurantId, menuItemDto);
+  }
+
+  @Put(':restaurantId/menu/:menuId')
+  updateMenuItem(
+    @Param('restaurantId') restaurantId: string,
+    @Param('menuId') menuId: string,
+    @Body() menuItemDto: MenuItemDto
+  ) {
+    return this.menuService.updateMenuItem(restaurantId, menuId, menuItemDto);
+  }
+
+  @Delete(':restaurantId/menu/:menuId')
+  deleteMenuItem(
+    @Param('restaurantId') restaurantId: string,
+    @Param('menuId') menuId: string
+  ) {
+    return this.menuService.deleteMenuItem(restaurantId, menuId);
+  }
+
+  @Get(':restaurantId/menu/:menuId')
+  getMenuItemById(
+    @Param('restaurantId') restaurantId: string,
+    @Param('menuId') menuId: string
+  ) {
+    return this.menuService.getMenuItemById(restaurantId, menuId);
+  }
+
+  @Get(':restaurantId/menu/search')
+  searchMenus(
+    @Param('restaurantId') restaurantId: string,
+    @Query() searchDto: SearchMenuDto
+  ) {
+    return this.menuService.searchMenus(restaurantId, searchDto);
+  }
+  
+  @Get(':restaurantId/menu')
+  getAllMenuItems(
+    @Param('restaurantId') restaurantId: string,
+    @Query() filterDto: FilterMenuDto
+  ) {
+    return this.menuService.getAllMenuItems(restaurantId, filterDto);
+  }
+  
+  // Menu-Dish relationship endpoints
+  @Post(':restaurantId/menu/:menuId/dishes')
+  addDishesToMenu(
+    @Param('restaurantId') restaurantId: string,
+    @Param('menuId') menuId: string,
+    @Body() addDishesDto: AddDishesToMenuDto
+  ) {
+    return this.menuService.addDishesToMenu(restaurantId, menuId, addDishesDto);
+  }
+
+  @Delete(':restaurantId/menu/:menuId/dishes/:dishId')
+  removeDishFromMenu(
+    @Param('restaurantId') restaurantId: string,
+    @Param('menuId') menuId: string,
+    @Param('dishId') dishId: string
+  ) {
+    return this.menuService.removeDishFromMenu(restaurantId, menuId, dishId);
   }
 }

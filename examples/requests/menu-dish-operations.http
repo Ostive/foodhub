@@ -1,0 +1,25 @@
+### Add dishes to a menu
+POST http://localhost:3002/restaurants/1/menu/1/dishes
+Content-Type: application/json
+
+{
+  "dishes": [
+    {
+      "dishId": 1,
+      "differCost": 0
+    },
+    {
+      "dishId": 2,
+      "differCost": 1.5
+    }
+  ]
+}
+
+### Remove a dish from a menu
+DELETE http://localhost:3002/restaurants/1/menu/1/dishes/1
+
+### Get menu with dishes
+GET http://localhost:3002/restaurants/1/menu/1
+
+### Get all menus with their dishes
+GET http://localhost:3002/restaurants/1/menu

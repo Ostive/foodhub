@@ -1,7 +1,7 @@
 import { Injectable, ValidationPipe, UsePipes, NotFoundException, BadRequestException } from '@nestjs/common';
-import { CreateDishDto, UpdateDishDto } from '../dto/dish';
+import { CreateDishDto, UpdateDishDto, FilterDishDto, SearchDishDto } from '../dto/dish';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Between, Like, ILike, Raw } from 'typeorm';
 import { Dish } from '../../../../libs/database/entities/dish.entity';
 import { User } from '../../../../libs/database/entities/user.entity';
 
@@ -52,41 +52,114 @@ export class DishService {
     };
   }
 
-  async findAllDishes(restaurantId: string) {
-    // Check if restaurant exists
-    const restaurant = await this.userRepository.findOne({
-      where: { userId: parseInt(restaurantId), role: 'restaurant' },
-    });
-    
-    if (!restaurant) {
-      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
-    }
+  async findAllDishes(restaurantId: string, filterDto?: FilterDishDto) {
+    try {
+      console.log(`Finding dishes for restaurant ID: ${restaurantId}`);
+      console.log(`Filter DTO:`, JSON.stringify(filterDto));
+      
+      // Check if restaurant exists
+      const restaurant = await this.userRepository.findOne({
+        where: { userId: parseInt(restaurantId), role: 'restaurant' },
+      });
+      
+      if (!restaurant) {
+        throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
+      }
 
-    // Find all dishes for the restaurant
-    const dishes = await this.dishRepository.find({
-      where: { user: { userId: parseInt(restaurantId) } },
-      relations: ['user'],
-    });
-    
-    // Format the response
-    const formattedDishes = dishes.map(dish => {
-      const { user, ...dishWithoutFullUser } = dish;
-      return {
-        ...dishWithoutFullUser,
-        restaurant: {
-          id: user.userId,
-          name: `${user.firstName} ${user.lastName}`,
-          email: user.email
-        }
+      console.log(`Restaurant found: ${restaurant.userId}`);
+
+      // Build query with filters
+      const query: any = {
+        user: { userId: parseInt(restaurantId) }
       };
-    });
 
-    return { 
-      success: true,
-      message: 'Dishes retrieved successfully', 
-      count: dishes.length,
-      dishes: formattedDishes
-    };
+      // Apply filters if provided
+      if (filterDto) {
+        // Filter by name
+        if (filterDto.name) {
+          query.name = ILike(`%${filterDto.name}%`);
+        }
+
+        // Filter by category
+        if (filterDto.category) {
+          query.category = ILike(`%${filterDto.category}%`);
+        }
+
+        // Filter by price range
+        if (filterDto.minPrice !== undefined && filterDto.maxPrice !== undefined) {
+          query.cost = Between(filterDto.minPrice, filterDto.maxPrice);
+        } else if (filterDto.minPrice !== undefined) {
+          query.cost = filterDto.minPrice;
+        } else if (filterDto.maxPrice !== undefined) {
+          query.cost = filterDto.maxPrice;
+        }
+
+        // Filter by isSoldAlone
+        if (filterDto.isSoldAlone !== undefined) {
+          query.isSoldAlone = filterDto.isSoldAlone;
+        }
+      }
+
+      console.log(`Query built:`, JSON.stringify(query));
+
+      // Calculate pagination
+      const page = filterDto?.page || 1;
+      const limit = filterDto?.limit || 10;
+      const skip = (page - 1) * limit;
+
+      // Determine sort options
+      const sortBy = filterDto?.sortBy || 'createdAt';
+      const sortOrder = filterDto?.sortOrder || 'DESC';
+      const order: any = {};
+      order[sortBy] = sortOrder;
+
+      console.log(`Pagination: page=${page}, limit=${limit}, skip=${skip}`);
+      console.log(`Sorting: ${sortBy} ${sortOrder}`);
+
+      // Find dishes with filters, pagination, and sorting
+      const [dishes, totalCount] = await this.dishRepository.findAndCount({
+        where: query,
+        relations: ['user'],
+        skip,
+        take: limit,
+        order
+      });
+      
+      console.log(`Found ${dishes.length} dishes out of ${totalCount} total`);
+      
+      // Format the response
+      const formattedDishes = dishes.map(dish => {
+        const { user, ...dishWithoutFullUser } = dish;
+        return {
+          ...dishWithoutFullUser,
+          restaurant: {
+            id: user.userId,
+            name: `${user.firstName} ${user.lastName}`,
+            email: user.email
+          }
+        };
+      });
+
+      // Calculate pagination metadata
+      const totalPages = Math.ceil(totalCount / limit);
+      const hasNext = page < totalPages;
+      const hasPrevious = page > 1;
+
+      return { 
+        success: true,
+        message: 'Dishes retrieved successfully', 
+        count: totalCount,
+        page,
+        limit,
+        totalPages,
+        hasNext,
+        hasPrevious,
+        dishes: formattedDishes
+      };
+    } catch (error) {
+      console.error('Error in findAllDishes:', error);
+      throw error;
+    }
   }
 
   async findOneDish(restaurantId: string, dishId: string) {
@@ -206,6 +279,86 @@ export class DishService {
       success: true,
       message: 'Dish deleted successfully',
       dish: dishInfo
+    };
+  }
+
+  async searchDishes(restaurantId: string, searchDto: SearchDishDto) {
+    // Check if restaurant exists
+    const restaurant = await this.userRepository.findOne({
+      where: { userId: parseInt(restaurantId), role: 'restaurant' },
+    });
+    
+    if (!restaurant) {
+      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
+    }
+
+    // Build query for search
+    const userId = parseInt(restaurantId);
+    let whereClause: any;
+    
+    if (searchDto.search) {
+      const searchTerm = `%${searchDto.search}%`;
+      whereClause = [
+        { name: ILike(searchTerm), user: { userId } },
+        { description: ILike(searchTerm), user: { userId } },
+        { category: ILike(searchTerm), user: { userId } },
+        { tags: Raw(alias => `${alias} ILIKE :searchTerm`, { searchTerm }), user: { userId } },
+        { additionalAllergens: ILike(searchTerm), user: { userId } },
+        { promo: ILike(searchTerm), user: { userId } }
+      ];
+    } else {
+      // If no search term, just filter by restaurant
+      whereClause = { user: { userId } };
+    }
+
+    // Calculate pagination
+    const page = searchDto.page || 1;
+    const limit = searchDto.limit || 10;
+    const skip = (page - 1) * limit;
+
+    // Determine sort options
+    const sortBy = searchDto.sortBy || 'createdAt';
+    const sortOrder = searchDto.sortOrder || 'DESC';
+    const order: any = {};
+    order[sortBy] = sortOrder;
+
+    // Find dishes with search, pagination, and sorting
+    const [dishes, totalCount] = await this.dishRepository.findAndCount({
+      where: whereClause,
+      relations: ['user'],
+      skip,
+      take: limit,
+      order
+    });
+    
+    // Format the response
+    const formattedDishes = dishes.map(dish => {
+      const { user, ...dishWithoutFullUser } = dish;
+      return {
+        ...dishWithoutFullUser,
+        restaurant: {
+          id: user.userId,
+          name: `${user.firstName} ${user.lastName}`,
+          email: user.email
+        }
+      };
+    });
+
+    // Calculate pagination metadata
+    const totalPages = Math.ceil(totalCount / limit);
+    const hasNext = page < totalPages;
+    const hasPrevious = page > 1;
+
+    return { 
+      success: true,
+      message: 'Dishes search completed successfully', 
+      count: totalCount,
+      page,
+      limit,
+      totalPages,
+      hasNext,
+      hasPrevious,
+      dishes: formattedDishes
     };
   }
 }

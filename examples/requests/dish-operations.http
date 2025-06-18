@@ -19,6 +19,27 @@ Content-Type: application/json
 ### Get all dishes for Bella Napoli
 GET http://localhost:3002/api/restaurants/9/dishes
 
+### Get dishes with pagination (page 1, 5 items per page)
+GET http://localhost:3002/api/restaurants/9/dishes?page=1&limit=5
+
+### Get dishes filtered by name
+GET http://localhost:3002/api/restaurants/9/dishes?name=pasta
+
+### Get dishes filtered by category
+GET http://localhost:3002/api/restaurants/9/dishes?category=italian
+
+### Get dishes filtered by price range
+GET http://localhost:3002/api/restaurants/9/dishes?minPrice=10&maxPrice=20
+
+### Get dishes that are sold alone
+GET http://localhost:3002/api/restaurants/9/dishes?isSoldAlone=true
+
+### Get dishes sorted by name ascending
+GET http://localhost:3002/api/restaurants/9/dishes?sortBy=name&sortOrder=ASC
+
+### Get dishes with multiple filters
+GET http://localhost:3002/api/restaurants/9/dishes?category=italian&minPrice=10&page=1&limit=10
+
 ### Get a specific dish by ID
 GET http://localhost:3002/api/restaurants/9/dishes/1
 

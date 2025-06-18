@@ -1,0 +1,17 @@
+### Search dishes by keyword (searches across name, description, category, tags, etc.)
+GET http://localhost:3002/api/restaurants/9/dishes/search?search=pasta&page=1&limit=10
+
+### Search dishes by keyword with sorting
+GET http://localhost:3002/api/restaurants/9/dishes/search?search=italian&sortBy=price&sortOrder=ASC
+
+### Search dishes with pagination only (no search term)
+GET http://localhost:3002/api/restaurants/9/dishes/search?page=1&limit=5
+
+### Search menus by keyword (searches across name, description, tags)
+GET http://localhost:3002/api/restaurants/9/menu/search?search=italian&page=1&limit=10
+
+### Search menus by keyword with sorting
+GET http://localhost:3002/api/restaurants/9/menu/search?search=special&sortBy=name&sortOrder=ASC
+
+### Search menus with pagination only (no search term)
+GET http://localhost:3002/api/restaurants/9/menu/search?page=1&limit=5
