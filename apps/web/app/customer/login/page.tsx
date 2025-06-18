@@ -6,50 +6,51 @@ import Image from "next/image";
 import { Eye, EyeOff, Mail, Lock, ArrowRight, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-// This will be replaced with a proper auth context in a real app
-import { isLoggedIn } from "../_utils/authState";
+// Import our authentication hooks
+import { useLogin } from "@/lib/hooks/use-auth";
+import { useAuth } from "@/lib/auth/auth-context";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
+  
+  // Use our login mutation hook
+  const { mutate: login, isPending: isLoading, error: loginError } = useLogin();
+  const { isAuthenticated } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setIsLoading(true);
     
-    // Simulate API call
-    try {
-      // Replace with actual authentication logic
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // For demo purposes, simple validation
-      if (!email || !password) {
-        throw new Error("Please fill in all fields");
-      }
-      
-      // Set logged in state
-      isLoggedIn.value = true;
-      
-      // Redirect to home page after successful login
-      router.push("/customer");
-    } catch (err: any) {
-      setError(err.message || "Login failed. Please try again.");
-    } finally {
-      setIsLoading(false);
+    // Validate form fields
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
     }
+    
+    // Call login mutation
+    login(
+      { email, password },
+      {
+        onSuccess: () => {
+          // Redirect to home page after successful login
+          router.push("/customer");
+        },
+        onError: (error: Error) => {
+          setError(error.message || "Login failed. Please try again.");
+        }
+      }
+    );
   };
 
-  // For testing purposes
-  const handleTestLogin = () => {
-    isLoggedIn.value = true;
+  // Redirect if already authenticated
+  if (isAuthenticated) {
     router.push("/customer");
-  };
+  }
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white">
@@ -187,7 +188,7 @@ export default function LoginPage() {
               </div>
             </div>
             <button
-              onClick={handleTestLogin}
+              onClick={() => login({ email: 'testcustomer@customer.com', password: 'Password123!' })}
               className="mt-4 w-full flex justify-center items-center py-3 px-4 border border-gray-300 rounded-xl shadow-xs text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-[#4CAF50] transition-colors duration-200"
             >
               <User className="mr-2 h-4 w-4 text-[#4CAF50]" />

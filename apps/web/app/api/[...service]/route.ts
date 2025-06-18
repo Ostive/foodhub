@@ -1,91 +1,47 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * API Gateway Configuration
+ * 
+ * This file serves as an API gateway that proxies requests to the appropriate backend services.
+ * It can also return mock data for development purposes when the USE_MOCK_DATA environment variable is set to 'true'.
+ */
+
 // Define the backend services and their base URLs
 const SERVICES: Record<string, string> = {
-  auth: process.env.AUTH_SERVICE_URL || 'http://localhost:3001',
+  auth: process.env.AUTH_SERVICE_URL || 'http://localhost:3004',
+  user: process.env.USER_SERVICE_URL || 'http://localhost:3003',
   restaurant: process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002',
   order: process.env.ORDER_SERVICE_URL || 'http://localhost:3003',
-  delivery: process.env.DELIVERY_SERVICE_URL || 'http://localhost:3004',
-  payment: process.env.PAYMENT_SERVICE_URL || 'http://localhost:3005',
-  user: process.env.USER_SERVICE_URL || 'http://localhost:3006',
+  delivery: process.env.DELIVERY_SERVICE_URL || 'http://localhost:3005',
+  payment: process.env.PAYMENT_SERVICE_URL || 'http://localhost:3006',
 };
 
-// Placeholder mock responses for development
-const MOCK_RESPONSES: Record<string, any> = {
-  auth: {
-    login: { success: true, token: "mock-jwt-token", user: { id: 1, name: "Mock User" } },
-    register: { success: true, message: "User registered successfully" },
-    verify: { success: true, message: "Token verified" }
-  },
-  restaurant: {
-    list: [
-      { id: 1, name: "Mock Restaurant 1", cuisine: "Italian", rating: 4.5 },
-      { id: 2, name: "Mock Restaurant 2", cuisine: "Japanese", rating: 4.7 },
-      { id: 3, name: "Mock Restaurant 3", cuisine: "Mexican", rating: 4.2 }
-    ],
-    menu: {
-      items: [
-        { id: 1, name: "Mock Dish 1", price: 12.99, description: "Delicious mock dish" },
-        { id: 2, name: "Mock Dish 2", price: 9.99, description: "Another tasty mock dish" }
-      ]
-    }
-  },
-  order: {
-    create: { success: true, orderId: "mock-order-123" },
-    status: { status: "preparing", estimatedDelivery: "30 minutes" },
-    history: [
-      { id: "mock-order-100", date: "2025-06-10", status: "delivered" },
-      { id: "mock-order-101", date: "2025-06-11", status: "delivered" }
-    ]
-  },
-  delivery: {
-    track: { status: "en route", location: { lat: 40.7128, lng: -74.0060 } },
-    estimate: { minutes: 25 }
-  },
-  payment: {
-    methods: [
-      { id: 1, type: "credit_card", last4: "1234" },
-      { id: 2, type: "paypal", email: "mock@example.com" }
-    ],
-    process: { success: true, transactionId: "mock-transaction-123" }
-  },
-  user: {
-    profile: { id: 1, name: "Mock User", email: "mock@example.com", phone: "123-456-7890" },
-    addresses: [
-      { id: 1, street: "123 Mock St", city: "Mock City", zip: "12345" }
-    ],
-    preferences: { notifications: true, marketing: false }
-  }
-};
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { service: string[] } }
-) {
+// API route handlers for different HTTP methods
+export async function GET(request: NextRequest, { params }: { params: { service: string[] } }) {
   return handleRequest('GET', request, params);
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { service: string[] } }
-) {
+export async function POST(request: NextRequest, { params }: { params: { service: string[] } }) {
   return handleRequest('POST', request, params);
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { service: string[] } }
-) {
+export async function PUT(request: NextRequest, { params }: { params: { service: string[] } }) {
   return handleRequest('PUT', request, params);
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { service: string[] } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { service: string[] } }) {
+  return handleRequest('PATCH', request, params);
+}
+
+export async function DELETE(request: NextRequest, { params }: { params: { service: string[] } }) {
   return handleRequest('DELETE', request, params);
 }
 
+/**
+ * Handle API requests and proxy them to the appropriate backend service
+ */
 async function handleRequest(
   method: string,
   request: NextRequest,
@@ -102,61 +58,97 @@ async function handleRequest(
       );
     }
 
-    // For now, return mock data instead of making actual API calls
-    // This is a placeholder implementation
-    const mockPath = pathParts.length > 0 ? pathParts[0] : 'default';
-    
-    if (MOCK_RESPONSES[serviceName] && MOCK_RESPONSES[serviceName][mockPath]) {
-      return NextResponse.json(MOCK_RESPONSES[serviceName][mockPath]);
+    // No mock data handling, always forward to real service
+
+    try {
+      return await forwardRequestToService(method, request, serviceName, pathParts, serviceUrl);
+    } catch (error) {
+      console.error('API Gateway Error:', error);
+      return NextResponse.json(
+        { error: 'Internal server error', message: error instanceof Error ? error.message : 'Unknown error' },
+        { status: 500 }
+      );
     }
-    
-    // If no specific mock data is found, return the entire service mock data
-    if (MOCK_RESPONSES[serviceName]) {
-      return NextResponse.json(MOCK_RESPONSES[serviceName]);
-    }
-
-    // If we were to actually make the API call, this is how it would look:
-    /*
-    // Reconstruct the target URL
-    const targetUrl = new URL(pathParts.join('/'), serviceUrl);
-    
-    // Forward query parameters
-    request.nextUrl.searchParams.forEach((value, key) => {
-      targetUrl.searchParams.append(key, value);
-    });
-
-    // Forward headers
-    const headers = new Headers();
-    request.headers.forEach((value, key) => {
-      headers.set(key, value);
-    });
-
-    // Forward the request to the target service
-    const response = await fetch(targetUrl.toString(), {
-      method,
-      headers,
-      body: method !== 'GET' && method !== 'HEAD' ? await request.text() : undefined,
-    });
-
-    // Return the response from the target service
-    const data = await response.text();
-    return new NextResponse(data, {
-      status: response.status,
-      statusText: response.statusText,
-      headers: Object.fromEntries(response.headers.entries()),
-    });
-    */
-
-    // Default response if no mock data is found
-    return NextResponse.json(
-      { message: `Placeholder response for ${serviceName} service` },
-      { status: 200 }
-    );
   } catch (error) {
     console.error('API Gateway Error:', error);
     return NextResponse.json(
       { error: 'Internal Server Error', details: error instanceof Error ? error.message : String(error) },
       { status: 500 }
     );
+  }
+}
+
+// Mock response handling removed
+
+/**
+ * Forward the request to the appropriate backend service
+ */
+async function forwardRequestToService(
+  method: string,
+  request: NextRequest,
+  serviceName: string,
+  pathParts: string[],
+  serviceUrl: string
+) {
+  // Reconstruct the target URL
+  let targetPath = '';
+  if (pathParts.length > 0) {
+    targetPath = `/${pathParts.join('/')}`;
+  }
+  
+  const targetUrl = new URL(targetPath, serviceUrl);
+  
+  // Forward query parameters
+  request.nextUrl.searchParams.forEach((value, key) => {
+    targetUrl.searchParams.append(key, value);
+  });
+
+  // Forward headers
+  const headers = new Headers();
+  request.headers.forEach((value, key) => {
+    // Skip next.js specific headers
+    if (!key.startsWith('next-')) {
+      headers.set(key, value);
+    }
+  });
+
+  // Set content type if not already set
+  if (!headers.has('Content-Type') && method !== 'GET' && method !== 'HEAD') {
+    headers.set('Content-Type', 'application/json');
+  }
+
+  console.log(`Forwarding ${method} request to: ${targetUrl.toString()}`);
+  
+  // Forward the request to the target service
+  const response = await fetch(targetUrl.toString(), {
+    method,
+    headers,
+    body: method !== 'GET' && method !== 'HEAD' ? await request.text() : undefined,
+  });
+
+  // Return the response from the target service
+  return formatServiceResponse(response);
+}
+
+/**
+ * Format the response from the backend service
+ */
+async function formatServiceResponse(response: Response) {
+  const contentType = response.headers.get('Content-Type') || '';
+  
+  if (contentType.includes('application/json')) {
+    const data = await response.json();
+    return NextResponse.json(data, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: Object.fromEntries(response.headers.entries()),
+    });
+  } else {
+    const data = await response.text();
+    return new NextResponse(data, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: Object.fromEntries(response.headers.entries()),
+    });
   }
 }

@@ -1,6 +1,8 @@
 "use client"
 
 import React from "react"
+import { QueryProvider } from "@/lib/providers/query-provider"
+import { AuthProvider } from "@/lib/auth/auth-context"
 
 interface ProvidersProps {
   children: React.ReactNode
@@ -8,15 +10,10 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <>
-      {/* Add your providers here, for example:
-         <ThemeProvider>
-           <AuthProvider>
-             {children}
-           </AuthProvider>
-         </ThemeProvider>
-      */}
-      {children}
-    </>
+    <QueryProvider>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </QueryProvider>
   )
 }
