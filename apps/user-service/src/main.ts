@@ -33,7 +33,14 @@ async function bootstrap() {
     .build();
   
   const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup('api/docs', app, document);
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+      docExpansion: 'list',
+      defaultModelsExpandDepth: 1,
+      defaultModelExpandDepth: 1,
+    },
+  });
   
   // Start the HTTP server
   const httpPort = config.services.userServicePort;
