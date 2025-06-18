@@ -79,13 +79,13 @@ export class RestaurantServiceController {
     @Param('restaurantId') restaurantId: string,
     @Body() createDishDto: CreateDishDto
   ) {
-    return this.dishService.createDish(createDishDto);
+    return this.dishService.createDish(restaurantId, createDishDto);
   }
 
   @Put(':restaurantId/dishes/:dishId')
   updateDish(
     @Param('restaurantId') restaurantId: string,
-    @Param('dishId') dishId: number,
+    @Param('dishId') dishId: string,
     @Body() updateDishDto: UpdateDishDto
   ) {
     return this.dishService.updateDish(restaurantId, dishId, updateDishDto);
@@ -94,7 +94,7 @@ export class RestaurantServiceController {
   @Delete(':restaurantId/dishes/:dishId')
   deleteDish(
     @Param('restaurantId') restaurantId: string,
-    @Param('dishId') dishId: number
+    @Param('dishId') dishId: string
   ) {
     return this.dishService.deleteDish(restaurantId, dishId);
   }
@@ -102,9 +102,9 @@ export class RestaurantServiceController {
   @Get(':restaurantId/dishes/:dishId')
   getDishById(
     @Param('restaurantId') restaurantId: string,
-    @Param('dishId') dishId: number
+    @Param('dishId') dishId: string
   ) {
-    return this.dishService.findOne(restaurantId, dishId);
+    return this.dishService.findOneDish(restaurantId, dishId);
   }
 
   @Get(':restaurantId/dishes')

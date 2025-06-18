@@ -16,167 +16,196 @@ export class DishService {
     private userRepository: Repository<User>,
   ) {}
 
-  async createDish(createDishDto: CreateDishDto) {
-    // Verify the restaurant exists
-    const restaurant = await this.userRepository.findOne({ 
-      where: { 
-        userId: parseInt(createDishDto.userId),
-        role: 'restaurant'
-      } 
+  async createDish(restaurantId: string, createDishDto: CreateDishDto) {
+    // Check if restaurant exists
+    const restaurant = await this.userRepository.findOne({
+      where: { userId: parseInt(restaurantId), role: 'restaurant' },
     });
     
     if (!restaurant) {
-      throw new BadRequestException(`Restaurant with ID ${createDishDto.userId} not found`);
+      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
     }
 
-    // Create the dish with restaurant association
-    const newDish = this.dishRepository.create({
+    // Create new dish entity
+    const dish = this.dishRepository.create({
       ...createDishDto,
-      user: restaurant
+      user: restaurant,
     });
+
+    // Save dish to database
+    const savedDish = await this.dishRepository.save(dish);
     
-    // Save the dish to the database
-    const savedDish = await this.dishRepository.save(newDish);
+    // Format the response
+    const { user, ...dishWithoutFullUser } = savedDish;
     
     return { 
+      success: true,
       message: 'Dish created successfully', 
-      dish: savedDish 
+      dish: {
+        ...dishWithoutFullUser,
+        restaurant: {
+          id: user.userId,
+          name: `${user.firstName} ${user.lastName}`,
+          email: user.email
+        }
+      }
     };
-
-    const newDish = this.dishRepository.create({...createDishDto});
-    await this.dishRepository.save(newDish);
-    
-    return { message: 'Dish created', newDish: createDishDto };
   }
 
   async findAllDishes(restaurantId: string) {
-    // Verify the restaurant exists
-    const restaurant = await this.userRepository.findOne({ 
-      where: { 
-        userId: parseInt(restaurantId),
-        role: 'restaurant'
-      } 
+    // Check if restaurant exists
+    const restaurant = await this.userRepository.findOne({
+      where: { userId: parseInt(restaurantId), role: 'restaurant' },
     });
     
     if (!restaurant) {
-      throw new BadRequestException(`Restaurant with ID ${restaurantId} not found`);
+      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
     }
 
-    // Find all dishes for this restaurant
+    // Find all dishes for the restaurant
     const dishes = await this.dishRepository.find({
       where: { user: { userId: parseInt(restaurantId) } },
-      relations: ['user']
+      relations: ['user'],
+    });
+    
+    // Format the response
+    const formattedDishes = dishes.map(dish => {
+      const { user, ...dishWithoutFullUser } = dish;
+      return {
+        ...dishWithoutFullUser,
+        restaurant: {
+          id: user.userId,
+          name: `${user.firstName} ${user.lastName}`,
+          email: user.email
+        }
+      };
     });
 
     return { 
-      message: 'All dishes retrieved successfully', 
-      dishes 
+      success: true,
+      message: 'Dishes retrieved successfully', 
+      count: dishes.length,
+      dishes: formattedDishes
     };
   }
 
-  async findOne(restaurantId: string, dishId: number) {
-    // Verify the restaurant exists
-    const restaurant = await this.userRepository.findOne({ 
-      where: { 
-        userId: parseInt(restaurantId),
-        role: 'restaurant'
-      } 
+  async findOneDish(restaurantId: string, dishId: string) {
+    // Check if restaurant exists
+    const restaurant = await this.userRepository.findOne({
+      where: { userId: parseInt(restaurantId), role: 'restaurant' },
     });
     
     if (!restaurant) {
-      throw new BadRequestException(`Restaurant with ID ${restaurantId} not found`);
+      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
     }
 
-    // Find the dish for this restaurant
+    // Find the specific dish for the restaurant
     const dish = await this.dishRepository.findOne({
-      where: { 
-        dishId,
-        user: { userId: parseInt(restaurantId) } 
-      },
-      relations: ['user']
+      where: { dishId: parseInt(dishId), user: { userId: parseInt(restaurantId) } },
+      relations: ['user'],
     });
 
     if (!dish) {
       throw new NotFoundException(`Dish with ID ${dishId} not found for restaurant ${restaurantId}`);
     }
+    
+    // Format the response
+    const { user, ...dishWithoutFullUser } = dish;
 
     return { 
+      success: true,
       message: 'Dish retrieved successfully', 
-      dish 
+      dish: {
+        ...dishWithoutFullUser,
+        restaurant: {
+          id: user.userId,
+          name: `${user.firstName} ${user.lastName}`,
+          email: user.email
+        }
+      }
     };
   }
 
-  async updateDish(restaurantId: string, dishId: number, updateDishDto: UpdateDishDto) {
-    // Verify the restaurant exists
-    const restaurant = await this.userRepository.findOne({ 
-      where: { 
-        userId: parseInt(restaurantId),
-        role: 'restaurant'
-      } 
+  async updateDish(restaurantId: string, dishId: string, updateDishDto: UpdateDishDto) {
+    // Check if restaurant exists
+    const restaurant = await this.userRepository.findOne({
+      where: { userId: parseInt(restaurantId), role: 'restaurant' },
     });
     
     if (!restaurant) {
-      throw new BadRequestException(`Restaurant with ID ${restaurantId} not found`);
+      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
     }
 
-    // Find the dish for this restaurant
+    // Check if dish exists and belongs to the restaurant
     const dish = await this.dishRepository.findOne({
-      where: { 
-        dishId,
-        user: { userId: parseInt(restaurantId) } 
-      }
+      where: { dishId: parseInt(dishId), user: { userId: parseInt(restaurantId) } },
+      relations: ['user'],
     });
-    
+
     if (!dish) {
       throw new NotFoundException(`Dish with ID ${dishId} not found for restaurant ${restaurantId}`);
     }
 
-    // Update the dish with the provided updates
-    await this.dishRepository.update(dishId, updateDishDto);
-    
-    // Get the updated dish
-    const updatedDish = await this.dishRepository.findOne({
-      where: { dishId },
-      relations: ['user']
-    });
+    // Update dish properties
+    Object.assign(dish, updateDishDto);
 
+    // Save updated dish
+    const updatedDish = await this.dishRepository.save(dish);
+    
+    // Format the response
+    const { user, ...dishWithoutFullUser } = updatedDish;
+    
     return { 
+      success: true,
       message: 'Dish updated successfully', 
-      dish: updatedDish 
+      dish: {
+        ...dishWithoutFullUser,
+        restaurant: {
+          id: user.userId,
+          name: `${user.firstName} ${user.lastName}`,
+          email: user.email
+        }
+      }
     };
   }
 
-  async deleteDish(restaurantId: string, dishId: number) {
-    // Verify the restaurant exists
-    const restaurant = await this.userRepository.findOne({ 
-      where: { 
-        userId: parseInt(restaurantId),
-        role: 'restaurant'
-      } 
+  async deleteDish(restaurantId: string, dishId: string) {
+    // Check if restaurant exists
+    const restaurant = await this.userRepository.findOne({
+      where: { userId: parseInt(restaurantId), role: 'restaurant' },
     });
     
     if (!restaurant) {
-      throw new BadRequestException(`Restaurant with ID ${restaurantId} not found`);
+      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
     }
-    
-    // Find the dish for this restaurant
+
+    // Check if dish exists and belongs to the restaurant
     const dish = await this.dishRepository.findOne({
-      where: { 
-        dishId,
-        user: { userId: parseInt(restaurantId) } 
-      }
+      where: { dishId: parseInt(dishId), user: { userId: parseInt(restaurantId) } },
+      relations: ['user'],
     });
 
     if (!dish) {
       throw new NotFoundException(`Dish with ID ${dishId} not found for restaurant ${restaurantId}`);
     }
+    
+    // Store dish info before deletion for response
+    const dishInfo = {
+      id: dish.dishId,
+      name: dish.name,
+      restaurant: {
+        id: dish.user.userId,
+        name: `${dish.user.firstName} ${dish.user.lastName}`
+      }
+    };
 
     // Delete the dish
-    await this.dishRepository.delete(dishId);
-    
+    await this.dishRepository.remove(dish);
+
     return { 
-      message: 'Dish deleted successfully', 
-      dishId 
+      success: true,
+      message: 'Dish deleted successfully',
+      dish: dishInfo
     };
   }
 }
