@@ -16,10 +16,6 @@ export class RestaurantService {
     private readonly restaurantRepository: Repository<User>,
   ) {}
 
-  getHello(): string {
-    return 'Hello World!';
-  }
-
   async createRestaurant(createRestaurantDto: CreateRestaurantDto): Promise<Partial<User>> {
     // Hash the password
     const hashedPassword = await bcrypt.hash(createRestaurantDto.password, 10);
