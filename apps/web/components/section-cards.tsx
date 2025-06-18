@@ -105,20 +105,105 @@ export function SectionCards() {
   )
 }
 
+
+
 const components = [
   {
-    name: "Button",
-    description: "Versatile button with multiple variants and sizes.",
-    demo: <Button variant="default">Click Me</Button>,
-    code: `<Button variant="default">Click Me</Button>`,
+    name: "Text Div",
+    description: "A simple div containing a text message.",
+    demo: <div className="text-muted-foreground">Hello, world!</div>,
+    code: `<div>Hello, world!</div>`,
   },
   {
-    name: "Badge",
-    description: "Small label for metadata or status indicators.",
-    demo: <Badge variant="outline">Beta</Badge>,
-    code: `<Badge variant="outline">Beta</Badge>`,
+    name: "HTML Button",
+    description: "A basic HTML button with styling.",
+    demo: <button className="px-4 py-2 bg-blue-500 text-white rounded">Click Me</button>,
+    code: `<button class="px-4 py-2 bg-blue-500 text-white rounded">Click Me</button>`,
   },
-  // Add more component cards here...
+  {
+    name: "Hyperlink",
+    description: "A simple link that opens Google in a new tab.",
+    demo: <a href="https://www.google.com" className="text-blue-600 underline" target="_blank">Google</a>,
+    code: `<a href="https://www.google.com" target="_blank">Google</a>`,
+  },
+  {
+    name: "Unordered List",
+    description: "A simple HTML unordered list with 3 items.",
+    demo: (
+      <ul className="list-disc pl-4">
+        <li>First item</li>
+        <li>Second item</li>
+        <li>Third item</li>
+      </ul>
+    ),
+    code: `<ul>
+  <li>First item</li>
+  <li>Second item</li>
+  <li>Third item</li>
+</ul>`,
+  },
+  {
+    name: "Dish Card",
+    description: "Card to display a dish with name, description and price.",
+    demo: (
+      <div className="border rounded p-4 shadow-sm max-w-xs">
+        <h3 className="text-lg font-semibold">Grilled Chicken</h3>
+        <p className="text-sm text-muted-foreground">Tender grilled chicken with herbs and spices.</p>
+        <p className="mt-2 font-bold">$15.99</p>
+      </div>
+    ),
+    code: `<div class="border rounded p-4 shadow-sm max-w-xs">
+  <h3 class="text-lg font-semibold">Grilled Chicken</h3>
+  <p class="text-sm text-muted-foreground">Tender grilled chicken with herbs and spices.</p>
+  <p class="mt-2 font-bold">$15.99</p>
+</div>`,
+  },
+  {
+    name: "Order Status Badge",
+    description: "Colored badge to show the order status.",
+    demo: (
+      <span className="inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-800">
+        Delivered
+      </span>
+    ),
+    code: `<span class="inline-block rounded-full bg-green-100 px-3 py-1 text-sm font-semibold text-green-800">
+  Delivered
+</span>`,
+  },
+  {
+    name: "Toggle Switch",
+    description: "Simple toggle switch for availability or open/close status.",
+    demo: (
+      <label className="inline-flex items-center cursor-pointer">
+        <input type="checkbox" className="sr-only peer" />
+        <div className="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-green-500 relative transition-colors"></div>
+        <span className="ml-3 text-sm font-medium text-gray-900">Open for orders</span>
+      </label>
+    ),
+    code: `<label class="inline-flex items-center cursor-pointer">
+  <input type="checkbox" class="sr-only peer" />
+  <div class="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-green-500 relative transition-colors"></div>
+  <span class="ml-3 text-sm font-medium text-gray-900">Open for orders</span>
+</label>`,
+  },
+  {
+    name: "Rating Stars",
+    description: "Display rating stars for dishes or service.",
+    demo: (
+      <div aria-label="4 out of 5 stars">
+        ⭐⭐⭐⭐☆
+      </div>
+    ),
+    code: `<div aria-label="4 out of 5 stars">
+  ⭐⭐⭐⭐☆
+</div>`,
+  },
+  {
+    name: "Input Form Field",
+    description: "Basic input field for entering dish or menu details.",
+    demo: <input type="text" placeholder="Enter dish name" className="border p-2 rounded w-full" />,
+    code: `<input type="text" placeholder="Enter dish name" class="border p-2 rounded w-full" />`,
+  },
 ]
 
 export function SectionCards2() {
