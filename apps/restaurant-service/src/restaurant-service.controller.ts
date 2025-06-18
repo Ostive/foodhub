@@ -36,6 +36,8 @@ export class RestaurantServiceController {
   ) {
     return this.restaurantServiceService.findOne(id);
   }
+
+
   @Get(':restaurantId/dishes')
   getAllDishes(
     @Param('restaurantId') restaurantId: string,
@@ -43,6 +45,16 @@ export class RestaurantServiceController {
   ) {
     return this.dishService.findAllDishes(restaurantId, filterDto);
   }
+
+
+  @Get(':restaurantId/dishes/search')
+  searchDishes(
+    @Param('restaurantId') restaurantId: string,
+    @Query() searchDto: SearchDishDto
+  ) {
+    return this.dishService.searchDishes(restaurantId, searchDto);
+  }
+
 
 
   // Dish management endpoints
@@ -80,14 +92,6 @@ export class RestaurantServiceController {
     @Param('dishId') dishId: string
   ) {
     return this.dishService.findOneDish(restaurantId, dishId);
-  }
-
-  @Get(':restaurantId/dishes/search')
-  searchDishes(
-    @Param('restaurantId') restaurantId: string,
-    @Query() searchDto: SearchDishDto
-  ) {
-    return this.dishService.searchDishes(restaurantId, searchDto);
   }
   
  

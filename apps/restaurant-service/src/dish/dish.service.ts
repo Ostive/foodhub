@@ -57,6 +57,11 @@ export class DishService {
       console.log(`Finding dishes for restaurant ID: ${restaurantId}`);
       console.log(`Filter DTO:`, JSON.stringify(filterDto));
       
+      // Validate restaurantId
+      if (!restaurantId || isNaN(parseInt(restaurantId))) {
+        throw new BadRequestException(`Invalid restaurant ID: ${restaurantId}`);
+      }
+
       // Check if restaurant exists
       const restaurant = await this.userRepository.findOne({
         where: { userId: parseInt(restaurantId), role: 'restaurant' },
@@ -69,38 +74,34 @@ export class DishService {
       console.log(`Restaurant found: ${restaurant.userId}`);
 
       // Build query with filters
-      const query: any = {
-        user: { userId: parseInt(restaurantId) }
-      };
-
+      const query = {};
+      
       // Apply filters if provided
       if (filterDto) {
         // Filter by name
         if (filterDto.name) {
-          query.name = ILike(`%${filterDto.name}%`);
+          query['name'] = ILike(`%${filterDto.name}%`);
         }
 
         // Filter by category
         if (filterDto.category) {
-          query.category = ILike(`%${filterDto.category}%`);
+          query['category'] = ILike(`%${filterDto.category}%`);
         }
 
         // Filter by price range
         if (filterDto.minPrice !== undefined && filterDto.maxPrice !== undefined) {
-          query.cost = Between(filterDto.minPrice, filterDto.maxPrice);
+          query['cost'] = Between(filterDto.minPrice, filterDto.maxPrice);
         } else if (filterDto.minPrice !== undefined) {
-          query.cost = filterDto.minPrice;
+          query['cost'] = Raw(alias => `${alias} >= ${filterDto.minPrice}`);
         } else if (filterDto.maxPrice !== undefined) {
-          query.cost = filterDto.maxPrice;
+          query['cost'] = Raw(alias => `${alias} <= ${filterDto.maxPrice}`);
         }
 
         // Filter by isSoldAlone
         if (filterDto.isSoldAlone !== undefined) {
-          query.isSoldAlone = filterDto.isSoldAlone;
+          query['isSoldAlone'] = filterDto.isSoldAlone;
         }
       }
-
-      console.log(`Query built:`, JSON.stringify(query));
 
       // Calculate pagination
       const page = filterDto?.page || 1;
@@ -118,7 +119,10 @@ export class DishService {
 
       // Find dishes with filters, pagination, and sorting
       const [dishes, totalCount] = await this.dishRepository.findAndCount({
-        where: query,
+        where: {
+          ...query,
+          userId: parseInt(restaurantId)
+        },
         relations: ['user'],
         skip,
         take: limit,
@@ -133,9 +137,9 @@ export class DishService {
         return {
           ...dishWithoutFullUser,
           restaurant: {
-            id: user.userId,
-            name: `${user.firstName} ${user.lastName}`,
-            email: user.email
+            id: user?.userId,
+            name: user ? `${user.firstName} ${user.lastName}` : 'Unknown',
+            email: user?.email
           }
         };
       });
@@ -158,6 +162,10 @@ export class DishService {
       };
     } catch (error) {
       console.error('Error in findAllDishes:', error);
+      if (error.name === 'QueryFailedError') {
+        console.error('SQL Error:', error.message);
+        throw new BadRequestException('Invalid query parameters');
+      }
       throw error;
     }
   }
