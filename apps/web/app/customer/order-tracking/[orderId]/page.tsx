@@ -272,11 +272,11 @@ export default function OrderTrackingPage() {
   return (
     <div className="bg-[#f8f9fa] min-h-svh pb-20">
       {/* Dark overlay for navbar */}
-      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-xs bg-linear-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
+      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-xs bg-linear-to-b from-black/60 via-black/40 to-transparent pointer-events-none" style={{ height: 90 }}></div>
       <CustomerNavbar />
       
       <div className="max-w-4xl mx-auto px-4 pt-20 pb-6">
-        <div className="flex items-center mb-6">
+        <div className="flex items-center mb-6" style={{ marginTop: 30 }}>
           <Link href="/customer/orders" className="mr-4 bg-white p-2 rounded-full shadow-xs text-gray-700 hover:bg-gray-100 transition-colors">
             <ChevronLeft size={20} />
           </Link>
@@ -285,7 +285,7 @@ export default function OrderTrackingPage() {
         
         {/* Order Status */}
         <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-4" >
             <h2 className="text-xl font-bold text-gray-900">Order Status</h2>
             <div className="flex items-center text-[#4CAF50] font-medium">
               <Clock className="w-4 h-4 mr-1" />
