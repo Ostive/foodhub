@@ -16,8 +16,8 @@ export class RestaurantServiceController {
   ) {}
 
   @Get()
-  getHello(): string {
-    return this.restaurantServiceService.getHello();
+  findAll() {
+    return this.restaurantServiceService.findAll();
   }
 
   @Post()
