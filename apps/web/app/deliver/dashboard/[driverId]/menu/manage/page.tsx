@@ -254,7 +254,7 @@ export default function ManageMenuItemPage() {
             </div>
             <div className="flex-1">
               <p className="text-sm text-gray-600 mb-2">Upload a high-quality image of your menu item (recommended size: 800x600px)</p>
-              <label className="inline-flex items-center px-4 py-2 bg-[#4CAF50] hover:bg-[#388E3C] text-white rounded-lg cursor-pointer transition-colors">
+              <label className="inline-flex items-center px-4 py-2 bg-[#009E73] hover:bg-[#388E3C] text-white rounded-lg cursor-pointer transition-colors">
                 <Upload className="h-4 w-4 mr-2" />
                 <span>Upload Image</span>
                 <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
@@ -276,7 +276,7 @@ export default function ManageMenuItemPage() {
                 value={formData.name}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#009E73] focus:outline-hidden transition-all duration-200"
                 placeholder="e.g. Margherita Pizza"
               />
             </div>
@@ -289,7 +289,7 @@ export default function ManageMenuItemPage() {
                 value={formData.categoryId}
                 onChange={handleInputChange}
                 required
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#009E73] focus:outline-hidden transition-all duration-200"
               >
                 <option value="">Select category</option>
                 {categories.map((category) => (
@@ -309,7 +309,7 @@ export default function ManageMenuItemPage() {
                 onChange={handleInputChange}
                 required
                 rows={3}
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#009E73] focus:outline-hidden transition-all duration-200"
                 placeholder="Describe your menu item..."
               ></textarea>
             </div>
@@ -328,7 +328,7 @@ export default function ManageMenuItemPage() {
                 required
                 step="0.01"
                 min="0"
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#009E73] focus:outline-hidden transition-all duration-200"
                 placeholder="e.g. 12.99"
               />
             </div>
@@ -344,7 +344,7 @@ export default function ManageMenuItemPage() {
                 name="prepTime"
                 value={formData.prepTime}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#009E73] focus:outline-hidden transition-all duration-200"
                 placeholder="e.g. 15-20"
               />
             </div>
@@ -363,7 +363,7 @@ export default function ManageMenuItemPage() {
                   name="isAvailable"
                   checked={formData.isAvailable}
                   onChange={handleInputChange}
-                  className="h-4 w-4 text-[#4CAF50] focus:ring-[#4CAF50] border-gray-300 rounded"
+                  className="h-4 w-4 text-[#009E73] focus:ring-[#009E73] border-gray-300 rounded"
                 />
                 <label htmlFor="isAvailable" className="ml-2 block text-sm text-gray-700">
                   Available (can be ordered)
@@ -377,7 +377,7 @@ export default function ManageMenuItemPage() {
                   name="isPopular"
                   checked={formData.isPopular}
                   onChange={handleInputChange}
-                  className="h-4 w-4 text-[#4CAF50] focus:ring-[#4CAF50] border-gray-300 rounded"
+                  className="h-4 w-4 text-[#009E73] focus:ring-[#009E73] border-gray-300 rounded"
                 />
                 <label htmlFor="isPopular" className="ml-2 block text-sm text-gray-700">
                   Mark as Popular
@@ -393,7 +393,7 @@ export default function ManageMenuItemPage() {
                   name="isVegetarian"
                   checked={formData.isVegetarian}
                   onChange={handleInputChange}
-                  className="h-4 w-4 text-[#4CAF50] focus:ring-[#4CAF50] border-gray-300 rounded"
+                  className="h-4 w-4 text-[#009E73] focus:ring-[#009E73] border-gray-300 rounded"
                 />
                 <label htmlFor="isVegetarian" className="ml-2 block text-sm text-gray-700">
                   Vegetarian
@@ -407,7 +407,7 @@ export default function ManageMenuItemPage() {
                   name="isVegan"
                   checked={formData.isVegan}
                   onChange={handleInputChange}
-                  className="h-4 w-4 text-[#4CAF50] focus:ring-[#4CAF50] border-gray-300 rounded"
+                  className="h-4 w-4 text-[#009E73] focus:ring-[#009E73] border-gray-300 rounded"
                 />
                 <label htmlFor="isVegan" className="ml-2 block text-sm text-gray-700">
                   Vegan
@@ -421,7 +421,7 @@ export default function ManageMenuItemPage() {
                   name="isGlutenFree"
                   checked={formData.isGlutenFree}
                   onChange={handleInputChange}
-                  className="h-4 w-4 text-[#4CAF50] focus:ring-[#4CAF50] border-gray-300 rounded"
+                  className="h-4 w-4 text-[#009E73] focus:ring-[#009E73] border-gray-300 rounded"
                 />
                 <label htmlFor="isGlutenFree" className="ml-2 block text-sm text-gray-700">
                   Gluten Free
@@ -466,7 +466,7 @@ export default function ManageMenuItemPage() {
                           updatedOptions[optionIndex].type = 'single';
                           setFormData({...formData, personalizationOptions: updatedOptions});
                         }}
-                        className="h-4 w-4 text-[#4CAF50] focus:ring-[#4CAF50]"
+                        className="h-4 w-4 text-[#009E73] focus:ring-[#009E73]"
                       />
                       <span className="ml-2 text-sm text-gray-700">Single choice</span>
                     </label>
@@ -479,7 +479,7 @@ export default function ManageMenuItemPage() {
                           updatedOptions[optionIndex].type = 'multiple';
                           setFormData({...formData, personalizationOptions: updatedOptions});
                         }}
-                        className="h-4 w-4 text-[#4CAF50] focus:ring-[#4CAF50]"
+                        className="h-4 w-4 text-[#009E73] focus:ring-[#009E73]"
                       />
                       <span className="ml-2 text-sm text-gray-700">Multiple choices</span>
                     </label>
@@ -497,7 +497,7 @@ export default function ManageMenuItemPage() {
                         updatedOptions[optionIndex].required = !option.required;
                         setFormData({...formData, personalizationOptions: updatedOptions});
                       }}
-                      className="h-4 w-4 text-[#4CAF50] focus:ring-[#4CAF50] rounded"
+                      className="h-4 w-4 text-[#009E73] focus:ring-[#009E73] rounded"
                     />
                     <span className="ml-2 text-sm text-gray-700">Customer must select an option</span>
                   </label>
@@ -517,7 +517,7 @@ export default function ManageMenuItemPage() {
                         setFormData({...formData, personalizationOptions: updatedOptions});
                       }}
                       placeholder="Choice name"
-                      className="flex-1 px-3 py-1.5 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
+                      className="flex-1 px-3 py-1.5 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#009E73] focus:outline-hidden transition-all duration-200"
                     />
                     <div className="flex items-center w-32">
                       <span className="text-gray-500 mr-1">+$</span>
@@ -532,7 +532,7 @@ export default function ManageMenuItemPage() {
                         step="0.01"
                         min="0"
                         placeholder="0.00"
-                        className="w-full px-2 py-1.5 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
+                        className="w-full px-2 py-1.5 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#009E73] focus:outline-hidden transition-all duration-200"
                       />
                     </div>
                     <button
@@ -586,7 +586,7 @@ export default function ManageMenuItemPage() {
                 ]
               });
             }}
-            className="mt-4 px-4 py-2 bg-[#4CAF50] hover:bg-[#388E3C] text-white rounded-lg flex items-center"
+            className="mt-4 px-4 py-2 bg-[#009E73] hover:bg-[#388E3C] text-white rounded-lg flex items-center"
           >
             <Plus className="h-4 w-4 mr-2" />
             Add Personalization Option
@@ -603,14 +603,14 @@ export default function ManageMenuItemPage() {
               type="text"
               value={newAllergen}
               onChange={(e) => setNewAllergen(e.target.value)}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+              className="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
               placeholder="Add an allergen (e.g. Dairy, Nuts)"
               onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddAllergen())}
             />
             <button
               type="button"
               onClick={handleAddAllergen}
-              className="px-4 py-2 bg-[#4CAF50] hover:bg-[#388E3C] text-white rounded-r-lg transition-colors"
+              className="px-4 py-2 bg-[#009E73] hover:bg-[#388E3C] text-white rounded-r-lg transition-colors"
             >
               <Plus className="h-5 w-5" />
             </button>
@@ -647,7 +647,7 @@ export default function ManageMenuItemPage() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-6 py-3 bg-[#4CAF50] hover:bg-[#388E3C] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors flex items-center"
+            className="px-6 py-3 bg-[#009E73] hover:bg-[#388E3C] disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors flex items-center"
           >
             {isSubmitting ? (
               <>

@@ -216,7 +216,7 @@ export default function ReviewsPage() {
         <div className="flex flex-wrap gap-2">
           <button 
             onClick={() => setFilterRating("all")} 
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterRating === "all" ? 'bg-[#FF9800] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterRating === "all" ? 'bg-[#D55E00] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
           >
             All Reviews
           </button>
@@ -224,7 +224,7 @@ export default function ReviewsPage() {
             <button 
               key={rating}
               onClick={() => setFilterRating(rating.toString())} 
-              className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center ${filterRating === rating.toString() ? 'bg-[#FF9800] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium flex items-center ${filterRating === rating.toString() ? 'bg-[#D55E00] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
             >
               {rating} 
               <Star className={`h-4 w-4 ml-1 ${filterRating === rating.toString() ? 'text-white' : 'text-yellow-400'}`} />
@@ -236,7 +236,7 @@ export default function ReviewsPage() {
           <input 
             type="text" 
             placeholder="Search reviews..." 
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#D55E00] focus:border-transparent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -303,7 +303,7 @@ export default function ReviewsPage() {
                       Replied
                     </span>
                   ) : (
-                    <button className="text-[#FF9800] hover:text-orange-700 text-sm font-medium">
+                    <button className="text-[#D55E00] hover:text-orange-700 text-sm font-medium">
                       Reply to Review
                     </button>
                   )}
@@ -316,7 +316,7 @@ export default function ReviewsPage() {
             <p className="text-gray-500">No reviews found matching your criteria</p>
             <button 
               onClick={() => { setFilterRating("all"); setSearchQuery(""); }}
-              className="mt-2 text-[#FF9800] hover:underline"
+              className="mt-2 text-[#D55E00] hover:underline"
             >
               Clear filters
             </button>
@@ -328,27 +328,27 @@ export default function ReviewsPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Total Reviews</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">{reviews.length}</p>
+          <p className="text-3xl font-bold text-[#D55E00]">{reviews.length}</p>
           <p className="text-sm text-green-600 mt-1">+15% from last month</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Average Rating</h3>
           <div className="flex items-center">
-            <p className="text-3xl font-bold text-[#FF9800]">{averageRating}</p>
+            <p className="text-3xl font-bold text-[#D55E00]">{averageRating}</p>
             <Star className="h-6 w-6 text-yellow-400 ml-2" />
           </div>
           <p className="text-sm text-green-600 mt-1">+0.3 from last month</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Response Rate</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">
+          <p className="text-3xl font-bold text-[#D55E00]">
             {((reviews.filter(r => r.replied).length / reviews.length) * 100).toFixed(0)}%
           </p>
           <p className="text-sm text-green-600 mt-1">Target: 100%</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Flagged Reviews</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">{reviews.filter(r => r.flagged).length}</p>
+          <p className="text-3xl font-bold text-[#D55E00]">{reviews.filter(r => r.flagged).length}</p>
           <p className="text-sm text-red-600 mt-1">Needs attention</p>
         </div>
       </div>

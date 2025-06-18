@@ -53,10 +53,10 @@ export default function DeliverSignup() {
       {/* Navbar */}
       <nav className="bg-white shadow-xs py-4 px-6 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-[#1976d2]">FoodYou<span className="text-[#64B5F6]">Deliver</span></Link>
+          <Link href="/" className="text-2xl font-bold text-[#0072B2]">FoodYou<span className="text-[#64B5F6]">Deliver</span></Link>
           <div className="flex items-center space-x-6">
-            <Link href="/deliver" className="text-gray-600 hover:text-[#1976d2] transition-colors">Back to Deliver</Link>
-            <Link href="/deliver/login" className="bg-[#1976d2] text-white px-5 py-2 rounded-full font-medium hover:bg-[#0d47a1] transition-colors">Sign In</Link>
+            <Link href="/deliver" className="text-gray-600 hover:text-[#0072B2] transition-colors">Back to Deliver</Link>
+            <Link href="/deliver/login" className="bg-[#0072B2] text-white px-5 py-2 rounded-full font-medium hover:bg-[#0d47a1] transition-colors">Sign In</Link>
           </div>
         </div>
       </nav>
@@ -67,11 +67,11 @@ export default function DeliverSignup() {
           <div className="lg:w-7/12">
             <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
               {/* Progress Steps */}
-              <div className="bg-linear-to-r from-[#1976d2] to-[#64B5F6] p-6 relative">
+              <div className="bg-linear-to-r from-[#0072B2] to-[#64B5F6] p-6 relative">
                 <div className="flex justify-between items-center relative z-10">
                   {[1, 2, 3, 4].map((stepNumber) => (
                     <div key={stepNumber} className="flex flex-col items-center">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${step >= stepNumber ? 'bg-white text-[#1976d2]' : 'bg-white/30 text-white'} font-bold text-lg`}>
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${step >= stepNumber ? 'bg-white text-[#0072B2]' : 'bg-white/30 text-white'} font-bold text-lg`}>
                         {step > stepNumber ? <Check className="h-5 w-5" /> : stepNumber}
                       </div>
                       <p className="text-white text-xs mt-2 font-medium">
@@ -107,7 +107,7 @@ export default function DeliverSignup() {
                             name="firstName"
                             value={formData.firstName}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#1976d2] focus:border-[#1976d2] transition-colors"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#0072B2] focus:border-[#0072B2] transition-colors"
                             placeholder="Your first name"
                             required
                           />
@@ -121,7 +121,7 @@ export default function DeliverSignup() {
                             name="lastName"
                             value={formData.lastName}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#1976d2] focus:border-[#1976d2] transition-colors"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#0072B2] focus:border-[#0072B2] transition-colors"
                             placeholder="Your last name"
                             required
                           />
@@ -136,7 +136,7 @@ export default function DeliverSignup() {
                           name="email"
                           value={formData.email}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#1976d2] focus:border-[#1976d2] transition-colors"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#0072B2] focus:border-[#0072B2] transition-colors"
                           placeholder="you@example.com"
                           required
                         />
@@ -150,7 +150,7 @@ export default function DeliverSignup() {
                           name="phone"
                           value={formData.phone}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#1976d2] focus:border-[#1976d2] transition-colors"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#0072B2] focus:border-[#0072B2] transition-colors"
                           placeholder="(123) 456-7890"
                           required
                         />
@@ -165,7 +165,7 @@ export default function DeliverSignup() {
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#1976d2] focus:border-[#1976d2] transition-colors"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#0072B2] focus:border-[#0072B2] transition-colors"
                             placeholder="Create a secure password"
                             required
                           />
@@ -183,13 +183,13 @@ export default function DeliverSignup() {
                     
                     <button 
                       type="submit" 
-                      className="w-full bg-[#1976d2] text-white py-3 px-4 rounded-xl mt-8 hover:bg-[#0d47a1] transition-colors font-medium flex items-center justify-center"
+                      className="w-full bg-[#0072B2] text-white py-3 px-4 rounded-xl mt-8 hover:bg-[#0d47a1] transition-colors font-medium flex items-center justify-center"
                     >
                       Continue <ChevronRight className="ml-2 h-5 w-5" />
                     </button>
                     
                     <p className="mt-4 text-sm text-gray-600 text-center">
-                      Already have an account? <Link href="/deliver/login" className="text-[#1976d2] font-medium hover:underline">Sign in</Link>
+                      Already have an account? <Link href="/deliver/login" className="text-[#0072B2] font-medium hover:underline">Sign in</Link>
                     </p>
                   </form>
                 )}
@@ -206,7 +206,7 @@ export default function DeliverSignup() {
                           name="address"
                           value={formData.address}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#1976d2] focus:border-[#1976d2] transition-colors"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#0072B2] focus:border-[#0072B2] transition-colors"
                           placeholder="123 Main St"
                           required
                         />
@@ -221,7 +221,7 @@ export default function DeliverSignup() {
                             name="city"
                             value={formData.city}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#1976d2] focus:border-[#1976d2] transition-colors"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#0072B2] focus:border-[#0072B2] transition-colors"
                             placeholder="City"
                             required
                           />
@@ -235,7 +235,7 @@ export default function DeliverSignup() {
                             name="zipCode"
                             value={formData.zipCode}
                             onChange={handleChange}
-                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#1976d2] focus:border-[#1976d2] transition-colors"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#0072B2] focus:border-[#0072B2] transition-colors"
                             placeholder="12345"
                             required
                           />
@@ -249,7 +249,7 @@ export default function DeliverSignup() {
                           name="vehicle"
                           value={formData.vehicle}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#1976d2] focus:border-[#1976d2] transition-colors"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#0072B2] focus:border-[#0072B2] transition-colors"
                           required
                         >
                           <option value="" disabled>Select vehicle type</option>
@@ -269,7 +269,7 @@ export default function DeliverSignup() {
                           name="licenseNumber"
                           value={formData.licenseNumber}
                           onChange={handleChange}
-                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#1976d2] focus:border-[#1976d2] transition-colors"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-[#0072B2] focus:border-[#0072B2] transition-colors"
                           placeholder="License number"
                           required
                         />
@@ -282,7 +282,7 @@ export default function DeliverSignup() {
                           name="hasInsurance"
                           checked={formData.hasInsurance}
                           onChange={handleChange}
-                          className="mt-1 h-4 w-4 text-[#1976d2] focus:ring-[#1976d2] rounded"
+                          className="mt-1 h-4 w-4 text-[#0072B2] focus:ring-[#0072B2] rounded"
                           required
                         />
                         <label htmlFor="hasInsurance" className="ml-2 text-sm text-gray-700">
@@ -302,7 +302,7 @@ export default function DeliverSignup() {
                       
                       <button 
                         type="submit" 
-                        className="bg-[#1976d2] text-white py-3 px-6 rounded-xl hover:bg-[#0d47a1] transition-colors font-medium flex items-center"
+                        className="bg-[#0072B2] text-white py-3 px-6 rounded-xl hover:bg-[#0d47a1] transition-colors font-medium flex items-center"
                       >
                         Continue <ChevronRight className="ml-2 h-5 w-5" />
                       </button>
@@ -315,8 +315,8 @@ export default function DeliverSignup() {
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Upload Documents</h2>
                     <div className="space-y-6">
                       <div className="space-y-4">
-                        <div className="border-2 border-dashed border-blue-200 rounded-xl p-6 text-center hover:border-[#1976d2] transition-colors bg-blue-50">
-                          <Upload className="h-12 w-12 text-[#1976d2] mx-auto mb-4" />
+                        <div className="border-2 border-dashed border-blue-200 rounded-xl p-6 text-center hover:border-[#0072B2] transition-colors bg-blue-50">
+                          <Upload className="h-12 w-12 text-[#0072B2] mx-auto mb-4" />
                           <p className="text-lg font-medium text-gray-800 mb-2">Upload Driver's License</p>
                           <p className="text-sm text-gray-600 mb-4">JPG, PNG or PDF (max 5MB)</p>
                           <input type="file" className="hidden" id="license-upload" />
@@ -325,8 +325,8 @@ export default function DeliverSignup() {
                           </label>
                         </div>
                         
-                        <div className="border-2 border-dashed border-blue-200 rounded-xl p-6 text-center hover:border-[#1976d2] transition-colors bg-blue-50">
-                          <Upload className="h-12 w-12 text-[#1976d2] mx-auto mb-4" />
+                        <div className="border-2 border-dashed border-blue-200 rounded-xl p-6 text-center hover:border-[#0072B2] transition-colors bg-blue-50">
+                          <Upload className="h-12 w-12 text-[#0072B2] mx-auto mb-4" />
                           <p className="text-lg font-medium text-gray-800 mb-2">Upload Vehicle Insurance</p>
                           <p className="text-sm text-gray-600 mb-4">JPG, PNG or PDF (max 5MB)</p>
                           <input type="file" className="hidden" id="insurance-upload" />
@@ -354,11 +354,11 @@ export default function DeliverSignup() {
                             name="acceptTerms"
                             checked={formData.acceptTerms}
                             onChange={handleChange}
-                            className="mt-1 h-4 w-4 text-[#1976d2] focus:ring-[#1976d2] rounded"
+                            className="mt-1 h-4 w-4 text-[#0072B2] focus:ring-[#0072B2] rounded"
                             required
                           />
                           <label htmlFor="acceptTerms" className="ml-2 text-sm text-gray-700">
-                            I have read and agree to the <Link href="#" className="text-[#1976d2] hover:underline">Terms of Service</Link> and <Link href="#" className="text-[#1976d2] hover:underline">Privacy Policy</Link>
+                            I have read and agree to the <Link href="#" className="text-[#0072B2] hover:underline">Terms of Service</Link> and <Link href="#" className="text-[#0072B2] hover:underline">Privacy Policy</Link>
                           </label>
                         </div>
                       </div>
@@ -375,7 +375,7 @@ export default function DeliverSignup() {
                       
                       <button 
                         type="submit" 
-                        className="bg-[#1976d2] text-white py-3 px-6 rounded-xl hover:bg-[#0d47a1] transition-colors font-medium flex items-center"
+                        className="bg-[#0072B2] text-white py-3 px-6 rounded-xl hover:bg-[#0d47a1] transition-colors font-medium flex items-center"
                       >
                         Submit Application <ChevronRight className="ml-2 h-5 w-5" />
                       </button>
@@ -397,19 +397,19 @@ export default function DeliverSignup() {
                         <h3 className="font-medium text-gray-900 mb-2">What's Next?</h3>
                         <ol className="text-left text-gray-700 space-y-2">
                           <li className="flex items-start">
-                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">1</span>
+                            <span className="bg-[#0072B2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">1</span>
                             <span>We'll review your application and documents</span>
                           </li>
                           <li className="flex items-start">
-                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">2</span>
+                            <span className="bg-[#0072B2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">2</span>
                             <span>You'll receive an email with the status of your application</span>
                           </li>
                           <li className="flex items-start">
-                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">3</span>
+                            <span className="bg-[#0072B2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">3</span>
                             <span>If approved, you'll get access to download the delivery app</span>
                           </li>
                           <li className="flex items-start">
-                            <span className="bg-[#1976d2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">4</span>
+                            <span className="bg-[#0072B2] text-white w-6 h-6 rounded-full flex items-center justify-center mr-2 shrink-0 mt-0.5">4</span>
                             <span>Start accepting orders and earning money!</span>
                           </li>
                         </ol>
@@ -417,7 +417,7 @@ export default function DeliverSignup() {
                     </div>
                     <Link 
                       href="/deliver" 
-                      className="inline-block bg-[#1976d2] text-white py-3 px-8 rounded-xl hover:bg-[#0d47a1] transition-colors font-medium mt-8"
+                      className="inline-block bg-[#0072B2] text-white py-3 px-8 rounded-xl hover:bg-[#0d47a1] transition-colors font-medium mt-8"
                     >
                       Return to Home
                     </Link>
@@ -430,7 +430,7 @@ export default function DeliverSignup() {
           {/* Right Side - Benefits */}
           <div className="lg:w-5/12">
             <div className="sticky top-24">
-              <div className="bg-linear-to-r from-[#1976d2] to-[#64B5F6] rounded-3xl overflow-hidden shadow-xl mb-8">
+              <div className="bg-linear-to-r from-[#0072B2] to-[#64B5F6] rounded-3xl overflow-hidden shadow-xl mb-8">
                 <div className="relative h-64 w-full">
                   <Image 
                     src="https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=800&q=80" 
@@ -438,7 +438,7 @@ export default function DeliverSignup() {
                     fill
                     className="object-cover opacity-80"
                   />
-                  <div className="absolute inset-0 bg-linear-to-t from-[#1976d2] to-transparent"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-[#0072B2] to-transparent"></div>
                   <div className="absolute bottom-0 left-0 p-8 text-white">
                     <h2 className="text-3xl font-bold mb-2">Join Our Team</h2>
                     <p className="text-xl text-blue-100">Become a delivery partner today</p>
@@ -486,7 +486,7 @@ export default function DeliverSignup() {
                   </div>
                 </div>
                 <div className="mt-6 pt-6 border-t border-gray-200">
-                  <p className="text-gray-600 text-sm">Have more questions? <Link href="#" className="text-[#1976d2] font-medium hover:underline">Contact Support</Link></p>
+                  <p className="text-gray-600 text-sm">Have more questions? <Link href="#" className="text-[#0072B2] font-medium hover:underline">Contact Support</Link></p>
                 </div>
               </div>
             </div>

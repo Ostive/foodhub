@@ -98,7 +98,7 @@ export default function AnalyticsPage() {
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-gray-500 font-medium">Total Revenue</h3>
             <div className="p-2 bg-orange-100 rounded-lg">
-              <DollarSign className="h-5 w-5 text-[#FF9800]" />
+              <DollarSign className="h-5 w-5 text-[#D55E00]" />
             </div>
           </div>
           <p className="text-3xl font-bold">${analyticsData.revenue.total.toFixed(2)}</p>
@@ -116,7 +116,7 @@ export default function AnalyticsPage() {
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-gray-500 font-medium">Total Orders</h3>
             <div className="p-2 bg-orange-100 rounded-lg">
-              <ShoppingBag className="h-5 w-5 text-[#FF9800]" />
+              <ShoppingBag className="h-5 w-5 text-[#D55E00]" />
             </div>
           </div>
           <p className="text-3xl font-bold">{analyticsData.orders.total}</p>
@@ -134,7 +134,7 @@ export default function AnalyticsPage() {
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-gray-500 font-medium">Total Customers</h3>
             <div className="p-2 bg-orange-100 rounded-lg">
-              <Users className="h-5 w-5 text-[#FF9800]" />
+              <Users className="h-5 w-5 text-[#D55E00]" />
             </div>
           </div>
           <p className="text-3xl font-bold">{analyticsData.customers.total}</p>
@@ -152,7 +152,7 @@ export default function AnalyticsPage() {
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-gray-500 font-medium">Avg. Order Value</h3>
             <div className="p-2 bg-orange-100 rounded-lg">
-              <TrendingUp className="h-5 w-5 text-[#FF9800]" />
+              <TrendingUp className="h-5 w-5 text-[#D55E00]" />
             </div>
           </div>
           <p className="text-3xl font-bold">${analyticsData.avgOrderValue.total.toFixed(2)}</p>
@@ -230,7 +230,7 @@ export default function AnalyticsPage() {
                       <div className="flex items-center">
                         <div className="w-full bg-gray-200 rounded-full h-2.5 mr-2 max-w-[150px]">
                           <div 
-                            className="bg-[#FF9800] h-2.5 rounded-full" 
+                            className="bg-[#D55E00] h-2.5 rounded-full" 
                             style={{ width: `${percentOfTotal}%` }}
                           ></div>
                         </div>

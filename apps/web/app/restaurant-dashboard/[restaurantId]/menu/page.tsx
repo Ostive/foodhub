@@ -179,7 +179,7 @@ export default function MenuPage() {
             <Tag className="h-5 w-5 mr-2" />
             Manage Categories
           </Link>
-          <Link href={`/restaurant-dashboard/${params.restaurantId}/menu/manage`} className="bg-[#FF9800] hover:bg-[#e65100] text-white px-4 py-2 rounded-lg flex items-center">
+          <Link href={`/restaurant-dashboard/${params.restaurantId}/menu/manage`} className="bg-[#D55E00] hover:bg-[#e65100] text-white px-4 py-2 rounded-lg flex items-center">
             <Plus className="h-5 w-5 mr-2" />
             Add New Item
           </Link>
@@ -193,7 +193,7 @@ export default function MenuPage() {
             <button
               key={category.id}
               onClick={() => setActiveCategory(category.id)}
-              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap mr-2 ${activeCategory === category.id ? 'bg-[#FF9800] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
+              className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap mr-2 ${activeCategory === category.id ? 'bg-[#D55E00] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
             >
               {category.name}
             </button>
@@ -204,7 +204,7 @@ export default function MenuPage() {
           <input 
             type="text" 
             placeholder="Search menu items..." 
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#D55E00] focus:border-transparent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -294,7 +294,7 @@ export default function MenuPage() {
                         {item.category}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#FF9800]">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#D55E00]">
                       ${item.price.toFixed(2)}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -338,7 +338,7 @@ export default function MenuPage() {
                     <p>No menu items found matching your criteria</p>
                     <button 
                       onClick={() => { setActiveCategory("all"); setSearchQuery(""); }}
-                      className="mt-2 text-[#FF9800] hover:underline"
+                      className="mt-2 text-[#D55E00] hover:underline"
                     >
                       Clear filters
                     </button>
@@ -354,24 +354,24 @@ export default function MenuPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Total Items</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">{menuItems.length}</p>
+          <p className="text-3xl font-bold text-[#D55E00]">{menuItems.length}</p>
           <p className="text-sm text-gray-500 mt-1">Across {categories.length - 1} categories</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Popular Items</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">{menuItems.filter(item => item.isPopular).length}</p>
+          <p className="text-3xl font-bold text-[#D55E00]">{menuItems.filter(item => item.isPopular).length}</p>
           <p className="text-sm text-gray-500 mt-1">Based on order frequency</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Avg. Item Price</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">
+          <p className="text-3xl font-bold text-[#D55E00]">
             ${(menuItems.reduce((sum, item) => sum + item.price, 0) / menuItems.length).toFixed(2)}
           </p>
           <p className="text-sm text-gray-500 mt-1">Excluding special offers</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Unavailable</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">{menuItems.filter(item => !item.isAvailable).length}</p>
+          <p className="text-3xl font-bold text-[#D55E00]">{menuItems.filter(item => !item.isAvailable).length}</p>
           <p className="text-sm text-gray-500 mt-1">Items currently not available</p>
         </div>
       </div>
@@ -397,7 +397,7 @@ export default function MenuPage() {
               </button>
               <button 
                 onClick={() => setShowAddItemModal(false)}
-                className="px-4 py-2 bg-[#FF9800] text-white rounded-lg hover:bg-[#e65100]"
+                className="px-4 py-2 bg-[#D55E00] text-white rounded-lg hover:bg-[#e65100]"
               >
                 Add Item
               </button>

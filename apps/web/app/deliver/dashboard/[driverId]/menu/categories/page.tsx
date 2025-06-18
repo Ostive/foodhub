@@ -131,7 +131,7 @@ export default function CategoriesPage() {
         
         <button
           onClick={() => setIsAddingCategory(true)}
-          className="px-4 py-2 bg-[#4CAF50] hover:bg-[#388E3C] text-white rounded-lg flex items-center transition-colors"
+          className="px-4 py-2 bg-[#009E73] hover:bg-[#388E3C] text-white rounded-lg flex items-center transition-colors"
           disabled={isAddingCategory}
         >
           <Plus className="h-5 w-5 mr-2" />
@@ -165,7 +165,7 @@ export default function CategoriesPage() {
                 id="name"
                 value={newCategory.name}
                 onChange={(e) => setNewCategory({ ...newCategory, name: e.target.value })}
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#009E73] focus:outline-hidden transition-all duration-200"
                 placeholder="e.g. Appetizers"
               />
             </div>
@@ -177,7 +177,7 @@ export default function CategoriesPage() {
                 id="description"
                 value={newCategory.description}
                 onChange={(e) => setNewCategory({ ...newCategory, description: e.target.value })}
-                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#4CAF50] focus:outline-hidden transition-all duration-200"
+                className="w-full px-4 py-2 bg-gray-50 rounded-lg focus:ring-2 focus:ring-[#009E73] focus:outline-hidden transition-all duration-200"
                 placeholder="e.g. Starters and small plates"
               />
             </div>
@@ -193,7 +193,7 @@ export default function CategoriesPage() {
               <button
                 type="button"
                 onClick={handleAddCategory}
-                className="px-4 py-2 bg-[#4CAF50] hover:bg-[#388E3C] text-white rounded-lg transition-colors"
+                className="px-4 py-2 bg-[#009E73] hover:bg-[#388E3C] text-white rounded-lg transition-colors"
               >
                 Add Category
               </button>
@@ -227,7 +227,7 @@ export default function CategoriesPage() {
                         type="text"
                         value={editForm.name}
                         onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
-                        className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                        className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                       />
                     </div>
                     <div className="col-span-5">
@@ -235,7 +235,7 @@ export default function CategoriesPage() {
                         type="text"
                         value={editForm.description}
                         onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
-                        className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#4CAF50] focus:border-transparent"
+                        className="w-full px-3 py-1.5 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
                       />
                     </div>
                     <div className="col-span-1 text-center">
@@ -244,7 +244,7 @@ export default function CategoriesPage() {
                     <div className="col-span-2 flex justify-end space-x-2">
                       <button
                         onClick={() => handleSaveEdit(category.id)}
-                        className="p-1.5 bg-[#4CAF50] hover:bg-[#388E3C] text-white rounded-md transition-colors"
+                        className="p-1.5 bg-[#009E73] hover:bg-[#388E3C] text-white rounded-md transition-colors"
                         title="Save"
                       >
                         <Save className="h-4 w-4" />

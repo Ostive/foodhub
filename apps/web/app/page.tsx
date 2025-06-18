@@ -54,7 +54,7 @@ export default function Page() {
             {/* Restaurant */}
             <a
               href="/restaurant-dashboard"
-              className="group flex flex-col items-center rounded-3xl overflow-visible shadow-2xl bg-white/90 border border-gray-100 hover:shadow-3xl transition-all cursor-pointer focus:outline-hidden focus:ring-4 focus:ring-[#FF9800] p-0"
+              className="group flex flex-col items-center rounded-3xl overflow-visible shadow-2xl bg-white/90 border border-gray-100 hover:shadow-3xl transition-all cursor-pointer focus:outline-hidden focus:ring-4 focus:ring-[#D55E00] p-0"
               style={{ minHeight: '420px' }}
             >
               <img
@@ -92,7 +92,7 @@ export default function Page() {
         <div className="container mx-auto px-4">
           <div className="text-left mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              What Our <span className="text-[#FF9800]">Customers</span> Say
+              What Our <span className="text-[#D55E00]">Customers</span> Say
             </h2>
             <p className="text-lg md:text-xl text-[#757575] mb-8 max-w-3xl">
               Don't just take our word for it, hear what our happy customers have to say

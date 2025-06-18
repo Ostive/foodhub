@@ -210,13 +210,13 @@ const LiveOrdersPanel = ({ restaurantId }: LiveOrdersPanelProps) => {
       
       {loading ? (
         <div className="p-8 flex justify-center">
-          <div className="h-8 w-8 border-4 border-t-[#FF9800] border-r-[#FF9800] border-b-[#FF9800] border-l-transparent rounded-full animate-spin"></div>
+          <div className="h-8 w-8 border-4 border-t-[#D55E00] border-r-[#D55E00] border-b-[#D55E00] border-l-transparent rounded-full animate-spin"></div>
         </div>
       ) : error ? (
         <div className="p-6 text-center text-red-600">
           <p>{error}</p>
           <button 
-            className="mt-2 text-[#FF9800] hover:underline"
+            className="mt-2 text-[#D55E00] hover:underline"
             onClick={() => window.location.reload()}
           >
             Try again

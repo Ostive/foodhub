@@ -57,19 +57,19 @@ export default function DeliverPage() {
       {/* Navbar */}
       <nav className="bg-white shadow-xs py-4 px-6 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-[#1976d2]">Food'EM</Link>
+          <Link href="/" className="text-2xl font-bold text-[#0072B2]">Food'EM</Link>
           <div className="flex items-center space-x-6">
-            <Link href="/" className="text-gray-600 hover:text-[#1976d2] transition-colors">Home</Link>
-            <Link href="#earnings" className="text-gray-600 hover:text-[#1976d2] transition-colors">Earnings</Link>
-            <Link href="#how-it-works" className="text-gray-600 hover:text-[#1976d2] transition-colors">How It Works</Link>
-            <Link href="/deliver/login" className="text-gray-600 hover:text-[#1976d2] transition-colors font-medium">Driver Login</Link>
-            <Link href="/deliver/signup" className="bg-[#1976d2] text-white px-5 py-2 rounded-full font-medium hover:bg-[#0d47a1] transition-colors">Apply Now</Link>
+            <Link href="/" className="text-gray-600 hover:text-[#0072B2] transition-colors">Home</Link>
+            <Link href="#earnings" className="text-gray-600 hover:text-[#0072B2] transition-colors">Earnings</Link>
+            <Link href="#how-it-works" className="text-gray-600 hover:text-[#0072B2] transition-colors">How It Works</Link>
+            <Link href="/deliver/login" className="text-gray-600 hover:text-[#0072B2] transition-colors font-medium">Driver Login</Link>
+            <Link href="/deliver/signup" className="bg-[#0072B2] text-white px-5 py-2 rounded-full font-medium hover:bg-[#0d47a1] transition-colors">Apply Now</Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-linear-to-r from-[#1976d2] to-[#64B5F6] py-20 px-4 overflow-hidden">
+      <section className="relative bg-linear-to-r from-[#0072B2] to-[#64B5F6] py-20 px-4 overflow-hidden">
         <div className="absolute inset-0 opacity-10">
           <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
             <path d="M0,0 L100,0 L100,100 L0,100 Z" fill="url(#grid-pattern)" />
@@ -85,7 +85,7 @@ export default function DeliverPage() {
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Deliver & Earn <br />On Your Terms</h1>
             <p className="text-xl md:text-2xl mb-8 text-blue-100">Join thousands of delivery partners making money on their own schedule with FoodYou.</p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Link href="/deliver/signup" className="bg-white text-[#1976d2] px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition-colors text-center">
+              <Link href="/deliver/signup" className="bg-white text-[#0072B2] px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition-colors text-center">
                 Start Earning Today
               </Link>
               <Link href="#how-it-works" className="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-white/10 transition-colors text-center">
@@ -140,19 +140,19 @@ export default function DeliverPage() {
             {earnings.map((item, index) => (
               <div key={index} className="bg-white rounded-2xl shadow-lg p-8 text-center hover:shadow-xl transition-shadow transform hover:-translate-y-1 duration-300">
                 <p className="text-gray-600 mb-2">{item.type}</p>
-                <p className="text-5xl font-bold text-[#1976d2] mb-2">{item.amount}</p>
+                <p className="text-5xl font-bold text-[#0072B2] mb-2">{item.amount}</p>
                 <p className="text-gray-500">{item.period}</p>
               </div>
             ))}
           </div>
           
-          <div className="bg-linear-to-r from-[#1976d2] to-[#64B5F6] rounded-3xl p-10 text-white">
+          <div className="bg-linear-to-r from-[#0072B2] to-[#64B5F6] rounded-3xl p-10 text-white">
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div>
                 <h3 className="text-3xl font-bold mb-4">Ready to start earning?</h3>
                 <p className="text-xl text-blue-100 mb-6 md:mb-0">Sign up today and start making money on your schedule.</p>
               </div>
-              <Link href="/deliver/signup" className="bg-white text-[#1976d2] px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition-colors inline-flex items-center">
+              <Link href="/deliver/signup" className="bg-white text-[#0072B2] px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition-colors inline-flex items-center">
                 Apply Now <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </div>
@@ -174,7 +174,7 @@ export default function DeliverPage() {
               return (
                 <div key={index} className="bg-white rounded-2xl shadow-lg p-8 hover:shadow-xl transition-shadow border border-gray-100">
                   <div className="bg-blue-100 p-4 rounded-2xl inline-block mb-6">
-                    <Icon className="h-8 w-8 text-[#1976d2]" />
+                    <Icon className="h-8 w-8 text-[#0072B2]" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{benefit.title}</h3>
                   <p className="text-gray-600">{benefit.description}</p>
@@ -200,14 +200,14 @@ export default function DeliverPage() {
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
               {steps.map((step, index) => (
                 <div key={index} className="bg-white rounded-2xl shadow-lg p-8 text-center relative">
-                  <div className="w-12 h-12 bg-[#1976d2] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-6">
+                  <div className="w-12 h-12 bg-[#0072B2] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-6">
                     {step.number}
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
                   <p className="text-gray-600">{step.description}</p>
                   {index < steps.length - 1 && (
                     <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden md:block">
-                      <ChevronRight className="h-8 w-8 text-[#1976d2]" />
+                      <ChevronRight className="h-8 w-8 text-[#0072B2]" />
                     </div>
                   )}
                 </div>
@@ -225,7 +225,7 @@ export default function DeliverPage() {
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">Hear from people already delivering with FoodYou</p>
           </div>
           
-          <div className="bg-linear-to-r from-[#1976d2] to-[#64B5F6] rounded-3xl p-10 text-white relative overflow-hidden">
+          <div className="bg-linear-to-r from-[#0072B2] to-[#64B5F6] rounded-3xl p-10 text-white relative overflow-hidden">
             <div className="absolute inset-0 opacity-10">
               <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <path d="M0,0 L100,0 L100,100 L0,100 Z" fill="url(#quote-pattern)" />
@@ -249,7 +249,7 @@ export default function DeliverPage() {
                         className="object-cover"
                       />
                     </div>
-                    <div className="absolute -bottom-2 -right-2 bg-white text-[#1976d2] rounded-full px-3 py-1 font-bold flex items-center">
+                    <div className="absolute -bottom-2 -right-2 bg-white text-[#0072B2] rounded-full px-3 py-1 font-bold flex items-center">
                       {Array(5).fill(0).map((_, i) => (
                         <Star key={i} className={`h-4 w-4 ${i < testimonials[activeTestimonial].rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'}`} />
                       ))}
@@ -311,7 +311,7 @@ export default function DeliverPage() {
           </div>
           <div className="md:w-1/2 flex justify-center">
             <div className="relative">
-              <div className="w-64 h-[500px] bg-[#1976d2] rounded-3xl shadow-2xl overflow-hidden border-8 border-gray-800 relative">
+              <div className="w-64 h-[500px] bg-[#0072B2] rounded-3xl shadow-2xl overflow-hidden border-8 border-gray-800 relative">
                 <div className="absolute top-0 left-0 right-0 h-6 bg-black z-10 flex justify-center items-center">
                   <div className="w-20 h-4 bg-black rounded-b-xl"></div>
                 </div>
@@ -325,7 +325,7 @@ export default function DeliverPage() {
               <div className="absolute -bottom-6 -right-6 bg-white p-4 rounded-2xl shadow-xl">
                 <div className="flex items-center gap-3">
                   <div className="bg-blue-100 p-3 rounded-full">
-                    <Star className="h-6 w-6 text-[#1976d2]" />
+                    <Star className="h-6 w-6 text-[#0072B2]" />
                   </div>
                   <div>
                     <p className="text-sm text-gray-600">App Rating</p>
@@ -339,11 +339,11 @@ export default function DeliverPage() {
       </section>
 
       {/* Footer CTA */}
-      <section className="py-20 px-4 bg-linear-to-r from-[#1976d2] to-[#64B5F6] text-white">
+      <section className="py-20 px-4 bg-linear-to-r from-[#0072B2] to-[#64B5F6] text-white">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Start Your Journey?</h2>
           <p className="text-xl text-blue-100 mb-10 max-w-3xl mx-auto">Join thousands of delivery partners already earning with FoodYou. Apply today and start delivering tomorrow.</p>
-          <Link href="/deliver/signup" className="bg-white text-[#1976d2] px-10 py-4 rounded-full font-bold text-xl hover:bg-blue-50 transition-colors inline-block">
+          <Link href="/deliver/signup" className="bg-white text-[#0072B2] px-10 py-4 rounded-full font-bold text-xl hover:bg-blue-50 transition-colors inline-block">
             Apply Now
           </Link>
         </div>

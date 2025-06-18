@@ -51,37 +51,37 @@ export default function OrdersPage() {
         <div className="flex flex-wrap gap-2">
           <button 
             onClick={() => setFilterStatus("all")} 
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "all" ? 'bg-[#FF9800] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "all" ? 'bg-[#D55E00] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
           >
             All Orders
           </button>
           <button 
             onClick={() => setFilterStatus("new")} 
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "new" ? 'bg-[#FF9800] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "new" ? 'bg-[#D55E00] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
           >
             New
           </button>
           <button 
             onClick={() => setFilterStatus("preparing")} 
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "preparing" ? 'bg-[#FF9800] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "preparing" ? 'bg-[#D55E00] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
           >
             Preparing
           </button>
           <button 
             onClick={() => setFilterStatus("out for delivery")} 
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "out for delivery" ? 'bg-[#FF9800] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "out for delivery" ? 'bg-[#D55E00] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
           >
             Out for Delivery
           </button>
           <button 
             onClick={() => setFilterStatus("delivered")} 
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "delivered" ? 'bg-[#FF9800] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "delivered" ? 'bg-[#D55E00] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
           >
             Delivered
           </button>
           <button 
             onClick={() => setFilterStatus("cancelled")} 
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "cancelled" ? 'bg-[#FF9800] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${filterStatus === "cancelled" ? 'bg-[#D55E00] text-white' : 'bg-white text-gray-700 border border-gray-200'}`}
           >
             Cancelled
           </button>
@@ -91,7 +91,7 @@ export default function OrdersPage() {
           <input 
             type="text" 
             placeholder="Search orders..." 
-            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#D55E00] focus:border-transparent"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -176,22 +176,22 @@ export default function OrdersPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Today's Orders</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">12</p>
+          <p className="text-3xl font-bold text-[#D55E00]">12</p>
           <p className="text-sm text-gray-500 mt-1">6 completed, 6 in progress</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Average Prep Time</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">18 min</p>
+          <p className="text-3xl font-bold text-[#D55E00]">18 min</p>
           <p className="text-sm text-gray-500 mt-1">2 min faster than last week</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Delivery Success</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">98%</p>
+          <p className="text-3xl font-bold text-[#D55E00]">98%</p>
           <p className="text-sm text-gray-500 mt-1">2% increase from last month</p>
         </div>
         <div className="bg-white rounded-xl shadow-xs p-6 border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 mb-2">Cancelled Orders</h3>
-          <p className="text-3xl font-bold text-[#FF9800]">3</p>
+          <p className="text-3xl font-bold text-[#D55E00]">3</p>
           <p className="text-sm text-gray-500 mt-1">Down from 5 last week</p>
         </div>
       </div>

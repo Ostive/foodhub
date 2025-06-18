@@ -73,7 +73,7 @@ export default function DeliveryLoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#1976d2] focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#0072B2] focus:border-transparent"
                 placeholder="you@example.com"
                 required
               />
@@ -89,7 +89,7 @@ export default function DeliveryLoginPage() {
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#1976d2] focus:border-transparent"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#0072B2] focus:border-transparent"
                   placeholder="••••••••"
                   required
                 />
@@ -102,7 +102,7 @@ export default function DeliveryLoginPage() {
                 </button>
               </div>
               <div className="flex justify-end mt-1">
-                <Link href="/deliver/forgot-password" className="text-sm text-[#1976d2] hover:underline">
+                <Link href="/deliver/forgot-password" className="text-sm text-[#0072B2] hover:underline">
                   Forgot password?
                 </Link>
               </div>
@@ -111,7 +111,7 @@ export default function DeliveryLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#1976d2] hover:bg-[#1565c0] text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
+              className="w-full bg-[#0072B2] hover:bg-[#1565c0] text-white py-3 rounded-lg font-medium transition-colors flex items-center justify-center"
             >
               {loading ? (
                 <div className="h-5 w-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
@@ -126,7 +126,7 @@ export default function DeliveryLoginPage() {
           <div className="mt-8 text-center">
             <p className="text-gray-600">
               Don't have an account?{" "}
-              <Link href="/restaurant/form" className="text-[#1976d2] font-medium hover:underline">
+              <Link href="/restaurant/form" className="text-[#0072B2] font-medium hover:underline">
                 Create a restaurant
               </Link>
             </p>
@@ -137,7 +137,7 @@ export default function DeliveryLoginPage() {
             <div>
               <Link
                 href="/restaurant-dashboard/bella-napoli"
-                className="block w-full p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-center font-medium text-[#1976d2]"
+                className="block w-full p-3 border border-gray-200 rounded-lg hover:bg-gray-50 text-center font-medium text-[#0072B2]"
               >
                 Test Restaurant
               </Link>

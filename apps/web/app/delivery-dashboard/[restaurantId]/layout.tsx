@@ -73,12 +73,12 @@ const restaurant =
       <aside className={`bg-white shadow-xl h-full fixed lg:relative z-10 transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-0 lg:w-20 overflow-hidden'}`}>
         <div className="p-4 flex items-center justify-between border-b">
           {sidebarOpen ? (
-            <Link href="/" className="text-xl font-bold text-[#FF9800]">
+            <Link href="/" className="text-xl font-bold text-[#D55E00]">
               <span className="text-gray-800">Food</span>
-              <span className="text-[#FF9800]">HUB</span>
+              <span className="text-[#D55E00]">HUB</span>
             </Link>
           ) : (
-            <Link href="/restaurant-dashboard" className="text-2xl font-bold text-[#FF9800]">FH</Link>
+            <Link href="/restaurant-dashboard" className="text-2xl font-bold text-[#D55E00]">FH</Link>
           )}
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:block hidden">
             <Menu className="h-6 w-6 text-gray-500" />
@@ -99,7 +99,7 @@ const restaurant =
                 <li key={item.path}>
                   <button 
                     onClick={() => handleNavigation(item.path)}
-                    className={`w-full flex items-center space-x-3 rounded-lg p-3 transition-colors ${isActive(item.path) ? 'text-[#FF9800] bg-orange-50' : 'text-gray-700 hover:bg-orange-50 hover:text-[#FF9800]'}`}
+                    className={`w-full flex items-center space-x-3 rounded-lg p-3 transition-colors ${isActive(item.path) ? 'text-[#D55E00] bg-orange-50' : 'text-gray-700 hover:bg-orange-50 hover:text-[#D55E00]'}`}
                     disabled={isLoading}
                   >
                     {isLoading && pathname !== item.path ? (
@@ -128,7 +128,7 @@ const restaurant =
             <input 
               type="text" 
               placeholder="Search orders, menu items..." 
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#D55E00] focus:border-transparent"
             />
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -145,9 +145,9 @@ const restaurant =
             {/* Profile Dropdown using shadcn/ui */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" className="h-10 w-10 rounded-full p-0 overflow-hidden border-2 border-[#FF9800] hover:border-orange-600 transition-colors">
+                <Button variant="outline" size="icon" className="h-10 w-10 rounded-full p-0 overflow-hidden border-2 border-[#D55E00] hover:border-orange-600 transition-colors">
                   <Avatar>
-                    <AvatarFallback className="bg-orange-100 text-[#FF9800]">
+                    <AvatarFallback className="bg-orange-100 text-[#D55E00]">
                       {restaurant.name.split(' ').map(word => word[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
@@ -183,7 +183,7 @@ const restaurant =
           {isLoading && (
             <div className="fixed inset-0 bg-white/50 backdrop-blur-xs flex items-center justify-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
-                <Loader2 className="h-10 w-10 animate-spin text-[#FF9800]" />
+                <Loader2 className="h-10 w-10 animate-spin text-[#D55E00]" />
                 <p className="mt-4 text-gray-600">Loading...</p>
               </div>
             </div>
