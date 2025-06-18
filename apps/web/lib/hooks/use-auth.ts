@@ -3,6 +3,7 @@ import { useAuth } from '../auth/auth-context';
 import { LoginCredentials, LoginResponse } from '../schemas/auth.schema';
 
 // Base API URL
+// #TODO: Move this to a config file
 const API_URL = '/api';
 
 /**
