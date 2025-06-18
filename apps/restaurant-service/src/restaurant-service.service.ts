@@ -1,8 +1,9 @@
 import { Injectable, ValidationPipe, UsePipes, BadRequestException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like, ILike } from 'typeorm';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
+import { SearchRestaurantDto } from './dto/search-restaurant.dto';
 import { User } from '../../../libs/database/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -131,5 +132,35 @@ export class RestaurantService {
     }
 
     await this.restaurantRepository.remove(restaurant);
+  }
+
+  async searchRestaurants(searchParams: SearchRestaurantDto): Promise<Partial<User>[]> {
+    // Build where conditions based on search parameters
+    const whereConditions: any = { role: 'restaurant' };
+    
+    if (searchParams.name) {
+      whereConditions.firstName = ILike(`%${searchParams.name}%`);
+    }
+    
+    if (searchParams.cuisine) {
+      // Assuming cuisine is stored in a field like 'cuisineType' or similar
+      // You might need to adjust this based on your actual data model
+      whereConditions.cuisineType = ILike(`%${searchParams.cuisine}%`);
+    }
+    
+    if (searchParams.location) {
+      whereConditions.address = ILike(`%${searchParams.location}%`);
+    }
+    
+    // Find restaurants matching the search criteria
+    const restaurants = await this.restaurantRepository.find({
+      where: whereConditions
+    });
+    
+    // Remove passwords from the response
+    return restaurants.map(restaurant => {
+      const { password, ...restaurantWithoutPassword } = restaurant as any;
+      return restaurantWithoutPassword;
+    });
   }
 }

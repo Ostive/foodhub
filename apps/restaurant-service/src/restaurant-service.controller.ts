@@ -6,6 +6,7 @@ import { CreateDishDto, UpdateDishDto, FilterDishDto, SearchDishDto } from './dt
 import { MenuItemDto, AddDishesToMenuDto, FilterMenuDto, SearchMenuDto } from './dto/menu';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { SearchRestaurantDto } from './dto/search-restaurant.dto';
 import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiQuery, ApiResponse } from '@nestjs/swagger';
 
 @ApiTags('restaurants')
@@ -36,6 +37,30 @@ export class RestaurantServiceController {
   @Get()
   findAll() {
     return this.restaurantServiceService.findAll();
+  }
+  
+  @ApiOperation({ summary: 'Search restaurants by name, cuisine, or location' })
+  @ApiQuery({ name: 'name', required: false, description: 'Restaurant name to search for', type: String })
+  @ApiQuery({ name: 'cuisine', required: false, description: 'Cuisine type to search for', type: String })
+  @ApiQuery({ name: 'location', required: false, description: 'Location or address to search for', type: String })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Returns restaurants matching search criteria',
+    schema: {
+      type: 'array',
+      items: {
+        properties: {
+          id: { type: 'number', example: 1 },
+          name: { type: 'string', example: 'Pizza Palace' },
+          address: { type: 'string', example: '123 Food Street, Paris' },
+          email: { type: 'string', example: 'contact@pizzapalace.com' }
+        }
+      }
+    }
+  })
+  @Get('search')
+  searchRestaurants(@Query() searchParams: SearchRestaurantDto) {
+    return this.restaurantServiceService.searchRestaurants(searchParams);
   }
 
   @ApiOperation({ summary: 'Create a new restaurant' })

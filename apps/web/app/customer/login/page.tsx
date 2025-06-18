@@ -36,8 +36,14 @@ export default function LoginPage() {
     login(
       { email, password },
       {
-        onSuccess: () => {
-          // Redirect to home page after successful login
+        onSuccess: (data) => {
+          // Check if the user has the correct role
+          if (data.user.role !== 'customer') {
+            setError("This login is only for customers. Please use the appropriate login page.");
+            return;
+          }
+          
+          // Redirect to customer dashboard after successful login
           router.push("/customer");
         },
         onError: (error: Error) => {
@@ -51,9 +57,28 @@ export default function LoginPage() {
   // This prevents the "Cannot update a component while rendering a different component" error
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/customer");
+      if (user?.role === 'customer') {
+        router.push("/customer");
+      } else if (isAuthenticated && user?.role !== 'customer') {
+        // If authenticated but wrong role, redirect to appropriate dashboard
+        switch(user?.role) {
+          case 'restaurant':
+            router.push("/restaurant/dashboard");
+            break;
+          case 'delivery_person':
+            router.push("/deliver/dashboard");
+            break;
+          case 'admin':
+          case 'manager':
+          case 'developer':
+            router.push("/admin/dashboard");
+            break;
+          default:
+            router.push("/");
+        }
+      }
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, user, router]);
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white">

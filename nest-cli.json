@@ -19,6 +19,15 @@
         "tsConfigPath": "apps/auth-service/tsconfig.app.json"
       }
     },
+    "deliver-service": {
+      "type": "application",
+      "root": "apps/deliver-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/deliver-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/deliver-service/tsconfig.app.json"
+      }
+    },
     "foodhub": {
       "type": "application",
       "root": "apps/foodhub",

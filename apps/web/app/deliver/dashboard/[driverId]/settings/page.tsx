@@ -7,14 +7,14 @@ import Link from "next/link";
 import { User, MapPin, Phone, Mail, Lock, Edit, Save, X, Camera, CreditCard, Bell, Shield, Clock, Heart, LogOut, Trash2, Plus, Calendar } from "lucide-react";
 import { useAuth } from "@/lib/auth/auth-context";
 
-
-type PaymentMethod = {
+// Bank account type
+type BankAccount = {
   id: string;
-  type: "card" | "paypal";
-  name: string;
-  last4?: string;
-  expiry?: string;
-  icon: string;
+  bankName: string;
+  accountHolder: string;
+  iban: string;
+  bic: string;
+  isDefault: boolean;
 };
 
 type NotificationSetting = {
@@ -24,12 +24,12 @@ type NotificationSetting = {
   enabled: boolean;
 };
 
-type ProfileTab = "personal" | "payment" | "notifications" | "security";
+type ProfileTab = "personal" | "bank" | "notifications" | "security";
 
 export default function ProfilePage() {
   const router = useRouter();
   const { user, logout } = useAuth();
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(false); // State for editing profile
   const [activeTab, setActiveTab] = useState<ProfileTab>("personal");
   const [showAddPaymentForm, setShowAddPaymentForm] = useState(false);
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
@@ -45,7 +45,7 @@ export default function ProfilePage() {
     address: user?.address || "123 Main St, New York, NY 10001",
     avatar: user?.profilePicture || "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
   });
-  
+
   // Form state
   const [formData, setFormData] = useState({
     name: userData.name,
@@ -61,13 +61,14 @@ export default function ProfilePage() {
     confirmPassword: ""
   });
 
-  // New payment method form state
-  const [newPaymentForm, setNewPaymentForm] = useState({
-    cardNumber: "",
-    cardName: "",
-    expiryDate: "",
-    cvv: "",
-    type: "card" as "card" | "paypal"
+  // New bank account form state
+  const [newBankForm, setNewBankForm] = useState<BankAccount>({
+    id: "",
+    bankName: "",
+    accountHolder: "",
+    iban: "",
+    bic: "",
+    isDefault: false
   });
 
   // Two-factor form state
@@ -75,55 +76,49 @@ export default function ProfilePage() {
     phoneNumber: userData.phone,
     verificationCode: ""
   });
-  
-  // Mock payment methods
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([
+
+  // Mock bank accounts for payment (RIB)
+  const [bankAccounts, setBankAccounts] = useState<BankAccount[]>([
     {
-      id: "card-1",
-      type: "card",
-      name: "Visa ending in 4242",
-      last4: "4242",
-      expiry: "12/25",
-      icon: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg"
-    },
-    {
-      id: "paypal-1",
-      type: "paypal",
-      name: "PayPal - john.doe@example.com",
-      icon: "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
+      id: "bank-1",
+      bankName: "BNP Paribas",
+      accountHolder: "John Doe",
+      iban: "FR76 3000 6000 0123 4567 8912 345",
+      bic: "BNPAFRPP",
+      isDefault: true
     }
   ]);
 
-  // Mock notification settings
+  // Mock notification settings for delivery drivers
   const [notificationSettings, setNotificationSettings] = useState<NotificationSetting[]>([
     {
-      id: "order-updates",
-      name: "Order Updates",
-      description: "Get notified about your order status",
+      id: "delivery-requests",
+      name: "Delivery Requests",
+      description: "Get notified about new delivery requests",
       enabled: true
     },
     {
-      id: "promotions",
-      name: "Promotions & Deals",
-      description: "Receive special offers and discounts",
+      id: "earnings-updates",
+      name: "Earnings Updates",
+      description: "Receive updates about your earnings and payments",
       enabled: true
     },
     {
-      id: "newsletter",
-      name: "Newsletter",
-      description: "Stay updated with our weekly newsletter",
-      enabled: false
+      id: "schedule-changes",
+      name: "Schedule Changes",
+      description: "Get notified about changes to your delivery schedule",
+      enabled: true
     },
     {
-      id: "restaurant-updates",
-      name: "Restaurant Updates",
-      description: "Get notified when your favorite restaurants add new items",
+      id: "app-updates",
+      name: "App Updates",
+      description: "Get notified about new features and updates",
       enabled: true
     }
   ]);
-  
+
   // Authentication is now handled by the ProtectedRoute component
-  
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -131,7 +126,7 @@ export default function ProfilePage() {
       [name]: value
     }));
   };
-  
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Update user data
@@ -141,7 +136,7 @@ export default function ProfilePage() {
     }));
     setIsEditing(false);
   };
-  
+
   const cancelEdit = () => {
     // Reset form data to current user data
     setFormData({
@@ -154,107 +149,95 @@ export default function ProfilePage() {
   };
 
   const toggleNotification = (id: string) => {
-    setNotificationSettings(prev => 
-      prev.map(setting => 
+    setNotificationSettings(prev =>
+      prev.map(setting =>
         setting.id === id ? { ...setting, enabled: !setting.enabled } : setting
       )
     );
   };
 
-  const removePaymentMethod = (id: string) => {
-    setPaymentMethods(prev => prev.filter(method => method.id !== id));
+  const removeBankAccount = (id: string) => {
+    setBankAccounts(prev => prev.filter(account => account.id !== id));
   };
 
   const handleLogout = () => {
     logout();
-    router.push("/customer/login");
+    router.push("/deliver/login");
   };
-  
-  // Handle adding a new payment method
-  const handleAddPaymentMethod = (e: React.FormEvent) => {
+
+  // Handle adding a new bank account
+  const handleAddBankAccount = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Generate a random ID for the new payment method
-    const newId = `card-${Math.floor(Math.random() * 10000)}`;
-    
-    // Create a new payment method object
-    const newMethod: PaymentMethod = {
-      id: newId,
-      type: newPaymentForm.type,
-      name: newPaymentForm.type === 'card' 
-        ? `${newPaymentForm.cardName.split(' ')[0]} ending in ${newPaymentForm.cardNumber.slice(-4)}` 
-        : `PayPal - ${userData.email}`,
-      last4: newPaymentForm.cardNumber.slice(-4),
-      expiry: newPaymentForm.expiryDate,
-      icon: newPaymentForm.type === 'card' 
-        ? "https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg"
-        : "https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg"
+
+    const newAccount = {
+      id: `bank-${Date.now()}`,
+      bankName: newBankForm.bankName,
+      accountHolder: newBankForm.accountHolder,
+      iban: newBankForm.iban,
+      bic: newBankForm.bic,
+      isDefault: bankAccounts.length === 0 ? true : newBankForm.isDefault
     };
-    
-    // Add the new payment method to the list
-    setPaymentMethods(prev => [...prev, newMethod]);
-    
-    // Reset the form
-    setNewPaymentForm({
-      cardNumber: "",
-      cardName: "",
-      expiryDate: "",
-      cvv: "",
-      type: "card"
-    });
-    
-    // Hide the form
+
+    setBankAccounts([...bankAccounts, newAccount]);
     setShowAddPaymentForm(false);
+    setNewBankForm({
+      id: "",
+      bankName: "",
+      accountHolder: "",
+      iban: "",
+      bic: "",
+      isDefault: false
+    });
   };
-  
+
   // Handle changing password
   const handleChangePassword = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate password
     if (passwordForm.newPassword !== passwordForm.confirmPassword) {
       alert("New passwords don't match!");
       return;
     }
-    
+
     if (passwordForm.newPassword.length < 8) {
       alert("Password must be at least 8 characters long!");
       return;
     }
-    
+
     // In a real app, you would send this to an API
     console.log("Password changed successfully!");
-    
+
     // Reset the form
     setPasswordForm({
       currentPassword: "",
       newPassword: "",
       confirmPassword: ""
     });
-    
+
     // Hide the form
     setShowChangePasswordForm(false);
   };
-  
+
   // Handle enabling two-factor authentication
   const handleEnableTwoFactor = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Validate verification code
     if (twoFactorForm.verificationCode.length !== 6) {
       alert("Verification code must be 6 digits!");
       return;
     }
-    
+
     // In a real app, you would send this to an API
     console.log("Two-factor authentication enabled!");
-    
+
     // Reset the form
     setTwoFactorForm({
       phoneNumber: userData.phone,
       verificationCode: ""
     });
-    
+
     // Hide the form
     setShowEnableTwoFactorForm(false);
   };
@@ -270,12 +253,12 @@ export default function ProfilePage() {
                 <div className="p-6 border-b border-gray-100">
                   <div className="flex items-center space-x-3">
                     <div className="h-12 w-12 rounded-full overflow-hidden">
-                      <Image 
-                        src={userData.avatar} 
-                        alt={userData.name} 
-                        width={48} 
-                        height={48} 
-                        className="object-cover" 
+                      <Image
+                        src={userData.avatar}
+                        alt={userData.name}
+                        width={48}
+                        height={48}
+                        className="object-cover"
                       />
                     </div>
                     <div>
@@ -285,25 +268,25 @@ export default function ProfilePage() {
                   </div>
                 </div>
                 <nav className="p-2">
-                  <button 
+                  <button
                     onClick={() => setActiveTab("personal")}
                     className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "personal" ? 'bg-[#009E73]/10 text-[#009E73]' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     <User className="h-5 w-5 mr-3" /> Personal Info
                   </button>
-                  <button 
-                    onClick={() => setActiveTab("payment")}
-                    className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "payment" ? 'bg-[#009E73]/10 text-[#009E73]' : 'text-gray-700 hover:bg-gray-100'}`}
+                  <button
+                    onClick={() => setActiveTab("bank")}
+                    className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "bank" ? 'bg-[#009E73]/10 text-[#009E73]' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
-                    <CreditCard className="h-5 w-5 mr-3" /> Payment Methods
+                    <CreditCard className="h-5 w-5 mr-3" /> Bank Accounts
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveTab("notifications")}
                     className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "notifications" ? 'bg-[#009E73]/10 text-[#009E73]' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
                     <Bell className="h-5 w-5 mr-3" /> Notifications
                   </button>
-                  <button 
+                  <button
                     onClick={() => setActiveTab("security")}
                     className={`w-full flex items-center px-4 py-2 rounded-lg text-left ${activeTab === "security" ? 'bg-[#009E73]/10 text-[#009E73]' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
@@ -311,13 +294,7 @@ export default function ProfilePage() {
                   </button>
                 </nav>
                 <div className="p-4 border-t border-gray-100">
-                  <Link href="/customer/orders" className="w-full flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
-                    <Clock className="h-5 w-5 mr-3" /> Order History
-                  </Link>
-                  <Link href="/customer/favorites" className="w-full flex items-center px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100">
-                    <Heart className="h-5 w-5 mr-3" /> Saved Restaurants
-                  </Link>
-                  <button 
+                  <button
                     onClick={handleLogout}
                     className="w-full flex items-center px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 mt-2"
                   >
@@ -326,7 +303,7 @@ export default function ProfilePage() {
                 </div>
               </div>
             </div>
-            
+
             {/* Main Content */}
             <div className="flex-1">
               {/* Personal Info Tab */}
@@ -335,14 +312,14 @@ export default function ProfilePage() {
                   <div className="flex items-center justify-between p-6 border-b border-gray-100">
                     <h2 className="text-xl font-bold text-gray-900">Personal Information</h2>
                     {!isEditing ? (
-                      <button 
+                      <button
                         onClick={() => setIsEditing(true)}
                         className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center text-sm font-medium"
                       >
                         <Edit className="h-4 w-4 mr-1" /> Edit
                       </button>
                     ) : (
-                      <button 
+                      <button
                         onClick={cancelEdit}
                         className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors flex items-center text-sm font-medium"
                       >
@@ -350,17 +327,17 @@ export default function ProfilePage() {
                       </button>
                     )}
                   </div>
-                  
+
                   <div className="p-6">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center mb-8">
                       <div className="relative mb-4 sm:mb-0 sm:mr-6">
                         <div className="h-24 w-24 rounded-full overflow-hidden">
-                          <Image 
-                            src={userData.avatar} 
-                            alt={userData.name} 
-                            width={96} 
-                            height={96} 
-                            className="object-cover" 
+                          <Image
+                            src={userData.avatar}
+                            alt={userData.name}
+                            width={96}
+                            height={96}
+                            className="object-cover"
                           />
                         </div>
                         {isEditing && (
@@ -374,7 +351,7 @@ export default function ProfilePage() {
                         <p className="text-gray-500">Update your profile photo and personal details</p>
                       </div>
                     </div>
-                    
+
                     <form onSubmit={handleSubmit}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* Name */}
@@ -394,7 +371,7 @@ export default function ProfilePage() {
                             <p className="text-gray-900 py-2">{userData.name}</p>
                           )}
                         </div>
-                        
+
                         {/* Email */}
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -412,7 +389,7 @@ export default function ProfilePage() {
                             <p className="text-gray-900 py-2">{userData.email}</p>
                           )}
                         </div>
-                        
+
                         {/* Phone */}
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -430,7 +407,7 @@ export default function ProfilePage() {
                             <p className="text-gray-900 py-2">{userData.phone}</p>
                           )}
                         </div>
-                        
+
                         {/* Address */}
                         <div>
                           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -449,11 +426,11 @@ export default function ProfilePage() {
                           )}
                         </div>
                       </div>
-                      
+
                       {/* Save button */}
                       {isEditing && (
                         <div className="mt-6">
-                          <button 
+                          <button
                             type="submit"
                             className="px-6 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center"
                           >
@@ -465,193 +442,152 @@ export default function ProfilePage() {
                   </div>
                 </div>
               )}
-              
-              {/* Payment Methods Tab */}
-              {activeTab === "payment" && (
+
+              {/* Bank Account Tab */}
+              {activeTab === "bank" && (
                 <div className="bg-white rounded-xl shadow-xs overflow-hidden">
                   <div className="flex items-center justify-between p-6 border-b border-gray-100">
-                    <h2 className="text-xl font-bold text-gray-900">Payment Methods</h2>
-                    <button 
+                    <h2 className="text-xl font-bold text-gray-900">Bank Accounts</h2>
+                    <button
                       onClick={() => setShowAddPaymentForm(true)}
                       className="px-4 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center text-sm font-medium"
                     >
                       <CreditCard className="h-4 w-4 mr-1" /> Add New
                     </button>
                   </div>
-                  
+
                   <div className="p-6">
-                    {paymentMethods.length > 0 ? (
+                    {bankAccounts.length > 0 ? (
                       <div className="space-y-4">
-                        {paymentMethods.map(method => (
-                          <div key={method.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
-                            <div className="flex items-center">
-                              <div className="h-10 w-16 relative mr-4">
-                                <Image 
-                                  src={method.icon} 
-                                  alt={method.type} 
-                                  fill
-                                  className="object-contain" 
-                                />
-                              </div>
-                              <div>
-                                <h3 className="font-medium text-gray-900">{method.name}</h3>
-                                {method.expiry && (
-                                  <p className="text-sm text-gray-500">Expires {method.expiry}</p>
+                        {bankAccounts.map(account => (
+                          <div key={account.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg">
+                            <div className="flex-1">
+                              <div className="flex items-center justify-between mb-2">
+                                <h3 className="font-medium text-gray-900">{account.bankName}</h3>
+                                {account.isDefault && (
+                                  <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">Default</span>
                                 )}
                               </div>
+                              <p className="text-sm text-gray-500 mb-1">Account Holder: {account.accountHolder}</p>
+                              <p className="text-sm text-gray-500 mb-1">IBAN: {account.iban}</p>
+                              <p className="text-sm text-gray-500">BIC: {account.bic}</p>
                             </div>
-                            <div className="flex items-center space-x-2">
-                              <button className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100">
-                                <Edit className="h-4 w-4" />
-                              </button>
-                              <button 
-                                onClick={() => removePaymentMethod(method.id)}
-                                className="p-2 text-gray-500 hover:text-red-600 rounded-full hover:bg-gray-100"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </button>
-                            </div>
+                            <button
+                              onClick={() => removeBankAccount(account.id)}
+                              className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                            >
+                              <Trash2 className="h-5 w-5" />
+                            </button>
                           </div>
                         ))}
                       </div>
                     ) : (
                       <div className="text-center py-8">
-                        <CreditCard className="h-12 w-12 mx-auto text-gray-400" />
-                        <h3 className="mt-2 text-lg font-medium text-gray-900">No payment methods</h3>
-                        <p className="mt-1 text-gray-500">Add a payment method to make checkout faster</p>
-                        <button 
+                        <CreditCard className="h-12 w-12 mx-auto text-gray-300 mb-3" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-1">No bank account</h3>
+                        <p className="text-gray-500 mb-4">Add your bank account information to receive payments</p>
+                        <button
                           onClick={() => setShowAddPaymentForm(true)}
-                          className="mt-4 px-4 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors"
+                          className="px-4 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors inline-flex items-center text-sm font-medium"
                         >
-                          Add Payment Method
+                          <Plus className="h-4 w-4 mr-1" /> Add Bank Account
                         </button>
                       </div>
                     )}
                     {showAddPaymentForm && (
                       <div className="mt-8">
                         <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-lg font-medium text-gray-900">Add New Payment Method</h3>
-                          <button 
+                          <h3 className="text-lg font-medium text-gray-900">Add New Bank Account</h3>
+                          <button
                             onClick={() => setShowAddPaymentForm(false)}
                             className="p-2 text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100"
                           >
                             <X className="h-4 w-4" />
                           </button>
                         </div>
-                        <form onSubmit={handleAddPaymentMethod}>
-                          {/* Payment Type Selector */}
-                          <div className="mb-6">
-                            <div className="flex space-x-4">
-                              <button
-                                type="button"
-                                onClick={() => setNewPaymentForm(prev => ({ ...prev, type: "card" }))}
-                                className={`flex-1 py-3 px-4 rounded-lg border ${newPaymentForm.type === 'card' ? 'border-[#009E73] bg-[#009E73]/5' : 'border-gray-200'} flex items-center justify-center`}
-                              >
-                                <div className="h-6 w-10 relative mr-2">
-                                  <Image 
-                                    src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" 
-                                    alt="Credit Card" 
-                                    fill
-                                    className="object-contain" 
-                                  />
-                                </div>
-                                <span className={`font-medium ${newPaymentForm.type === 'card' ? 'text-[#009E73]' : 'text-gray-700'}`}>Credit Card</span>
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setNewPaymentForm(prev => ({ ...prev, type: "paypal" }))}
-                                className={`flex-1 py-3 px-4 rounded-lg border ${newPaymentForm.type === 'paypal' ? 'border-[#009E73] bg-[#009E73]/5' : 'border-gray-200'} flex items-center justify-center`}
-                              >
-                                <div className="h-6 w-10 relative mr-2">
-                                  <Image 
-                                    src="https://upload.wikimedia.org/wikipedia/commons/b/b5/PayPal.svg" 
-                                    alt="PayPal" 
-                                    fill
-                                    className="object-contain" 
-                                  />
-                                </div>
-                                <span className={`font-medium ${newPaymentForm.type === 'paypal' ? 'text-[#009E73]' : 'text-gray-700'}`}>PayPal</span>
-                              </button>
+                        <form onSubmit={handleAddBankAccount}>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Bank Name */}
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <CreditCard className="inline h-4 w-4 mr-1" /> Bank Name
+                              </label>
+                              <input
+                                type="text"
+                                name="bankName"
+                                value={newBankForm.bankName}
+                                onChange={(e) => setNewBankForm(prev => ({ ...prev, bankName: e.target.value }))}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
+                              />
+                            </div>
+
+                            {/* Account Holder */}
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <User className="inline h-4 w-4 mr-1" /> Account Holder
+                              </label>
+                              <input
+                                type="text"
+                                name="accountHolder"
+                                value={newBankForm.accountHolder}
+                                onChange={(e) => setNewBankForm(prev => ({ ...prev, accountHolder: e.target.value }))}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
+                              />
+                            </div>
+
+                            {/* IBAN */}
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <CreditCard className="inline h-4 w-4 mr-1" /> IBAN
+                              </label>
+                              <input
+                                type="text"
+                                name="iban"
+                                value={newBankForm.iban}
+                                onChange={(e) => setNewBankForm(prev => ({ ...prev, iban: e.target.value }))}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
+                              />
+                            </div>
+
+                            {/* BIC */}
+                            <div>
+                              <label className="block text-sm font-medium text-gray-700 mb-1">
+                                <CreditCard className="inline h-4 w-4 mr-1" /> BIC
+                              </label>
+                              <input
+                                type="text"
+                                name="bic"
+                                value={newBankForm.bic}
+                                onChange={(e) => setNewBankForm(prev => ({ ...prev, bic: e.target.value }))}
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
+                              />
+                            </div>
+
+                            {/* Default */}
+                            <div className="col-span-2">
+                              <div className="flex items-center">
+                                <input
+                                  type="checkbox"
+                                  id="isDefault"
+                                  name="isDefault"
+                                  checked={newBankForm.isDefault}
+                                  onChange={(e) => setNewBankForm(prev => ({ ...prev, isDefault: e.target.checked }))}
+                                  className="h-4 w-4 text-[#009E73] focus:ring-[#009E73] border-gray-300 rounded"
+                                />
+                                <label htmlFor="isDefault" className="ml-2 block text-sm text-gray-700">
+                                  <Shield className="inline h-4 w-4 mr-1" /> Set as default payment account
+                                </label>
+                              </div>
                             </div>
                           </div>
-                          
-                          {newPaymentForm.type === 'card' ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              {/* Card Number */}
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  <CreditCard className="inline h-4 w-4 mr-1" /> Card Number
-                                </label>
-                                <input
-                                  type="text"
-                                  name="cardNumber"
-                                  value={newPaymentForm.cardNumber}
-                                  onChange={(e) => setNewPaymentForm(prev => ({ ...prev, cardNumber: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
-                                />
-                              </div>
-                              
-                              {/* Card Name */}
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  <User className="inline h-4 w-4 mr-1" /> Card Name
-                                </label>
-                                <input
-                                  type="text"
-                                  name="cardName"
-                                  value={newPaymentForm.cardName}
-                                  onChange={(e) => setNewPaymentForm(prev => ({ ...prev, cardName: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
-                                />
-                              </div>
-                              
-                              {/* Expiry Date */}
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  <Calendar className="inline h-4 w-4 mr-1" /> Expiry Date
-                                </label>
-                                <input
-                                  type="text"
-                                  name="expiryDate"
-                                  value={newPaymentForm.expiryDate}
-                                  onChange={(e) => setNewPaymentForm(prev => ({ ...prev, expiryDate: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
-                                />
-                              </div>
-                              
-                              {/* CVV */}
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  <Lock className="inline h-4 w-4 mr-1" /> CVV
-                                </label>
-                                <input
-                                  type="text"
-                                  name="cvv"
-                                  value={newPaymentForm.cvv}
-                                  onChange={(e) => setNewPaymentForm(prev => ({ ...prev, cvv: e.target.value }))}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
-                                />
-                              </div>
-                            </div>
-                          ) : (
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              {/* PayPal Email */}
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  <Mail className="inline h-4 w-4 mr-1" /> PayPal Email
-                                </label>
-                                <p className="text-gray-900 py-2">{userData.email}</p>
-                              </div>
-                            </div>
-                          )}
-                          
+
                           {/* Save button */}
                           <div className="mt-6">
-                            <button 
+                            <button
                               type="submit"
                               className="px-6 py-2 bg-[#009E73] text-white rounded-lg hover:bg-[#388E3C] transition-colors flex items-center"
                             >
-                              <Save className="h-4 w-4 mr-2" /> Save Changes
+                              <Save className="h-4 w-4 mr-2" /> Add Bank Account
                             </button>
                           </div>
                         </form>

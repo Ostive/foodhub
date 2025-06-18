@@ -27,6 +27,11 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'cdn.pixabay.com',
       },
+      {
+        
+        protocol: 'https',
+        hostname: 'ui-avatars.com',
+      },
       // Add other domains as needed
     ],
   },

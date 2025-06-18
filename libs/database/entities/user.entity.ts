@@ -87,8 +87,8 @@ export class User {
     @OneToMany(() => Order, order => order.restaurant)
     restaurantOrders: Order[];
 
-    @OneToMany(() => Order, order => order.delevery)
-    deleveryOrders: Order[];
+    @OneToMany(() => Order, order => order.delivery)
+    deliveryOrders: Order[];
 
     @OneToMany(() => Comment, comment => comment.customer)
     customerComments: Comment[];

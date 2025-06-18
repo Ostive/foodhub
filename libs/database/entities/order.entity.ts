@@ -17,13 +17,13 @@ export class Order {
   restaurantId: number;
 
   @Column()
-  deleveryId: number;
+  deliveryId: number;
 
   @Column({ nullable: true })
   promoId: number;
 
   @Column({ type: 'varchar', length: 255 })
-  deleveryLocalisation: string;
+  deliveryLocalisation: string;
 
   @Column({ type: 'timestamp' })
   time: Date;
@@ -43,9 +43,9 @@ export class Order {
   @JoinColumn({ name: 'restaurantId' })
   restaurant: User;
 
-  @ManyToOne(() => User, user => user.deleveryOrders, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'deleveryId' })
-  delevery: User;
+  @ManyToOne(() => User, user => user.deliveryOrders, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'deliveryId' })
+  delivery: User;
 
   @ManyToOne(() => Promo, promo => promo.orders, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'promoId' })

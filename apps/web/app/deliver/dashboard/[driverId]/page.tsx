@@ -5,42 +5,29 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight, MapPin, Clock, DollarSign, Star, LogOut, Bell, Home, Settings, BarChart, Package, User, Phone, Navigation, CheckCircle, XCircle } from "lucide-react";
+import { useAuth } from "@/lib/auth/auth-context";
 
-// Mock delivery driver data
-const mockDrivers = {
-  "driver-1": {
-    id: "driver-1",
-    name: "Michael Rodriguez",
-    phone: "+1 (555) 987-6543",
-    image: "https://randomuser.me/api/portraits/men/32.jpg",
-    rating: 4.8,
-    completedDeliveries: 342,
-    vehicle: "Honda Civic",
-    licensePlate: "ABC-1234",
-    status: "available", // available, busy, offline
-    earnings: {
-      today: 85.50,
-      week: 645.75,
-      month: 2450.25
-    }
-  },
-  "driver-2": {
-    id: "driver-2",
-    name: "Sarah Chen",
-    phone: "+1 (555) 123-4567",
-    image: "https://randomuser.me/api/portraits/women/44.jpg",
-    rating: 4.9,
-    completedDeliveries: 512,
-    vehicle: "Toyota Prius",
-    licensePlate: "XYZ-5678",
-    status: "busy", // available, busy, offline
-    earnings: {
-      today: 92.25,
-      week: 712.50,
-      month: 2875.00
-    }
-  }
-};
+// Driver type definition
+type DriverStatus = "available" | "busy" | "offline";
+
+interface DriverEarnings {
+  today: number;
+  week: number;
+  month: number;
+}
+
+interface DriverData {
+  id: string | number;
+  name: string;
+  phone: string;
+  image: string;
+  rating: number;
+  completedDeliveries: number;
+  vehicle: string;
+  licensePlate: string;
+  status: DriverStatus;
+  earnings: DriverEarnings;
+}
 
 // Mock available orders
 const availableOrders = [
@@ -111,63 +98,119 @@ const navItems = [
 ];
 
 export default function DriverDashboard() {
-  const params = useParams();
   const router = useRouter();
-  const driverId = params.driverId as string;
-  
-  const [driver, setDriver] = useState<any>(null);
+  const { driverId } = useParams();
+  const { user, isAuthenticated, token } = useAuth();
+  const [driver, setDriver] = useState<DriverData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [driverStatus, setDriverStatus] = useState<"available" | "busy" | "offline">("offline");
+  const [error, setError] = useState("");
+  const [driverStatus, setDriverStatus] = useState<DriverStatus>("offline");
   const [showAvailableOrders, setShowAvailableOrders] = useState(false);
   const [availableOrdersList, setAvailableOrdersList] = useState(availableOrders);
+
+
   
-  // Check if user is logged in
+  // Authentication check removed - no redirects to login page
   useEffect(() => {
-    const checkAuth = () => {
-      const driverData = localStorage.getItem("deliveryDriver");
-      if (!driverData) {
-        router.push("/deliver/login");
-        return;
-      }
-      
-      const parsedData = JSON.parse(driverData);
-      if (!parsedData.isLoggedIn || parsedData.id !== driverId) {
-        router.push("/deliver/login");
-      }
-    };
-    
-    checkAuth();
-  }, [driverId, router]);
+    // This useEffect is kept as a placeholder in case we need to add non-redirect logic later
+    // No authentication checks or redirects here
+  }, []);
   
+  // Mock driver data for specific IDs (including ID 13)
+  const mockDriversData: Record<string, DriverData> = {
+    "13": {
+      id: "13",
+      name: "Alex Johnson",
+      phone: "+1 (555) 987-6543",
+      image: "https://randomuser.me/api/portraits/men/32.jpg",
+      rating: 4.8,
+      completedDeliveries: 342,
+      vehicle: "Honda Civic",
+      licensePlate: "ABC-1234",
+      status: "available",
+      earnings: {
+        today: 85.50,
+        week: 645.75,
+        month: 2450.25
+      }
+    },
+    "14": {
+      id: "14",
+      name: "Sarah Chen",
+      phone: "+1 (555) 123-4567",
+      image: "https://randomuser.me/api/portraits/women/44.jpg",
+      rating: 4.9,
+      completedDeliveries: 512,
+      vehicle: "Toyota Prius",
+      licensePlate: "XYZ-5678",
+      status: "busy",
+      earnings: {
+        today: 92.25,
+        week: 712.50,
+        month: 2875.00
+      }
+    }
+  };
+
   // Fetch driver data
   useEffect(() => {
-    const fetchDriverData = () => {
+    const fetchDriverData = async () => {
       setLoading(true);
       
-      // Simulate API call
-      setTimeout(() => {
-        const driverData = mockDrivers[driverId as keyof typeof mockDrivers];
-        
-        if (driverData) {
-          setDriver(driverData);
-          // Ensure the status is one of the allowed types
-          if (driverData.status === "available" || driverData.status === "busy" || driverData.status === "offline") {
-            setDriverStatus(driverData.status);
-          } else {
-            setDriverStatus("offline"); // Default to offline if invalid status
-          }
+      try {
+        // First check if we have mock data for this specific driver ID
+        if (mockDriversData[String(driverId)]) {
+          setDriver(mockDriversData[String(driverId)]);
+          setDriverStatus(mockDriversData[String(driverId)].status);
+          setError("");
         } else {
-          setError("Driver not found");
-          setDriver(null);
+          // If no mock data exists for this ID, create a generic driver
+          const driverData: DriverData = {
+            id: String(driverId),
+            name: user ? `${user.firstName} ${user.lastName || ''}`.trim() : `Driver ${driverId}`,
+            phone: user?.phone || "+1 (555) 123-4567",
+            image: user?.profilePicture || `https://ui-avatars.com/api/?name=Driver+${driverId}&background=0072B2&color=fff`,
+            rating: 4.8,
+            completedDeliveries: Math.floor(Math.random() * 300), 
+            vehicle: user?.transport || "Vehicle not specified",
+            licensePlate: "ABC-" + Math.floor(1000 + Math.random() * 9000),
+            status: "available" as DriverStatus,
+            earnings: {
+              today: Math.floor(Math.random() * 100),
+              week: Math.floor(Math.random() * 700),
+              month: Math.floor(Math.random() * 3000)
+            }
+          };
+          
+          setDriver(driverData);
+          setDriverStatus("available");
+          setError("");
         }
-        
+      } catch (err) {
+        console.error("Error creating driver data:", err);
+        // Create a fallback driver object instead of setting to null
+        const fallbackDriver: DriverData = {
+          id: String(driverId),
+          name: `Driver ${driverId}`,
+          phone: "+1 (555) 000-0000",
+          image: `https://ui-avatars.com/api/?name=Driver&background=0072B2&color=fff`,
+          rating: 4.0,
+          completedDeliveries: 0,
+          vehicle: "Not specified",
+          licensePlate: "Not specified",
+          status: "offline" as DriverStatus,
+          earnings: { today: 0, week: 0, month: 0 }
+        };
+        setDriver(fallbackDriver);
+      } finally {
         setLoading(false);
-      }, 1000);
+      }
     };
     
+    // Always fetch driver data, regardless of authentication state
     fetchDriverData();
-  }, [driverId]);
+    
+  }, [driverId, user]);
   
   const handleStatusChange = (status: "available" | "busy" | "offline") => {
     setDriverStatus(status);
@@ -181,8 +224,9 @@ export default function DriverDashboard() {
   };
   
   const handleLogout = () => {
-    localStorage.removeItem("deliveryDriver");
-    router.push("/deliver/login");
+    // Simple logout without redirect
+    console.log("Logout clicked");
+    // No redirects to login page
   };
   
   const handleAcceptOrder = (orderId: string) => {
@@ -208,18 +252,14 @@ export default function DriverDashboard() {
     );
   }
   
-  if (error || !driver) {
+  // We no longer need this error state since we always have driver data
+  // Just show a loading state instead
+  if (!driver) {
     return (
       <div className="min-h-svh bg-gray-50 flex items-center justify-center p-4">
         <div className="bg-white rounded-xl shadow-md p-8 max-w-md w-full text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Error</h1>
-          <p className="text-gray-600 mb-6">{error || "Driver not found"}</p>
-          <button
-            onClick={() => router.push("/deliver/login")}
-            className="bg-[#1976d2] hover:bg-[#1565c0] text-white px-6 py-3 rounded-lg font-medium transition-colors"
-          >
-            Back to Login
-          </button>
+          <div className="w-16 h-16 border-4 border-[#1976d2] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading driver data...</p>
         </div>
       </div>
     );
