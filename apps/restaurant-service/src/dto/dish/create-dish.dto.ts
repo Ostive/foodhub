@@ -15,8 +15,7 @@ export class CreateDishDto {
   description: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  @Min(0)
+  @IsBoolean()
   isSoldAlone: boolean;
 
   @IsOptional()
