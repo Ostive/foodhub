@@ -1,15 +1,15 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { RestaurantServiceService } from './restaurant-service.service';
+import { RestaurantService } from './restaurant-service.service';
 import { MenuService } from './menu/menu.service';
 import { DishService } from './dish/dish.service';
-import { CreateRestaurantDto, UpdateRestaurantDto } from './dto/restaurant';
+import { CreateRestaurantDto, UpdateRestaurantDto } from './dto/menu';
 import { MenuItemDto } from './dto/menu';
 import { CreateDishDto, UpdateDishDto } from './dto/dish';
 
 @Controller('restaurants')
 export class RestaurantServiceController {
   constructor(
-    private readonly restaurantServiceService: RestaurantServiceService,
+    private readonly restaurantServiceService: RestaurantService,
     private readonly menuService: MenuService,
     private readonly dishService: DishService
   ) {}
@@ -25,7 +25,7 @@ export class RestaurantServiceController {
   }
 
   @Put(':id')
-  updateRestaurant(@Param('id') id: string, @Body() updateRestaurantDto: UpdateRestaurantDto) {
+  updateRestaurant(@Param('id') id: number, @Body() updateRestaurantDto: UpdateRestaurantDto) {
     return this.restaurantServiceService.updateRestaurant(id, updateRestaurantDto);
   }
 
@@ -35,52 +35,44 @@ export class RestaurantServiceController {
   }
 
   @Get(':id')
-  getRestaurantById(@Param('id') id: string) {
-    return this.restaurantServiceService.getRestaurantById(id);
+  getRestaurantById(
+    @Param('id') id: number
+  ) {
+    return this.restaurantServiceService.findOne(id);
   }
 
   // Dish management endpoints
   @Post(':restaurantId/dishes')
   createDish(
-    @Param('restaurantId') restaurantId: string,
     @Body() createDishDto: CreateDishDto
   ) {
-    return this.dishService.createDish(restaurantId, createDishDto);
+    return this.dishService.createDish( createDishDto);
   }
 
   @Put(':restaurantId/dishes/:dishId')
   updateDish(
-    @Param('restaurantId') restaurantId: string,
-    @Param('dishId') dishId: string,
+    @Param('dishId') dishId: number,
     @Body() updateDishDto: UpdateDishDto
   ) {
-    return this.dishService.updateDish(restaurantId, dishId, updateDishDto);
+    return this.dishService.updateDish(dishId, updateDishDto);
   }
 
   @Delete(':restaurantId/dishes/:dishId')
   deleteDish(
-    @Param('restaurantId') restaurantId: string,
-    @Param('dishId') dishId: string
+    @Param('dishId') dishId: number
   ) {
-    return this.dishService.deleteDish(restaurantId, dishId);
+    return this.dishService.deleteDish(dishId);
   }
 
   @Get(':restaurantId/dishes/:dishId')
   getDishById(
-    @Param('restaurantId') restaurantId: string,
-    @Param('dishId') dishId: string
+    @Param('dishId') dishId: number
   ) {
-    return this.dishService.getDishById(restaurantId, dishId);
+    return this.dishService.findOne(dishId);
   }
 
   @Get(':restaurantId/dishes')
-  getAllDishes(
-    @Param('restaurantId') restaurantId: string,
-    @Query('category') category?: string
-  ) {
-    if (category) {
-      return this.dishService.getDishesByCategory(restaurantId, category);
-    }
-    return this.dishService.getAllDishes(restaurantId);
+  getAllDishes(  ) {
+    return this.dishService.findAllDishes();
   }
 }
