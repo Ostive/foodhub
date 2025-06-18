@@ -1,27 +1,89 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, MapPin, Eye, Truck } from "lucide-react";
+import { Clock, MapPin } from "lucide-react";
+import Image from "next/image";
 
 export default function DeliveryOrdersPage() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [availableOrders, setAvailableOrders] = useState([
+    {
+      id: "#ORD-7825",
+      restaurantName: "Pizza Hub",
+      restaurantAddress: "123 Maple St",
+      restaurantImage: "https://images.unsplash.com/photo-1601924638867-3ec1b6c66dbe?auto=format&fit=crop&w=600&q=80",
+      customerName: "Michael Chen",
+      customerAddress: "456 Main Ave",
+      estimatedDistance: "3.2 miles",
+      estimatedTime: "20-25 min",
+      paymentAmount: "$29.99",
+      items: [
+        { name: "Hawaiian", quantity: 1 },
+        { name: "Wings", quantity: 1 }
+      ],
+      status: "Out for Delivery"
+    },
+    {
+      id: "#ORD-7800",
+      restaurantName: "Green Bites",
+      restaurantAddress: "456 Oak Ave",
+      restaurantImage: "https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?auto=format&fit=crop&w=600&q=80",
+      customerName: "Jennifer Lee",
+      customerAddress: "123 Forest Rd",
+      estimatedDistance: "2.9 miles",
+      estimatedTime: "18-22 min",
+      paymentAmount: "$21.50",
+      items: [
+        { name: "Margherita", quantity: 1 },
+        { name: "Greek Salad", quantity: 1 }
+      ],
+      status: "Cancelled"
+    },
+    {
+      id: "#ORD-7826",
+      restaurantName: "Sushi Zen",
+      restaurantAddress: "789 Pine Rd",
+      restaurantImage: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80",
+      customerName: "Laura Smith",
+      customerAddress: "789 Birch Lane",
+      estimatedDistance: "1.7 miles",
+      estimatedTime: "10-15 min",
+      paymentAmount: "$25.00",
+      items: [
+        { name: "California Roll", quantity: 2 }
+      ],
+      status: "Accepted"
+    },
+    {
+      id: "#ORD-7827",
+      restaurantName: "Taco Town",
+      restaurantAddress: "321 Elm Blvd",
+      restaurantImage: "https://images.unsplash.com/photo-1604908177521-c36b2ac2f1be?auto=format&fit=crop&w=600&q=80",
+      customerName: "Tom Ray",
+      customerAddress: "321 River St",
+      estimatedDistance: "2.1 miles",
+      estimatedTime: "12-16 min",
+      paymentAmount: "$18.00",
+      items: [
+        { name: "Beef Tacos", quantity: 3 }
+      ],
+      status: "Accepted"
+    }
+  ]);
 
-  // Filtered mock orders for delivery personnel
-  const orders = [
-    { id: "#ORD-7825", customer: "Michael Chen", restaurant: "Pizza Hub", location: "123 Maple St", items: "Hawaiian, Wings", total: "$29.99", time: "9:30 AM", date: "Today", status: "Out for Delivery" },
-    { id: "#ORD-7800", customer: "Jennifer Lee", restaurant: "Green Bites", location: "456 Oak Ave", items: "Margherita, Greek Salad", total: "$21.50", time: "6:30 PM", date: "Yesterday", status: "Cancelled" },
-    { id: "#ORD-7826", customer: "Laura Smith", restaurant: "Sushi Zen", location: "789 Pine Rd", items: "2x California Roll", total: "$25.00", time: "10:10 AM", date: "Today", status: "Accepted" },
-    { id: "#ORD-7827", customer: "Tom Ray", restaurant: "Taco Town", location: "321 Elm Blvd", items: "3x Beef Tacos", total: "$18.00", time: "10:20 AM", date: "Today", status: "Accepted" },
-  ];
-
-  const filteredOrders = orders.filter(order => {
+  const filteredAvailableOrders = availableOrders.filter((order) => {
     const query = searchQuery.toLowerCase();
     return (
       order.id.toLowerCase().includes(query) ||
-      order.customer.toLowerCase().includes(query) ||
-      order.restaurant.toLowerCase().includes(query)
+      order.customerName.toLowerCase().includes(query) ||
+      order.restaurantName.toLowerCase().includes(query)
     );
   });
+
+  const handleAcceptOrder = (orderId: string) => {
+    alert(`Order ${orderId} accepted.`);
+    setAvailableOrders(availableOrders.filter(order => order.id !== orderId));
+  };
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
@@ -45,32 +107,57 @@ export default function DeliveryOrdersPage() {
       />
 
       <div className="space-y-4">
-        {filteredOrders.length > 0 ? (
-          filteredOrders.map((order) => (
-            <div key={order.id} className="bg-white p-4 rounded-xl shadow border border-gray-100">
-              <div className="flex justify-between items-center mb-2">
-                <h2 className="text-md font-semibold text-gray-800">{order.id}</h2>
-                <span className={`text-xs px-2 py-1 rounded-full font-medium ${getStatusColor(order.status)}`}>
-                  {order.status}
-                </span>
+        {filteredAvailableOrders.length > 0 ? (
+          filteredAvailableOrders.map((order) => (
+            <div key={order.id} className="border border-gray-200 rounded-lg p-4 hover:border-[#1976d2] transition-colors">
+              <div className="flex items-start">
+                <div className="w-16 h-16 rounded-lg overflow-hidden mr-4 shrink-0">
+                  <Image 
+                    src={order.restaurantImage} 
+                    alt={order.restaurantName} 
+                    width={64} 
+                    height={64} 
+                    className="w-full h-full object-cover" 
+                  />
+                </div>
+
+                <div className="grow">
+                  <h3 className="font-medium text-gray-900">{order.restaurantName}</h3>
+                  <div className="flex items-center text-gray-500 text-sm mt-1">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    <span>{order.restaurantAddress}</span>
+                  </div>
+                  <div className="flex items-center text-gray-500 text-sm mt-1">
+                    <Clock className="w-4 h-4 mr-1" />
+                    <span>Est. delivery time: {order.estimatedTime}</span>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <div className="font-medium text-gray-900">{order.paymentAmount}</div>
+                  <div className="text-sm text-gray-500">{order.estimatedDistance}</div>
+                </div>
               </div>
-              <p className="text-sm text-gray-600"><strong>Customer:</strong> {order.customer}</p>
-              <p className="text-sm text-gray-600"><strong>Restaurant:</strong> {order.restaurant}</p>
-              <div className="flex items-center text-sm text-gray-600 mt-1">
-                <MapPin className="w-4 h-4 mr-1" /> {order.location}
-              </div>
-              <div className="flex items-center text-sm text-gray-400 mt-1">
-                <Clock className="w-4 h-4 mr-1" /> {order.date}, {order.time}
-              </div>
-              <div className="mt-2 flex gap-2">
-                <button className="text-blue-600 hover:underline text-sm flex items-center">
-                  <Eye className="w-4 h-4 mr-1" /> View
-                </button>
-                {order.status === "Accepted" && (
-                  <button className="text-green-600 hover:underline text-sm flex items-center">
-                    <Truck className="w-4 h-4 mr-1" /> Start Delivery
+
+              <div className="mt-4 flex justify-between items-center">
+                <span className="text-sm text-gray-500">{order.items.length} items</span>
+                <div className="flex space-x-2">
+                  <button
+                    onClick={() => {
+                      alert(`Order ${order.id} rejected. You won't see this order again.`);
+                      setAvailableOrders(availableOrders.filter(o => o.id !== order.id));
+                    }}
+                    className="border border-gray-300 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+                  >
+                    Reject
                   </button>
-                )}
+                  <button
+                    onClick={() => handleAcceptOrder(order.id)}
+                    className="bg-[#1976d2] hover:bg-[#1565c0] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  >
+                    Accept
+                  </button>
+                </div>
               </div>
             </div>
           ))

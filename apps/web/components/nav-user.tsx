@@ -84,7 +84,7 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <a href="../admin-profile">
+              <a href="../admin/admin-profile">
                 <DropdownMenuItem className="cursor-pointer">
                   <IconUserCircle />
                   <span>Account</span>

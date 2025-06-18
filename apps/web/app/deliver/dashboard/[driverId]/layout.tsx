@@ -26,7 +26,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 // Mock delivery driver data
-const mockDrivers = {
+export const mockDrivers = {
   "driver-1": {
     id: "driver-1",
     name: "Michael Rodriguez",
@@ -140,7 +140,7 @@ export default function DeliverDashboardLayout({
   const [isLoading, setIsLoading] = useState(false);
 
   const params = useParams();
-    const driverId = params.driverId as string;
+  const driverId = params.driverId as string;
     
     const [driver, setDriver] = useState<any>(null);
     const [loading, setLoading] = useState(true);
@@ -194,7 +194,9 @@ export default function DeliverDashboardLayout({
       
       fetchDriverData();
     }, [driverId]);
-    
+    useEffect(() => {
+      setIsLoading(false);
+    }, [pathname]);
     const handleStatusChange = (status: "available" | "busy" | "offline") => {
       setDriverStatus(status);
       
@@ -233,12 +235,40 @@ export default function DeliverDashboardLayout({
   };
 
   const navItems = [
-    { name: "Dashboard", path: `/deliver/dashboard`, icon: Home },
-    { name: "Orders", path: `/deliver/dashboard/orders`, icon: Calendar },
-    { name: "Analytics", path: `/deliver/dashboard/analytics`, icon: BarChart2 },
-    { name: "Customers", path: `/deliver/dashboard/customers`, icon: Users },
-    { name: "Reviews", path: `/deliver/dashboard/reviews`, icon: MessageSquare },
+    { name: "Dashboard", path: `/deliver/dashboard/${driverId}`, icon: Home },
+    { name: "Orders", path: `/deliver/dashboard/${driverId}/orders`, icon: Calendar },
+    { name: "Analytics", path: `/deliver/dashboard/${driverId}/analytics`, icon: BarChart2 },
+    { name: "Customers", path: `/deliver/dashboard/${driverId}/customers`, icon: Users },
+    { name: "Reviews", path: `/deliver/dashboard/${driverId}/reviews`, icon: MessageSquare },
   ];
+
+  if (loading) {
+    return (
+      <div className="min-h-svh bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-[#1976d2] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  if (error || !driver) {
+    return (
+      <div className="min-h-svh bg-gray-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl shadow-md p-8 max-w-md w-full text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Error</h1>
+          <p className="text-gray-600 mb-6">{error || "Driver not found"}</p>
+          <button
+            onClick={() => router.push("/deliver/login")}
+            className="bg-[#1976d2] hover:bg-[#1565c0] text-white px-6 py-3 rounded-lg font-medium transition-colors"
+          >
+            Back to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-svh bg-gray-50">

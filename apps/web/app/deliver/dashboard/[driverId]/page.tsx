@@ -159,6 +159,7 @@ export default function DriverDashboard() {
           }
         } else {
           setError("Driver not found");
+          setDriver(null);
         }
         
         setLoading(false);
@@ -226,19 +227,7 @@ export default function DriverDashboard() {
   
   return (
     <div className="min-h-svh bg-gray-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-white shadow-xs py-4 px-6 sticky top-0 z-10">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">       
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <div className="h-10 w-10 rounded-full overflow-hidden">
-                <Image src={driver.image} alt={driver.name} width={40} height={40} />
-              </div>
-              <span className="font-medium text-gray-900">{driver.name}</span>
-            </div>
-          </div>
-        </div>
-      </header>
+     
       
       {/* Main Content */}
       <main className="grow flex">
