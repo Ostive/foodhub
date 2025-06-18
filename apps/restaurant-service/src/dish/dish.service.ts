@@ -109,7 +109,8 @@ export class DishService {
       const skip = (page - 1) * limit;
 
       // Determine sort options
-      const sortBy = filterDto?.sortBy || 'createdAt';
+      // Use dishId as default sort field since createdAt doesn't exist in Dish entity
+      const sortBy = filterDto?.sortBy || 'dishId';
       const sortOrder = filterDto?.sortOrder || 'DESC';
       const order: any = {};
       order[sortBy] = sortOrder;
@@ -291,82 +292,118 @@ export class DishService {
   }
 
   async searchDishes(restaurantId: string, searchDto: SearchDishDto) {
-    // Check if restaurant exists
-    const restaurant = await this.userRepository.findOne({
-      where: { userId: parseInt(restaurantId), role: 'restaurant' },
-    });
-    
-    if (!restaurant) {
-      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
-    }
+    try {
+      console.log(`Searching dishes for restaurant ID: ${restaurantId}`);
+      console.log(`Search DTO:`, JSON.stringify(searchDto));
+      
+      // Validate restaurantId
+      if (!restaurantId || isNaN(parseInt(restaurantId))) {
+        throw new BadRequestException(`Invalid restaurant ID: ${restaurantId}`);
+      }
 
-    // Build query for search
-    const userId = parseInt(restaurantId);
-    let whereClause: any;
-    
-    if (searchDto.search) {
-      const searchTerm = `%${searchDto.search}%`;
-      whereClause = [
-        { name: ILike(searchTerm), user: { userId } },
-        { description: ILike(searchTerm), user: { userId } },
-        { category: ILike(searchTerm), user: { userId } },
-        { tags: Raw(alias => `${alias} ILIKE :searchTerm`, { searchTerm }), user: { userId } },
-        { additionalAllergens: ILike(searchTerm), user: { userId } },
-        { promo: ILike(searchTerm), user: { userId } }
-      ];
-    } else {
-      // If no search term, just filter by restaurant
-      whereClause = { user: { userId } };
-    }
+      // Check if restaurant exists
+      const restaurant = await this.userRepository.findOne({
+        where: { userId: parseInt(restaurantId), role: 'restaurant' },
+      });
+      
+      if (!restaurant) {
+        throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
+      }
 
-    // Calculate pagination
-    const page = searchDto.page || 1;
-    const limit = searchDto.limit || 10;
-    const skip = (page - 1) * limit;
+      console.log(`Restaurant found: ${restaurant.userId}`);
 
-    // Determine sort options
-    const sortBy = searchDto.sortBy || 'createdAt';
-    const sortOrder = searchDto.sortOrder || 'DESC';
-    const order: any = {};
-    order[sortBy] = sortOrder;
-
-    // Find dishes with search, pagination, and sorting
-    const [dishes, totalCount] = await this.dishRepository.findAndCount({
-      where: whereClause,
-      relations: ['user'],
-      skip,
-      take: limit,
-      order
-    });
-    
-    // Format the response
-    const formattedDishes = dishes.map(dish => {
-      const { user, ...dishWithoutFullUser } = dish;
-      return {
-        ...dishWithoutFullUser,
-        restaurant: {
-          id: user.userId,
-          name: `${user.firstName} ${user.lastName}`,
-          email: user.email
+      // Build query for search
+      const userId = parseInt(restaurantId);
+      let whereClause: any;
+      
+      if (searchDto.search) {
+        const searchTerm = `%${searchDto.search}%`;
+        // Use direct userId instead of nested user object to avoid potential join issues
+        whereClause = [
+          { name: ILike(searchTerm), userId },
+          { description: ILike(searchTerm), userId },
+          { category: ILike(searchTerm), userId },
+          { additionalAllergens: ILike(searchTerm), userId },
+          { promo: ILike(searchTerm), userId }
+        ];
+        
+        // Handle tags separately as it's an array
+        try {
+          whereClause.push({ 
+            tags: Raw(alias => `${alias}::text ILIKE :searchTerm`, { searchTerm }), 
+            userId 
+          });
+        } catch (e) {
+          console.error('Error with tags search:', e);
+          // Continue without tags search if it fails
         }
+      } else {
+        // If no search term, just filter by restaurant
+        whereClause = { userId };
+      }
+
+      // Calculate pagination
+      const page = searchDto.page || 1;
+      const limit = searchDto.limit || 10;
+      const skip = (page - 1) * limit;
+
+      // Determine sort options
+      // Use dishId as default sort field since createdAt doesn't exist in Dish entity
+      const sortBy = searchDto.sortBy || 'dishId';
+      const sortOrder = searchDto.sortOrder || 'DESC';
+      const order: any = {};
+      order[sortBy] = sortOrder;
+
+      console.log(`Pagination: page=${page}, limit=${limit}, skip=${skip}`);
+      console.log(`Sorting: ${sortBy} ${sortOrder}`);
+
+      // Find dishes with search, pagination, and sorting
+      const [dishes, totalCount] = await this.dishRepository.findAndCount({
+        where: whereClause,
+        relations: ['user'],
+        skip,
+        take: limit,
+        order
+      });
+      
+      console.log(`Found ${dishes.length} dishes out of ${totalCount} total`);
+      
+      // Format the response
+      const formattedDishes = dishes.map(dish => {
+        const { user, ...dishWithoutFullUser } = dish;
+        return {
+          ...dishWithoutFullUser,
+          restaurant: {
+            id: user?.userId,
+            name: user ? `${user.firstName} ${user.lastName}` : 'Unknown',
+            email: user?.email
+          }
+        };
+      });
+
+      // Calculate pagination metadata
+      const totalPages = Math.ceil(totalCount / limit);
+      const hasNext = page < totalPages;
+      const hasPrevious = page > 1;
+
+      return { 
+        success: true,
+        message: 'Dishes search completed successfully', 
+        count: totalCount,
+        page,
+        limit,
+        totalPages,
+        hasNext,
+        hasPrevious,
+        dishes: formattedDishes
       };
-    });
-
-    // Calculate pagination metadata
-    const totalPages = Math.ceil(totalCount / limit);
-    const hasNext = page < totalPages;
-    const hasPrevious = page > 1;
-
-    return { 
-      success: true,
-      message: 'Dishes search completed successfully', 
-      count: totalCount,
-      page,
-      limit,
-      totalPages,
-      hasNext,
-      hasPrevious,
-      dishes: formattedDishes
-    };
+    } catch (error) {
+      console.error('Error in searchDishes:', error);
+      if (error.name === 'QueryFailedError') {
+        console.error('SQL Error:', error.message);
+        throw new BadRequestException('Invalid search parameters');
+      }
+      throw error;
+    }
   }
 }

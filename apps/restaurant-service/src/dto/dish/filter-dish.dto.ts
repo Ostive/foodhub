@@ -30,7 +30,7 @@ export class FilterDishDto extends PaginationDto {
 
   @IsOptional()
   @IsString()
-  sortBy?: 'name' | 'price' | 'createdAt' = 'createdAt';
+  sortBy?: 'name' | 'cost' | 'dishId' = 'dishId';
 
   @IsOptional()
   @IsString()

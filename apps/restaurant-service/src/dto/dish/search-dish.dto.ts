@@ -8,7 +8,7 @@ export class SearchDishDto extends PaginationDto {
 
   @IsOptional()
   @IsString()
-  sortBy?: 'name' | 'price' | 'createdAt' = 'createdAt';
+  sortBy?: 'name' | 'cost' | 'dishId' = 'dishId';
 
   @IsOptional()
   @IsString()
