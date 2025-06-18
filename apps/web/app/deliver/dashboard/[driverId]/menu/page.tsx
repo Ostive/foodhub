@@ -175,7 +175,7 @@ export default function MenuPage() {
           <p className="text-gray-600">Add, edit, and manage your restaurant menu</p>
         </div>
         <div className="flex space-x-3">
-          <Link href={`/restaurant-dashboard/${params.restaurantId}/menu/categories`} className="bg-[#4CAF50] hover:bg-[#388E3C] text-white px-4 py-2 rounded-lg flex items-center">
+          <Link href={`/restaurant-dashboard/${params.restaurantId}/menu/categories`} className="bg-[#009E73] hover:bg-[#388E3C] text-white px-4 py-2 rounded-lg flex items-center">
             <Tag className="h-5 w-5 mr-2" />
             Manage Categories
           </Link>
