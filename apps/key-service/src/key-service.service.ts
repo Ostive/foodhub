@@ -5,7 +5,6 @@ import * as crypto from 'crypto';
 export class KeyServiceService {
   private readonly logger = new Logger(KeyServiceService.name);
 
-  // Stockage des clés en mémoire avec préfixe FH-
   private apis: Record<string, string> = {
     APIADMIN_LIST_ROUTES: this.generateKey(),
     APIAUTH_LOGIN: this.generateKey(),
@@ -22,7 +21,6 @@ export class KeyServiceService {
   };
 
   constructor() {
-    // Régénère toutes les clés toutes les heures (3600000 ms)
     setInterval(() => {
       for (const api in this.apis) {
         this.apis[api] = this.generateKey();

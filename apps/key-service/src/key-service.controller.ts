@@ -6,13 +6,11 @@ import { KeyServiceService } from './key-service.service';
 export class KeyServiceController {
   constructor(private readonly keyServiceService: KeyServiceService) {}
 
-  // Récupérer toutes les clés
   @Get()
   getKeys() {
     return this.keyServiceService.getAllKeys();
   }
 
-  // Régénérer une clé spécifique par son nom (ex: APIAUTH_LOGIN)
   @Post(':apiName/regenerate')
   regenerateKey(@Param('apiName') apiName: string, @Res() res: Response) {
     try {
