@@ -50,9 +50,17 @@ export default function CustomerNavbarNew() {
     <>
       <Navbar className="bg-transparent">
         <NavBody>
-          <Link href="/customer" className="font-display text-3xl font-bold text-[#009E73]">
-            FoodHUB
-          </Link>
+          <Link href="/" className="flex items-center space-x-2">
+        <img
+          src="/FOOD-LOGO.png"
+          alt="logo"
+          width={30}
+          height={30}
+        />
+        <span className="font-display text-3xl font-bold text-[#4CAF50]">
+          FoodHUB
+        </span>
+      </Link>
 
           <form
             onSubmit={handleSearchSubmit}
