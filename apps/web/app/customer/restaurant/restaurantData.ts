@@ -25,6 +25,7 @@ export interface MenuItem {
   popular?: boolean;
   vegetarian?: boolean;
   spicy?: boolean;
+  isSoldAlone?: boolean; // Whether the item can be added directly to cart without customization
   customizationOptions?: {
     sizes?: {
       name: string;

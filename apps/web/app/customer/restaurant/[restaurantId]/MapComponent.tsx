@@ -28,26 +28,7 @@ export default function MapComponent({
     try {
       map.current = new maplibregl.Map({
         container: mapContainer.current,
-        style: {
-          version: 8,
-          sources: {
-            'osm': {
-              type: 'raster',
-              tiles: ['https://a.tile.openstreetmap.org/{z}/{x}/{y}.png'],
-              tileSize: 256,
-              attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            }
-          },
-          layers: [
-            {
-              id: 'osm',
-              type: 'raster',
-              source: 'osm',
-              minzoom: 0,
-              maxzoom: 19
-            }
-          ]
-        },
+        style: 'https://tiles.openfreemap.org/styles/liberty', // OpenFreeMap Liberty style
         center: [longitude, latitude],
         zoom: zoom
       });

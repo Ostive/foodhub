@@ -202,7 +202,13 @@ export default function RestaurantDashboardLayout({
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
+                <DropdownMenuItem 
+                  variant="destructive"
+                  onClick={() => {
+                    localStorage.removeItem('user');
+                    router.push('/restaurant/login');
+                  }}
+                >
                   <LogOut className="h-4 w-4 mr-3" />
                   <span>Logout</span>
                 </DropdownMenuItem>

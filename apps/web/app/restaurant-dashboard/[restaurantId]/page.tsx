@@ -49,6 +49,7 @@ export default function RestaurantDashboard() {
         // Get user info from localStorage (set during login)
         const userInfo = localStorage.getItem('user');
         let userId = restaurantId;
+        let token = '';
         
         // If we have user info and this is the current logged-in restaurant
         if (userInfo) {
@@ -56,13 +57,24 @@ export default function RestaurantDashboard() {
           if (user.role === 'restaurant' && user.userId) {
             userId = user.userId.toString();
           }
+          // Get the authentication token
+          token = user.token || '';
         }
         
         if (!userId) {
           throw new Error('No restaurant ID available');
         }
         
-        const response = await fetch(`http://localhost:3002/api/restaurants/${userId}`);
+        if (!token) {
+          throw new Error('No authentication token available');
+        }
+        
+        const response = await fetch(`http://localhost:3002/api/restaurants/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
         
         if (!response.ok) {
           throw new Error('Failed to fetch restaurant data');

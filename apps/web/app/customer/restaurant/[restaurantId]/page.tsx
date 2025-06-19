@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Star, Clock, Bike, Heart, ChevronLeft, ChevronRight, Search, Plus, Minus, ShoppingBag, History, ArrowRight, MapPin, Store } from "lucide-react";
 import Link from "next/link";
 import CustomerNavbar from "../../_components/CustomerNavbar";
+import CartTotalDisplay from "../../_components/CartTotalDisplay";
 import { useParams } from "next/navigation";
 
 import restaurantsData from "../restaurantData";
@@ -13,6 +14,7 @@ import GeocodedMapComponent from "./GeocodedMapComponent";
 import { useRestaurantDetails } from "@/hooks/useRestaurantDetails";
 import { useRestaurantDishes, Dish } from "@/hooks/useRestaurantDishes";
 import DishCard from "../../_components/DishCard";
+import { useCart } from "@/contexts/CartContext";
 
 interface CartItem {
   id: string;
@@ -36,11 +38,13 @@ export default function RestaurantPage() {
   // Define all state hooks at the top level
   const [activeCategory, setActiveCategory] = useState<string>('Menu');
   const [dishCategories, setDishCategories] = useState<{[key: string]: Dish[]}>({});
-  const [cartItems, setCartItems] = useState<Record<string, number>>({});
   const [showMap, setShowMap] = useState(false);
   const [liked, setLiked] = useState(false);
   const [showOrderAgain, setShowOrderAgain] = useState(true);
   const [lastAddedItem, setLastAddedItem] = useState<string | null>(null);
+  
+  // Use the cart context instead of local state
+  const { cartItems, addToCart, removeFromCart, getItemQuantity, getTotalItems } = useCart();
   
   // Define all refs at the top level
   const menuCategoriesRef = useRef<HTMLDivElement>(null);
@@ -54,17 +58,18 @@ export default function RestaurantPage() {
   
   // Adapter function to convert Dish to MenuItem type
   const adaptDishToMenuItem = (dish: Dish): MenuItem => ({
-    id: String(dish.id),
+    id: String(dish.dishId),
     name: dish.name,
     description: dish.description,
-    price: `$${dish.price.toFixed(2)}`,
-    image: dish.image || 'https://via.placeholder.com/300',
-    popular: false,
-    vegetarian: dish.isVegetarian,
-    spicy: false,
-    customizationOptions: dish.ingredients ? {
-      ingredients: dish.ingredients.map(ingredient => ({
-        name: ingredient,
+    price: `$${dish.cost.toFixed(2)}`,
+    image: dish.picture ? `/images/dishes/${dish.picture}` : 'https://via.placeholder.com/300',
+    popular: dish.promo !== null,
+    vegetarian: dish.isVegetarian || false,
+    spicy: dish.spicyLevel ? dish.spicyLevel > 0 : false,
+    isSoldAlone: dish.isSoldAlone, // Add the isSoldAlone property
+    customizationOptions: dish.additionalAllergens ? {
+      ingredients: dish.additionalAllergens.map(allergen => ({
+        name: allergen,
         price: "$0.00",
         default: true
       }))
@@ -90,23 +95,40 @@ export default function RestaurantPage() {
   
   // Group dishes by category
   useEffect(() => {
+    console.log('Dishes data:', JSON.stringify(dishes, null, 2));
+    console.log('Dishes length:', dishes?.length);
+    
     if (dishes && dishes.length > 0) {
+      // Log the first dish to see its structure
+      console.log('First dish example:', JSON.stringify(dishes[0], null, 2));
+      
       const categorized: {[key: string]: Dish[]} = {};
       
       dishes.forEach(dish => {
-        const category = dish.category || 'Other';
-        if (!categorized[category]) {
-          categorized[category] = [];
+        // Check if dish has the expected properties
+        console.log(`Processing dish: ${dish.dishId}, name: ${dish.name}, tags: ${dish.tags ? dish.tags.join(', ') : 'No tags'}`);
+        
+        // Use the first tag as the category, or 'Other' if no tags
+        const category = dish.tags && dish.tags.length > 0 ? dish.tags[0] : 'Other';
+        
+        // Capitalize the first letter of the category
+        const formattedCategory = category.charAt(0).toUpperCase() + category.slice(1);
+        
+        if (!categorized[formattedCategory]) {
+          categorized[formattedCategory] = [];
         }
-        categorized[category].push(dish);
+        categorized[formattedCategory].push(dish);
       });
       
+      console.log('Categorized dishes:', Object.keys(categorized));
       setDishCategories(categorized);
       
       // Set active category to first category when dishes load
       if (Object.keys(categorized).length > 0) {
         setActiveCategory(Object.keys(categorized)[0]);
       }
+    } else {
+      console.log('No dishes available or dishes array is empty');
     }
   }, [dishes]);
   
@@ -128,58 +150,49 @@ export default function RestaurantPage() {
     }
   };
   
-  const addToCart = (itemId: string) => {
-    setCartItems(prev => {
-      const newItems = { ...prev };
-      if (newItems[itemId]) {
-        newItems[itemId] += 1;
-      } else {
-        newItems[itemId] = 1;
+  // Set the last added item for visual feedback when an item is added to cart
+  useEffect(() => {
+    const handleLastAddedItem = (itemId: string) => {
+      setLastAddedItem(itemId);
+      
+      // Clear the visual feedback after 2 seconds
+      setTimeout(() => {
+        setLastAddedItem(null);
+      }, 2000);
+    };
+    
+    // This is a custom event listener to update the lastAddedItem
+    // We'll trigger this event from the addToCart function in CartContext
+    window.addEventListener('itemAddedToCart', (e: any) => {
+      if (e.detail && e.detail.itemId) {
+        handleLastAddedItem(e.detail.itemId);
       }
-      return newItems;
     });
     
-    // Set the last added item for visual feedback
-    setLastAddedItem(itemId);
-    
-    // Clear the visual feedback after 2 seconds
-    setTimeout(() => {
-      setLastAddedItem(null);
-    }, 2000);
-  };
+    return () => {
+      window.removeEventListener('itemAddedToCart', (e: any) => {});
+    };
+  }, []);
   
-  const removeFromCart = (itemId: string) => {
-    setCartItems(prev => {
-      const newItems = { ...prev };
-      if (newItems[itemId] && newItems[itemId] > 1) {
-        newItems[itemId] -= 1;
-      } else {
-        delete newItems[itemId];
-      }
-      return newItems;
-    });
-  };
+  // We don't need to redefine these functions since we're using the ones from CartContext
+  // Removed to avoid naming conflicts
   
-  const getItemQuantity = (itemId: string): number => {
-    return cartItems[itemId] || 0;
-  };
-  
-  const getTotalItems = (): number => {
-    return Object.values(cartItems).reduce((total, quantity) => total + quantity, 0);
-  };
-  
+  // Calculate cart total based on items in cart
   const getCartTotal = (): string => {
     let total = 0;
     
+    // Create a flat array of all menu items from all categories
+    const allMenuItems = Object.values(dishCategories).flat().map(dish => ({
+      id: String(dish.dishId),
+      price: `$${dish.cost.toFixed(2)}`
+    }));
+    
     Object.entries(cartItems).forEach(([itemId, quantity]) => {
-      // Find the item in the menu categories
-      for (const category of restaurantData.menuCategories) {
-        const item = category.items.find(item => item.id === itemId);
-        if (item) {
-          const price = parseFloat(item.price.replace('$', ''));
-          total += price * quantity;
-          break;
-        }
+      // Find the item in the menu items
+      const item = allMenuItems.find(item => item.id === itemId);
+      if (item) {
+        const price = parseFloat(item.price.replace(/[^0-9.]/g, ''));
+        total += price * quantity;
       }
     });
     
@@ -188,6 +201,13 @@ export default function RestaurantPage() {
   
   // Check if an item needs customization or can be added directly to cart
   const needsCustomization = (item: MenuItem): boolean => {
+    // If the item has isSoldAlone property set, use that
+    if (item.isSoldAlone !== undefined) {
+      // isSoldAlone = true means the item can be added directly to cart without customization
+      return !item.isSoldAlone;
+    }
+    
+    // Legacy fallback for items without isSoldAlone property
     // Items that don't need customization (can be added directly to cart)
     const directAddItems = ['onion-rings', 'french-fries', 'mozzarella-sticks', 'side-salad', 'coleslaw'];
     
@@ -701,7 +721,7 @@ export default function RestaurantPage() {
                 <h2 className="text-xl font-bold text-gray-900 mb-4">{category}</h2>
                 <div className="space-y-4">
                   {categoryDishes.map((dish) => (
-                    <div key={dish.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
+                    <div key={dish.dishId} className="bg-white rounded-xl shadow-sm overflow-hidden">
                       {renderMenuItem(adaptDishToMenuItem(dish))}
                     </div>
                   ))}
@@ -712,19 +732,14 @@ export default function RestaurantPage() {
         )}
       </div>
       
-      {/* Cart Button (fixed at bottom) */}
-      {getTotalItems() > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 p-4 flex justify-center bg-gradient-to-t from-white via-white to-transparent">
-          <Link 
-            href={`/customer/restaurant/${params.restaurantId}/cart`}
-            className="bg-[#4CAF50] hover:bg-[#388E3C] text-white py-3 px-6 rounded-full shadow-lg flex items-center justify-center transition-colors w-full max-w-md"
-          >
-            <ShoppingBag size={20} className="mr-2" />
-            <span className="font-medium">View Cart ({getTotalItems()} items)</span>
-            <span className="ml-auto font-bold">{getCartTotal()}</span>
-          </Link>
-        </div>
-      )}
+      {/* Cart Total Display */}
+      <CartTotalDisplay 
+        menuItems={Object.values(dishCategories).flat().map(dish => ({
+          id: String(dish.dishId),
+          price: `$${dish.cost.toFixed(2)}`
+        }))}
+        restaurantId={restaurantId}
+      />
     </div>
   );
 }

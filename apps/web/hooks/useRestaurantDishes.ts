@@ -3,22 +3,23 @@
 import { useState, useEffect } from 'react';
 
 export interface Dish {
-  id: number;
+  dishId: number;
   name: string;
   description: string;
-  price: number;
-  image?: string;
-  category?: string;
-  ingredients?: string[];
-  allergens?: string[];
+  cost: number; // API returns cost instead of price
+  picture?: string; // API returns picture instead of image
+  tags?: string[]; // API returns tags instead of category
+  additionalAllergens?: string[] | null;
   isVegetarian?: boolean;
-  isVegan?: boolean;
-  isGlutenFree?: boolean;
-  preparationTime?: string;
-  calories?: number;
-  restaurantId: number;
-  createdAt: string;
-  updatedAt: string;
+  isSoldAlone?: boolean;
+  spicyLevel?: number;
+  userId: number; // This is the restaurantId in the API
+  promo?: any | null;
+  restaurant?: {
+    id: number;
+    name: string;
+    email: string;
+  };
 }
 
 export function useRestaurantDishes(restaurantId: string | undefined) {
@@ -42,7 +43,19 @@ export function useRestaurantDishes(restaurantId: string | undefined) {
         }
         
         const data = await response.json();
-        setDishes(data);
+        console.log('API Response from hook:', data);
+        
+        // Handle nested response structure where dishes are in a 'dishes' property
+        if (data && data.dishes && Array.isArray(data.dishes)) {
+          console.log('Found dishes array in response:', data.dishes.length);
+          setDishes(data.dishes);
+        } else if (Array.isArray(data)) {
+          console.log('Response is an array:', data.length);
+          setDishes(data);
+        } else {
+          console.log('Unexpected response format:', typeof data);
+          setDishes([]);
+        }
       } catch (err) {
         console.error('Error fetching dishes:', err);
         setError('Failed to load dishes');

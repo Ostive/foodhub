@@ -21,15 +21,17 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { useAuth } from "@/lib/auth/auth-context";
 import { LogoutButton } from "@/components/auth/logout-button";
+import { useCart } from "@/contexts/CartContext";
 
 export default function CustomerNavbarNew() {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
+  const { getTotalItems } = useCart();
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const cartItemCount = 3;
+  const cartItemCount = getTotalItems();
 
   // Use user data from auth context or fallback to default
   const userData = {
@@ -156,14 +158,18 @@ export default function CustomerNavbarNew() {
               </div>
             </form>
 
-            <Link href="/customer/cart" className="flex items-center py-3 border-b border-gray-100">
-              <ShoppingBag className="w-5 h-5 mr-3 text-[#009E73]" />
-              Cart
-              {cartItemCount > 0 && (
-                <span className="ml-auto bg-[#009E73] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItemCount}
-                </span>
-              )}
+            <Link href="/customer/cart" className="flex items-center justify-between py-3 border-b border-gray-100 w-full">
+              <div className="flex items-center">
+                <ShoppingBag className="w-5 h-5 mr-3 text-[#009E73]" />
+                Cart
+              </div>
+              <div className="flex items-center">
+                {cartItemCount > 0 && (
+                  <span className="bg-[#009E73] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartItemCount}
+                  </span>
+                )}
+              </div>
             </Link>
 
             {isAuthenticated ? (

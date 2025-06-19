@@ -10,10 +10,11 @@ import { NextRequest, NextResponse } from 'next/server';
 // Get all dishes for a restaurant
 export async function GET(
   request: Request,
-  { params }: { params: { restaurantId: string } }
+  { params }: { params: Promise<{ restaurantId: string }> }
 ) {
   try {
-    const restaurantId = params.restaurantId;
+    // Fix for NextJS 14: await params before accessing properties
+    const { restaurantId } = await params;
     const restaurantServiceUrl = process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002';
 
     if (!restaurantServiceUrl) {
@@ -23,6 +24,8 @@ export async function GET(
       );
     }
 
+    console.log(`Fetching dishes from: ${restaurantServiceUrl}/api/restaurants/${restaurantId}/dishes`);
+    
     // Forward the request to the restaurant service
     const response = await fetch(`${restaurantServiceUrl}/api/restaurants/${restaurantId}/dishes`, {
       method: 'GET',
@@ -41,7 +44,16 @@ export async function GET(
 
     // Return the response from the restaurant service
     const data = await response.json();
-    return NextResponse.json(data);
+    console.log(`Received dishes data from restaurant service:`, JSON.stringify(data, null, 2));
+    
+    // Check if we need to extract the dishes array from a nested structure
+    if (data && data.dishes && Array.isArray(data.dishes)) {
+      console.log('Returning dishes array from nested structure');
+      return NextResponse.json(data.dishes);
+    } else {
+      console.log('Returning data as is');
+      return NextResponse.json(data);
+    }
     
   } catch (error) {
     console.error('Restaurant Dishes API Error:', error);

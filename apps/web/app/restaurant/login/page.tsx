@@ -152,7 +152,7 @@ export default function DeliveryLoginPage() {
           <div className="mt-8 text-center">
             <p className="text-gray-600">
               Don't have an account?{" "}
-              <Link href="/restaurant/form" className="text-[#0072B2] font-medium hover:underline">
+              <Link href="/restaurant/register" className="text-[#0072B2] font-medium hover:underline">
                 Create a restaurant
               </Link>
             </p>

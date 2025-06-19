@@ -10,10 +10,11 @@ import { NextRequest, NextResponse } from 'next/server';
 // Get restaurant by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { restaurantId: string } }
+  { params }: { params: Promise<{ restaurantId: string }> }
 ) {
   try {
-    const restaurantId = params.restaurantId;
+    // Fix for NextJS 14: await params before accessing properties
+    const { restaurantId } = await params;
     
     // Forward the request to the restaurant service
     const restaurantServiceUrl = process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002';
