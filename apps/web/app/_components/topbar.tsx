@@ -20,7 +20,7 @@ export default function NavbarDemo() {
     },
     {
       name: "Restaurant",
-      link: "/restaurant",
+      link: "/restaurant/login",
     },
     {
       name: "Delivery",
