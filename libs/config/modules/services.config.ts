@@ -25,6 +25,8 @@ export interface ServicesConfig {
   performanceServicePort: number;
   deliverService: string;
   deliverServicePort: number;
+  keyService: string; 
+  keyServicePort: number;
 }
 
 export default registerAs('services', (): ServicesConfig => ({
@@ -40,5 +42,7 @@ export default registerAs('services', (): ServicesConfig => ({
   authServicePort: extractPortFromUrl(process.env.AUTH_SERVICE_URL || 'http://localhost:3004'),
   performanceServicePort: extractPortFromUrl(process.env.PERFORMANCE_SERVICE_URL || 'http://localhost:3005'),
   deliverServicePort: extractPortFromUrl(process.env.DELIVER_SERVICE_URL || 'http://localhost:3006'),
+  keyService: process.env.KEY_SERVICE_URL || 'http://localhost:3007',
+  keyServicePort: extractPortFromUrl(process.env.KEY_SERVICE_URL || 'http://localhost:3007')
 
 }));

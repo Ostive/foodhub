@@ -37,6 +37,15 @@
         "tsConfigPath": "apps/foodhub/tsconfig.app.json"
       }
     },
+    "key-service": {
+      "type": "application",
+      "root": "apps/key-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/key-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/key-service/tsconfig.app.json"
+      }
+    },
     "order-service": {
       "type": "application",
       "root": "apps/order-service",
