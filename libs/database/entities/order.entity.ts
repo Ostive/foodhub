@@ -16,7 +16,7 @@ export class Order {
   @Column()
   restaurantId: number;
 
-  @Column()
+  @Column({ nullable: true })
   deliveryId: number;
 
   @Column({ nullable: true })
@@ -46,7 +46,7 @@ export class Order {
   @JoinColumn({ name: 'restaurantId' })
   restaurant: User;
 
-  @ManyToOne(() => User, user => user.deliveryOrders, { onDelete: 'SET NULL', nullable: true  })
+  @ManyToOne(() => User, user => user.deliveryOrders, { onDelete: 'SET NULL'})
   @JoinColumn({ name: 'deliveryId' })
   delivery: User;
 
