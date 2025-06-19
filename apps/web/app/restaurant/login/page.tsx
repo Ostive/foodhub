@@ -19,12 +19,37 @@ export default function DeliveryLoginPage() {
     setError("");
     setLoading(true);
 
-    // Ici tu peux intégrer ta logique d'authentification réelle
+    try {
+      const response = await fetch('http://localhost:3004/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    setTimeout(() => {
-      setError("Invalid email or password"); // Exemple d'erreur par défaut
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Login failed');
+      }
+
+      // Store the token and user info in localStorage or a state management solution
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+
+      // Redirect to restaurant dashboard with the user ID
+      if (data.user && data.user.userId) {
+        router.push(`/restaurant-dashboard/${data.user.userId}`);
+      } else {
+        // Fallback if no user ID is available
+        router.push('/restaurant-dashboard');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed. Please try again.');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   return (

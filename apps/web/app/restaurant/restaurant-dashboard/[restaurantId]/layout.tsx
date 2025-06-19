@@ -53,52 +53,19 @@ export default function RestaurantDashboardLayout({
     /*{ name: "Settings", path: `/restaurant-dashboard/${restaurantId}/settings`, icon: Settings },*/
   ];
 
-  const [restaurant, setRestaurant] = useState({ name: "Restaurant", cuisine: "Unknown", tags: [] as string[] });
-  const [isLoadingRestaurant, setIsLoadingRestaurant] = useState(true);
+  const restaurants = {
+    "bella-napoli": { name: "Bella Napoli Pizzeria", cuisine: "Italian" },
+    "sushi-master": { name: "Sushi Master", cuisine: "Japanese" },
+    "taco-fiesta": { name: "Taco Fiesta", cuisine: "Mexican" },
+    "burger-joint": { name: "Burger Joint", cuisine: "American" }
+  };
+  
+type RestaurantKey = keyof typeof restaurants;
 
-  useEffect(() => {
-    const fetchRestaurantData = async () => {
-      try {
-        // Get user info from localStorage (set during login)
-        const userInfo = localStorage.getItem('user');
-        let userId = restaurantId;
-        
-        // If we have user info and this is the current logged-in restaurant
-        if (userInfo) {
-          const user = JSON.parse(userInfo);
-          if (user.role === 'restaurant' && user.userId) {
-            userId = user.userId.toString();
-          }
-        }
-        
-        if (!userId) {
-          throw new Error('No restaurant ID available');
-        }
-        
-        const response = await fetch(`http://localhost:3002/api/restaurants/${userId}`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch restaurant data');
-        }
-        
-        const data = await response.json();
-        
-        // Set restaurant data
-        setRestaurant({
-          name: data.firstName || "Restaurant",
-          cuisine: data.tags && data.tags.length > 0 ? data.tags[0].charAt(0).toUpperCase() + data.tags[0].slice(1) : "Unknown",
-          tags: data.tags || []
-        });
-      } catch (err) {
-        console.error('Error fetching restaurant data:', err);
-        // Keep default values
-      } finally {
-        setIsLoadingRestaurant(false);
-      }
-    };
-    
-    fetchRestaurantData();
-  }, [restaurantId]);
+const restaurant =
+  typeof restaurantId === "string" && restaurantId in restaurants
+    ? restaurants[restaurantId as RestaurantKey]
+    : { name: "Restaurant", cuisine: "Unknown" };
 
   return (
     <div className="flex h-svh bg-gray-50 ">

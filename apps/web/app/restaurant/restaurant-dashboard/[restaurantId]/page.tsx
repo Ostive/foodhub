@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Clock, DollarSign, Award, TrendingUp, ChevronRight, Bell, Calendar, Users, CheckCircle, AlertCircle, Package, Star, ArrowUpRight, MoreHorizontal, Search, MapPin, Phone, Mail, Settings, HelpCircle, LogOut, Plus, Utensils } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,98 +24,21 @@ export default function RestaurantDashboard() {
   const { restaurantId } = useParams();
   const [currentDate] = useState(new Date());
   const [activeTab, setActiveTab] = useState("overview");
-  const [restaurant, setRestaurant] = useState({
+  
+  // In a real app, you would fetch this data based on the restaurantId
+  // For now, we'll use mock data
+  const restaurant = {
     id: restaurantId as string,
-    name: "Loading...",
-    logo: "/restaurant-logo.png",
-    address: "Loading...",
-    phone: "Loading...",
-    email: "Loading...",
-    rating: 0,
-    openingHours: "Loading...",
-    owner: "Loading...",
-    avatar: "",
-    tags: [] as string[],
-    minimumPurchase: 0,
-    deliveryRadius: 0,
-    averagePreparationTime: "Loading..."
-  });
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  
-  useEffect(() => {
-    const fetchRestaurantData = async () => {
-      try {
-        // Get user info from localStorage (set during login)
-        const userInfo = localStorage.getItem('user');
-        let userId = restaurantId;
-        
-        // If we have user info and this is the current logged-in restaurant
-        if (userInfo) {
-          const user = JSON.parse(userInfo);
-          if (user.role === 'restaurant' && user.userId) {
-            userId = user.userId.toString();
-          }
-        }
-        
-        if (!userId) {
-          throw new Error('No restaurant ID available');
-        }
-        
-        const response = await fetch(`http://localhost:3002/api/restaurants/${userId}`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch restaurant data');
-        }
-        
-        const data = await response.json();
-        
-        // Transform the API data to match our component's expected format
-        setRestaurant({
-          id: userId.toString(),
-          name: data.firstName || "Restaurant Name",
-          logo: "/restaurant-logo.png",
-          address: data.address || "No address provided",
-          phone: data.phone || "No phone provided",
-          email: data.email || "No email provided",
-          rating: 4.5, // Default rating if not provided
-          openingHours: "9:00 AM - 10:00 PM", // Default hours if not provided
-          owner: `${data.firstName || ''} ${data.lastName || ''}`.trim() || "Restaurant Owner",
-          avatar: data.profilePicture || "https://cwdaust.com.au/wpress/wp-content/uploads/2015/04/placeholder-restaurant.png",
-          tags: data.tags || [],
-          minimumPurchase: data.minimumPurchase || 0,
-          deliveryRadius: data.deliveryRadius || 0,
-          averagePreparationTime: data.averagePreparationTime || "20-30 min"
-        });
-      } catch (err) {
-        console.error('Error fetching restaurant data:', err);
-        setError('Failed to load restaurant data');
-        
-        // Set fallback data
-        setRestaurant({
-          id: restaurantId as string,
-          name: "Restaurant",
-          logo: "/restaurant-logo.png",
-          address: "123 Restaurant Street",
-          phone: "+1 (555) 123-4567",
-          email: "info@restaurant.com",
-          rating: 4.5,
-          openingHours: "9:00 AM - 10:00 PM",
-          owner: "Restaurant Owner",
-          avatar: "https://cwdaust.com.au/wpress/wp-content/uploads/2015/04/placeholder-restaurant.png",
-          tags: ["restaurant"] as string[],
-          minimumPurchase: 10,
-          deliveryRadius: 5,
-          averagePreparationTime: "20-30 min"
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchRestaurantData();
-  }, [restaurantId]);
-  
+    name: "Bella Napoli Pizzeria",
+    logo: "/restaurant-logo.png", // You would need to add this image to your public folder
+    address: "123 Italian Street, Foodville",
+    phone: "+1 (555) 123-4567",
+    email: "info@bellanapoli.com",
+    rating: 4.8,
+    openingHours: "10:00 AM - 10:00 PM",
+    owner: "Marco Rossi",
+    avatar: "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=80&q=80"
+  };
   
   // Format date as "Monday, April 24, 2025"
   const formattedDate = currentDate.toLocaleDateString('en-US', {

@@ -14,7 +14,6 @@ import { useRestaurantDetails } from "@/hooks/useRestaurantDetails";
 import { useRestaurantDishes, Dish } from "@/hooks/useRestaurantDishes";
 import DishCard from "../../_components/DishCard";
 
-
 interface CartItem {
   id: string;
   quantity: number;
@@ -34,15 +33,42 @@ export default function RestaurantPage() {
   const params = useParams();
   const restaurantId = params.restaurantId as string;
   
+  // Define all state hooks at the top level
+  const [activeCategory, setActiveCategory] = useState<string>('Menu');
+  const [dishCategories, setDishCategories] = useState<{[key: string]: Dish[]}>({});
+  const [cartItems, setCartItems] = useState<Record<string, number>>({});
+  const [showMap, setShowMap] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [showOrderAgain, setShowOrderAgain] = useState(true);
+  const [lastAddedItem, setLastAddedItem] = useState<string | null>(null);
+  
+  // Define all refs at the top level
+  const menuCategoriesRef = useRef<HTMLDivElement>(null);
+  const orderAgainSliderRef = useRef<HTMLDivElement>(null);
+  
   // Fetch restaurant details from API
   const { restaurant, loading: restaurantLoading, error: restaurantError } = useRestaurantDetails(restaurantId);
   
   // Fetch restaurant dishes from API
   const { dishes, loading: dishesLoading, error: dishesError } = useRestaurantDishes(restaurantId);
   
-  // Group dishes by category
-  const [dishCategories, setDishCategories] = useState<{[key: string]: Dish[]}>({});
+  // Get restaurant data with fallbacks
+  const restaurantData = restaurantsData[restaurantId] || {
+    name: restaurant?.firstName || 'Restaurant',
+    rating: restaurant?.rating || 4.0,
+    ratingCount: 100,
+    deliveryTime: restaurant?.averagePreparationTime || '25-35 min',
+    deliveryFee: '5€',
+    image: restaurant?.profilePicture || '/images/restaurant-placeholder.jpg',
+    address: restaurant?.address || 'Address unavailable',
+    cuisineType: restaurant?.cuisineType || 'Various',
+    menuCategories: [],
+    previousOrders: [],
+  };
   
+  const previousItems = getAllPreviousItems(restaurantData.previousOrders);
+  
+  // Group dishes by category
   useEffect(() => {
     if (dishes && dishes.length > 0) {
       const categorized: {[key: string]: Dish[]} = {};
@@ -56,8 +82,108 @@ export default function RestaurantPage() {
       });
       
       setDishCategories(categorized);
+      
+      // Set active category to first category when dishes load
+      if (Object.keys(categorized).length > 0) {
+        setActiveCategory(Object.keys(categorized)[0]);
+      }
     }
   }, [dishes]);
+  
+  // Helper functions
+  const scrollToCategory = (categoryId: string) => {
+    setActiveCategory(categoryId);
+    const element = document.getElementById(categoryId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
+  const scrollOrderAgain = (direction: 'left' | 'right') => {
+    if (orderAgainSliderRef.current) {
+      const { current } = orderAgainSliderRef;
+      const scrollAmount = 300;
+      const left = direction === 'left' ? current.scrollLeft - scrollAmount : current.scrollLeft + scrollAmount;
+      current.scrollTo({ left, behavior: 'smooth' });
+    }
+  };
+  
+  const addToCart = (itemId: string) => {
+    setCartItems(prev => {
+      const newItems = { ...prev };
+      if (newItems[itemId]) {
+        newItems[itemId] += 1;
+      } else {
+        newItems[itemId] = 1;
+      }
+      return newItems;
+    });
+    
+    // Set the last added item for visual feedback
+    setLastAddedItem(itemId);
+    
+    // Clear the visual feedback after 2 seconds
+    setTimeout(() => {
+      setLastAddedItem(null);
+    }, 2000);
+  };
+  
+  const removeFromCart = (itemId: string) => {
+    setCartItems(prev => {
+      const newItems = { ...prev };
+      if (newItems[itemId] && newItems[itemId] > 1) {
+        newItems[itemId] -= 1;
+      } else {
+        delete newItems[itemId];
+      }
+      return newItems;
+    });
+  };
+  
+  const getItemQuantity = (itemId: string): number => {
+    return cartItems[itemId] || 0;
+  };
+  
+  const getTotalItems = (): number => {
+    return Object.values(cartItems).reduce((total, quantity) => total + quantity, 0);
+  };
+  
+  const getCartTotal = (): string => {
+    let total = 0;
+    
+    Object.entries(cartItems).forEach(([itemId, quantity]) => {
+      // Find the item in the menu categories
+      for (const category of restaurantData.menuCategories) {
+        const item = category.items.find(item => item.id === itemId);
+        if (item) {
+          const price = parseFloat(item.price.replace('$', ''));
+          total += price * quantity;
+          break;
+        }
+      }
+    });
+    
+    return `$${total.toFixed(2)}`;
+  };
+  
+  // Check if an item needs customization or can be added directly to cart
+  const needsCustomization = (item: MenuItem): boolean => {
+    // Items that don't need customization (can be added directly to cart)
+    const directAddItems = ['onion-rings', 'french-fries', 'mozzarella-sticks', 'side-salad', 'coleslaw'];
+    
+    // If the item is in our direct add list, it doesn't need customization
+    if (directAddItems.includes(item.id)) {
+      return false;
+    }
+    
+    // If the item has customization options, it needs the customization page
+    if (item.customizationOptions) {
+      return true;
+    }
+    
+    // Default to needing customization for other items
+    return true;
+  };
 
   // Check if restaurant exists in our data or is loading from API
   if (restaurantLoading) {
@@ -167,149 +293,8 @@ export default function RestaurantPage() {
       </div>
     );
   }
-
-
-  // Get restaurant data - we can use non-null assertion here because we've already checked it exists
-  const restaurantData = restaurantsData[restaurantId] || {
-    name: restaurant?.firstName || 'Restaurant',
-    rating: restaurant?.rating || 4.0,
-    ratingCount: 100,
-    deliveryTime: restaurant?.averagePreparationTime || '25-35 min',
-    deliveryFee: '5€',
-    image: restaurant?.profilePicture || '/images/restaurant-placeholder.jpg',
-    address: restaurant?.address || 'Address unavailable',
-    cuisineType: restaurant?.cuisineType || 'Various',
-    menuCategories: [],
-    previousOrders: [],
-  };
   
-  // State for menu categories
-  const [activeCategory, setActiveCategory] = useState<string>('Menu');
-  
-  // Update active category when dish categories are loaded
-  useEffect(() => {
-    if (Object.keys(dishCategories).length > 0) {
-      setActiveCategory(Object.keys(dishCategories)[0]);
-    }
-  }, [dishCategories]);
-  
-  const menuCategoriesRef = useRef<HTMLDivElement>(null);
-  
-  // State for cart
-  const [cartItems, setCartItems] = useState<Record<string, number>>({});
-  
-  // State for order again slider
-  const orderAgainSliderRef = useRef<HTMLDivElement>(null);
-  
-  // State for showing map
-  const [showMap, setShowMap] = useState(false);
-  
-  const [liked, setLiked] = useState(false);
-  const [showOrderAgain, setShowOrderAgain] = useState(false);
-  
-  // Update showOrderAgain when restaurantData changes
-  useEffect(() => {
-    setShowOrderAgain(restaurantData.previousOrders.length > 0);
-  }, [restaurantData.previousOrders.length]);
-  
-  const previousItems = getAllPreviousItems(restaurantData.previousOrders);
-  
-  const scrollToCategory = (categoryId: string) => {
-    setActiveCategory(categoryId);
-    const element = document.getElementById(categoryId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-  
-  const scrollOrderAgain = (direction: 'left' | 'right') => {
-    if (orderAgainSliderRef.current) {
-      const { current } = orderAgainSliderRef;
-      const scrollAmount = 300;
-      const left = direction === 'left' ? current.scrollLeft - scrollAmount : current.scrollLeft + scrollAmount;
-      current.scrollTo({ left, behavior: 'smooth' });
-    }
-  };
-  
-  const [lastAddedItem, setLastAddedItem] = useState<string | null>(null);
-
-  const addToCart = (itemId: string) => {
-    setCartItems(prev => {
-      const newItems = { ...prev };
-      if (newItems[itemId]) {
-        newItems[itemId] += 1;
-      } else {
-        newItems[itemId] = 1;
-      }
-      return newItems;
-    });
-    
-    // Set the last added item for visual feedback
-    setLastAddedItem(itemId);
-    
-    // Clear the visual feedback after 2 seconds
-    setTimeout(() => {
-      setLastAddedItem(null);
-    }, 2000);
-  };
-  
-  const removeFromCart = (itemId: string) => {
-    setCartItems(prev => {
-      const newItems = { ...prev };
-      if (newItems[itemId] && newItems[itemId] > 1) {
-        newItems[itemId] -= 1;
-      } else {
-        delete newItems[itemId];
-      }
-      return newItems;
-    });
-  };
-  
-  const getItemQuantity = (itemId: string): number => {
-    return cartItems[itemId] || 0;
-  };
-  
-  const getTotalItems = (): number => {
-    return Object.values(cartItems).reduce((total, quantity) => total + quantity, 0);
-  };
-  
-  const getCartTotal = (): string => {
-    let total = 0;
-    
-    Object.entries(cartItems).forEach(([itemId, quantity]) => {
-      // Find the item in the menu categories
-      for (const category of restaurantData.menuCategories) {
-        const item = category.items.find(item => item.id === itemId);
-        if (item) {
-          const price = parseFloat(item.price.replace('$', ''));
-          total += price * quantity;
-          break;
-        }
-      }
-    });
-    
-    return `$${total.toFixed(2)}`;
-  };
-  
-  // Check if an item needs customization or can be added directly to cart
-  const needsCustomization = (item: MenuItem): boolean => {
-    // Items that don't need customization (can be added directly to cart)
-    const directAddItems = ['onion-rings', 'french-fries', 'mozzarella-sticks', 'side-salad', 'coleslaw'];
-    
-    // If the item is in our direct add list, it doesn't need customization
-    if (directAddItems.includes(item.id)) {
-      return false;
-    }
-    
-    // If the item has customization options, it needs the customization page
-    if (item.customizationOptions) {
-      return true;
-    }
-    
-    // Default to needing customization for other items
-    return true;
-  };
-
+  // Helper function to render menu items
   const renderMenuItem = (item: MenuItem) => {
     // Helper function to get offer display text
     const getOfferDisplayText = () => {
@@ -507,228 +492,4 @@ export default function RestaurantPage() {
         </div>
       </div>
     );
-
   };
-
-  return (
-    <div className="bg-[#f8f9fa] min-h-svh pb-20">
-      {/* Dark overlay for navbar */}
-      <div className="fixed top-0 left-0 right-0 h-16 z-40 backdrop-blur-xs bg-linear-to-b from-black/60 via-black/40 to-transparent pointer-events-none"></div>
-      <CustomerNavbar />
-      
-      {/* Hero Section with Cover Image */}
-      <div className="relative h-[400px] md:h-[500px]">
-        <div className="absolute inset-0 bg-black/40 z-10"></div>
-        <Image 
-          src={restaurant?.profilePicture || restaurantData.coverImage || '/images/restaurant-placeholder.jpg'} 
-          alt={restaurant?.firstName || restaurantData.name} 
-          fill
-          className="object-cover object-center" 
-        />
-        
-        <div className="absolute top-4 left-4 z-20">
-          <Link 
-            href="/customer" 
-            className="bg-white/90 px-3 py-2 rounded-full shadow-md text-gray-700 hover:bg-white transition-colors flex items-center"
-          >
-            <ChevronLeft size={20} className="mr-1" />
-            <span className="font-medium">Back</span>
-          </Link>
-        </div>
-        
-        <button 
-          className={`absolute top-4 right-4 z-20 p-2 rounded-full shadow-md transition-colors ${liked ? 'bg-[#FF9800]/90 text-white' : 'bg-white/90 text-gray-700 hover:text-[#FF9800]'}`}
-          onClick={() => setLiked(!liked)}
-        >
-          <Heart size={24} className={liked ? 'fill-current' : ''} />
-        </button>
-        
-        <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{restaurant?.firstName || restaurantData.name}</h1>
-            <div className="flex flex-wrap items-center text-white/90 gap-x-4 gap-y-2 mb-2">
-              <div className="flex items-center">
-                <Star size={16} className="text-[#FFC107] mr-1" />
-                <span>{restaurant?.rating || restaurantData.rating} ({restaurantData.reviewCount || 0} reviews)</span>
-              </div>
-              <div className="flex items-center">
-                <Clock size={16} className="mr-1" />
-                <span>{restaurant?.averagePreparationTime || restaurantData.deliveryTime}</span>
-              </div>
-              <div className="flex items-center">
-                <Bike size={16} className="mr-1" />
-                <span>{restaurantData.deliveryFee} • {restaurant?.address || restaurantData.distance}</span>
-              </div>
-            </div>
-            <p className="text-white/90 text-sm md:text-base">{restaurant?.description || restaurantData.description || `${restaurant?.firstName || restaurantData.name} offers delicious ${restaurant?.cuisineType || 'cuisine'} for delivery.`}</p>
-          </div>
-        </div>
-      </div>
-      
-      <div className="max-w-4xl mx-auto px-4 py-6">
-
-        
-        {/* Order Again Section */}
-        {showOrderAgain && previousItems && previousItems.length > 0 && (
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <History size={20} className="text-[#4CAF50] mr-2" />
-                <h2 className="text-xl font-bold text-gray-900">Order Again</h2>
-              </div>
-              <div className="flex space-x-2">
-                <button 
-                  onClick={() => scrollOrderAgain('left')}
-                  className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-                <button 
-                  onClick={() => scrollOrderAgain('right')}
-                  className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-                >
-                  <ChevronRight size={20} />
-                </button>
-              </div>
-            </div>
-            
-            <div 
-              ref={orderAgainSliderRef}
-              className="flex overflow-x-auto pb-4 hide-scrollbar gap-4"
-            >
-              {previousItems.map((item: any, index: number) => (
-                <div key={`${item.id}-${index}`} className="shrink-0 w-48 bg-white rounded-xl shadow-xs overflow-hidden">
-                  <div className="relative h-32">
-                    <Image 
-                      src={item.image} 
-                      alt={item.name} 
-                      fill
-                      className="object-cover object-center" 
-                    />
-                  </div>
-                  <div className="p-3">
-                    <h3 className="font-medium text-gray-900 truncate">{item.name}</h3>
-                    <div className="flex justify-between items-center mt-2">
-                      <span className="text-sm text-gray-500">{item.orderDate}</span>
-                      <button 
-                        onClick={() => addToCart(item.id)}
-                        className="bg-[#4CAF50] hover:bg-[#388E3C] text-white p-1 rounded-full"
-                      >
-                        <Plus size={16} />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        
-        {/* Menu Categories Navigation */}
-        <div className="sticky top-16 bg-white z-30 rounded-xl shadow-xs mb-6 overflow-hidden">
-          <div className="overflow-x-auto hide-scrollbar">
-            <div className="flex p-2 min-w-max">
-              {restaurantData.menuCategories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => scrollToCategory(category.id)}
-                  className={`px-4 py-2 mx-1 rounded-lg whitespace-nowrap ${activeCategory === category.id ? 'bg-[#4CAF50] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-        
-        {/* Restaurant Details Link */}
-        <div className="mb-6">
-          <Link
-            href={`/customer/restaurant/${restaurantId}/details`}
-            className="bg-white rounded-xl shadow-xs p-4 flex items-center justify-between w-full hover:shadow-md transition-shadow"
-          >
-            <div className="flex items-center">
-              <div className="bg-[#4CAF50]/10 p-3 rounded-full mr-3">
-                <MapPin className="h-6 w-6 text-[#4CAF50]" />
-              </div>
-              <div>
-                <h3 className="font-medium text-gray-900">Restaurant Details</h3>
-                <p className="text-sm text-gray-500">View location, hours, contact info and more</p>
-              </div>
-            </div>
-            <ArrowRight className="h-5 w-5 text-gray-400" />
-          </Link>
-        </div>
-        
-        {/* API Dishes Section */}
-        {!dishesLoading && !dishesError && Object.keys(dishCategories).length > 0 ? (
-          <div className="mb-8">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Menu</h2>
-            
-            {/* Category tabs */}
-            <div className="flex overflow-x-auto hide-scrollbar space-x-2 pb-4 mb-6">
-              {Object.keys(dishCategories).map((category) => (
-                <button
-                  key={category}
-                  onClick={() => setActiveCategory(category)}
-                  className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${activeCategory === category ? 'bg-[#4CAF50] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-            
-            {/* Display dishes for active category */}
-            {Object.keys(dishCategories).map((category) => (
-              <div key={category} className={`${activeCategory === category ? 'block' : 'hidden'}`}>
-                <h3 className="text-xl font-semibold text-gray-800 mb-4">{category}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {dishCategories[category].map((dish) => (
-                    <DishCard key={dish.id} dish={dish} />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : dishesLoading ? (
-          <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4CAF50]"></div>
-          </div>
-        ) : dishesError ? (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center mb-8">
-            <p className="text-red-600 mb-2">Unable to load menu items</p>
-            <p className="text-gray-600 text-sm">Please try again later</p>
-          </div>
-        ) : (
-          /* Fallback to static data if no API dishes */
-          <div>
-            {restaurantData.menuCategories.map((category) => (
-              <div key={category.id} id={category.id} className="mb-8 scroll-mt-24">
-                <h2 className="text-2xl font-bold text-gray-900 mb-4">{category.name}</h2>
-                {category.items.map((item) => renderMenuItem(item))}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      
-      {/* Cart Button */}
-      {getTotalItems() > 0 && (
-        <Link 
-          href="/customer/cart"
-          className="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-[#4CAF50] hover:bg-[#388E3C] text-white px-6 py-3 rounded-full text-lg font-medium transition-colors flex items-center shadow-lg w-11/12 max-w-md justify-between"
-        >
-          <div className="flex items-center">
-            <ShoppingBag size={20} className="mr-2" />
-            <span>{getTotalItems()} {getTotalItems() === 1 ? 'item' : 'items'}</span>
-          </div>
-          
-          <div className="flex items-center">
-            <span>{getCartTotal()}</span>
-            <ArrowRight size={20} className="ml-2" />
-          </div>
-        </Link>
-      )}
-    </div>
-  );
-}

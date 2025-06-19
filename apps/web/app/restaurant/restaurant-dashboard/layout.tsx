@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useParams, useRouter } from "next/navigation";
-import { Menu, Home, Calendar, BarChart2, Settings, LogOut, Bell, ChevronDown, Utensils, Users, MessageSquare, Loader2 } from "lucide-react";
+import { Menu, Home, Calendar, BarChart2, Settings, LogOut, Bell, ChevronDown, Utensils, Users, MessageSquare, ChevronRight, ChevronLeft, Loader2 } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -22,106 +22,64 @@ export default function RestaurantDashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  // Always declare all hooks at the top level, before any conditional logic
   const pathname = usePathname();
-  const { restaurantId } = useParams();
+  const params = useParams();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  
+  // Reset loading state when navigation completes
   useEffect(() => {
     setIsLoading(false);
   }, [pathname]);
-
-  const isActive = (path: string) => {
-    return pathname === path;
-  };
   
+  // Check if we're on a specific restaurant page
+  const isRestaurantSpecificPage = pathname.includes('/restaurant-dashboard/') && 
+                                  pathname !== '/restaurant-dashboard' && 
+                                  pathname !== '/restaurant-dashboard/';
+  
+  // Handle navigation with loading state
   const handleNavigation = (path: string) => {
     if (pathname !== path) {
       setIsLoading(true);
       router.push(path);
     }
   };
-
+  
+  // Navigation items for main dashboard
   const navItems = [
-    { name: "Dashboard", path: `/restaurant-dashboard/${restaurantId}`, icon: Home },
-    { name: "Orders", path: `/restaurant-dashboard/${restaurantId}/orders`, icon: Calendar },
-    { name: "Menu", path: `/restaurant-dashboard/${restaurantId}/menu`, icon: Utensils },
-    { name: "Analytics", path: `/restaurant-dashboard/${restaurantId}/analytics`, icon: BarChart2 },
-    { name: "Customers", path: `/restaurant-dashboard/${restaurantId}/customers`, icon: Users },
-    { name: "Reviews", path: `/restaurant-dashboard/${restaurantId}/reviews`, icon: MessageSquare },
-    /*{ name: "Settings", path: `/restaurant-dashboard/${restaurantId}/settings`, icon: Settings },*/
+    { name: "Restaurants", path: "/restaurant-dashboard", icon: Home },
   ];
 
-  const [restaurant, setRestaurant] = useState({ name: "Restaurant", cuisine: "Unknown", tags: [] as string[] });
-  const [isLoadingRestaurant, setIsLoadingRestaurant] = useState(true);
+  const isActive = (path: string) => {
+    return pathname === path;
+  };
 
-  useEffect(() => {
-    const fetchRestaurantData = async () => {
-      try {
-        // Get user info from localStorage (set during login)
-        const userInfo = localStorage.getItem('user');
-        let userId = restaurantId;
-        
-        // If we have user info and this is the current logged-in restaurant
-        if (userInfo) {
-          const user = JSON.parse(userInfo);
-          if (user.role === 'restaurant' && user.userId) {
-            userId = user.userId.toString();
-          }
-        }
-        
-        if (!userId) {
-          throw new Error('No restaurant ID available');
-        }
-        
-        const response = await fetch(`http://localhost:3002/api/restaurants/${userId}`);
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch restaurant data');
-        }
-        
-        const data = await response.json();
-        
-        // Set restaurant data
-        setRestaurant({
-          name: data.firstName || "Restaurant",
-          cuisine: data.tags && data.tags.length > 0 ? data.tags[0].charAt(0).toUpperCase() + data.tags[0].slice(1) : "Unknown",
-          tags: data.tags || []
-        });
-      } catch (err) {
-        console.error('Error fetching restaurant data:', err);
-        // Keep default values
-      } finally {
-        setIsLoadingRestaurant(false);
-      }
-    };
-    
-    fetchRestaurantData();
-  }, [restaurantId]);
+  // If we're on a specific restaurant page, just render the children
+  // as the restaurant-specific layout will handle the sidebar
+  if (isRestaurantSpecificPage) {
+    return children;
+  }
 
   return (
-    <div className="flex h-svh bg-gray-50 ">
+    <div className="flex h-svh bg-gray-50">
       {/* Sidebar */}
       <aside className={`bg-white shadow-xl h-full fixed lg:relative z-10 transition-all duration-300 ${sidebarOpen ? 'w-64' : 'w-0 lg:w-20 overflow-hidden'}`}>
         <div className="p-4 flex items-center justify-between border-b">
           {sidebarOpen ? (
-            <Link href="/" className="text-xl font-bold text-[#D55E00]">
+            <Link href="/" className="text-xl font-bold">
               <span className="text-gray-800">Food</span>
-              <span className="text-[#D55E00]">HUB</span>
+              <span className="text-[#D55E00]">You</span>
             </Link>
           ) : (
-            <Link href="/restaurant-dashboard" className="text-2xl font-bold text-[#D55E00]">FH</Link>
+            <Link href="/" className="text-2xl font-bold">
+              <span className="text-[#D55E00]">FY</span>
+            </Link>
           )}
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:block hidden">
             <Menu className="h-6 w-6 text-gray-500" />
           </button>
-        </div>
-        
-        {/* Restaurant Info */}
-        <div className={`p-4 border-b ${!sidebarOpen && 'hidden'}`}>
-          <h2 className="font-medium truncate">{restaurant.name}</h2>
-          <p className="text-xs text-gray-500">{restaurant.cuisine} Cuisine</p>
         </div>
         
         <nav className="p-4">
@@ -146,29 +104,34 @@ export default function RestaurantDashboardLayout({
               );
             })}
             
+            <li className="pt-6">
+              <button
+                onClick={() => handleNavigation("/")}
+                className="w-full flex items-center space-x-3 text-red-500 hover:bg-red-50 rounded-lg p-3 transition-colors"
+                disabled={isLoading}
+              >
+                {isLoading && pathname !== "/" ? (
+                  <Loader2 className="h-5 w-5 animate-spin text-red-500" />
+                ) : (
+                  <LogOut className="h-5 w-5" />
+                )}
+                {sidebarOpen && <span className="ml-3">Sign Out</span>}
+              </button>
+            </li>
           </ul>
         </nav>
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto ">
         {/* Header */}
         <header className="bg-white shadow-xs p-4 flex justify-between items-center">
           <button onClick={() => setSidebarOpen(!sidebarOpen)} className="lg:hidden block">
             <Menu className="h-6 w-6 text-gray-500" />
           </button>
-          <div className="relative w-full max-w-xl mx-4 hidden md:block">
-            <input 
-              type="text" 
-              placeholder="Search orders, menu items..." 
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#D55E00] focus:border-transparent"
-            />
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </div>
-          </div>
+          
+          <div className="flex-1"></div>
+          
           <div className="flex items-center space-x-4">
             <Button variant="outline" size="icon" className="relative h-10 w-10 rounded-full">
               <Bell className="h-5 w-5 text-gray-500" />
@@ -180,26 +143,23 @@ export default function RestaurantDashboardLayout({
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="icon" className="h-10 w-10 rounded-full p-0 overflow-hidden border-2 border-[#D55E00] hover:border-orange-600 transition-colors">
                   <Avatar>
-                    <AvatarFallback className="bg-orange-100 text-[#D55E00]">
-                      {restaurant.name.split(' ').map(word => word[0]).join('')}
-                    </AvatarFallback>
+                    <AvatarFallback className="bg-orange-100 text-[#D55E00]">AD</AvatarFallback>
                   </Avatar>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-64">
                 <DropdownMenuLabel>
-                  <p className="font-medium">{restaurant.name}</p>
-                  <p className="text-xs text-gray-500">Restaurant Admin</p>
+                  <p className="font-medium">Admin User</p>
+                  <p className="text-xs text-gray-500">Platform Admin</p>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link
-                    href={`/restaurant-dashboard/${restaurantId}/settings`}
-                    className="flex items-center w-full cursor-pointer"
-                  >
-                    <Settings className="h-4 w-4 mr-3 text-gray-500" />
-                    <span>Account</span>
-                  </Link>
+                <DropdownMenuItem>
+                  <Users className="h-4 w-4 mr-3 text-gray-500" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="h-4 w-4 mr-3 text-gray-500" />
+                  <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem variant="destructive">
