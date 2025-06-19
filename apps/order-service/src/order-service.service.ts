@@ -70,7 +70,6 @@ export class OrderServiceService {
     }
     
     order.deliveryId = deliveryId;
-    order.status = OrderStatus.ACCEPTED_DELIVERY;
     return this.orderRepository.save(order);
   }
 
@@ -118,13 +117,6 @@ export class OrderServiceService {
       throw new Error(`Invalid status transition from ${order.status} to ${newStatus}`);
     }
     
-    // If transitioning to ACCEPTED_DELIVERY, ensure deliveryPersonId is provided
-    if (newStatus === OrderStatus.ACCEPTED_DELIVERY) {
-      if (!deliveryPersonId) {
-        throw new Error('Delivery person ID is required when accepting an order for delivery');
-      }
-      order.deliveryId = deliveryPersonId;
-    }
     
     order.status = newStatus;
     return this.orderRepository.save(order);
@@ -136,8 +128,7 @@ export class OrderServiceService {
   private getValidStatusTransitions(currentStatus: OrderStatus): OrderStatus[] {
     const transitions = {
       [OrderStatus.CREATED]: [OrderStatus.ACCEPTED_RESTAURANT],
-      [OrderStatus.ACCEPTED_RESTAURANT]: [OrderStatus.ACCEPTED_DELIVERY],
-      [OrderStatus.ACCEPTED_DELIVERY]: [OrderStatus.PREPARING],
+      [OrderStatus.ACCEPTED_RESTAURANT]: [OrderStatus.PREPARING],
       [OrderStatus.PREPARING]: [OrderStatus.OUT_FOR_DELIVERY],
       [OrderStatus.OUT_FOR_DELIVERY]: [OrderStatus.DELIVERED],
       [OrderStatus.DELIVERED]: []

@@ -165,17 +165,6 @@ export class OrderServiceController {
     description: 'Order ID',
     example: '1'
   })
-  @ApiBody({
-    description: 'New status and optional delivery person ID',
-    schema: {
-      type: 'object',
-      properties: {
-        status: { type: 'string', enum: Object.values(OrderStatus), example: OrderStatus.ACCEPTED_DELIVERY },
-        deliveryPersonId: { type: 'number', example: 1, nullable: true }
-      },
-      required: ['status']
-    }
-  })
   @ApiResponse({ status: 200, description: 'Order status updated successfully' })
   @ApiResponse({ status: 400, description: 'Invalid status transition' })
   @ApiResponse({ status: 404, description: 'Order not found' })
