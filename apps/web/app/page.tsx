@@ -26,10 +26,10 @@ export default function Page() {
             />
             <div className="absolute inset-0 z-20 flex flex-col justify-center p-12 md:p-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                Find Your Place on Foodyou
+                Find Your Place on FoodHUB
               </h2>
               <p className="text-lg md:text-xl text-white/90 max-w-2xl">
-                Whether you want to eat, cook, or deliver, Foodyou welcomes everyone. Tap a card to get started!
+                Whether you want to eat, cook, or deliver, FoodHUB welcomes everyone. Tap a card to get started!
               </p>
             </div>
           </div>
@@ -110,13 +110,13 @@ export default function Page() {
               {
                 name: "Michael Chen",
                 role: "Foodie Enthusiast",
-                quote: "I've discovered so many amazing restaurants through Foodyou that I never knew existed in my neighborhood.",
+                quote: "I've discovered so many amazing restaurants through FoodHUB that I never knew existed in my neighborhood.",
                 avatar: "https://randomuser.me/api/portraits/men/32.jpg"
               },
               {
                 name: "Emily Rodriguez",
                 role: "Busy Professional",
-                quote: "As someone who works late, Foodyou has been a lifesaver. The variety of options and quick delivery is perfect.",
+                quote: "As someone who works late, FoodHUB has been a lifesaver. The variety of options and quick delivery is perfect.",
                 avatar: "https://randomuser.me/api/portraits/women/68.jpg"
               },
             ].map((testimonial, idx) => (
@@ -150,10 +150,10 @@ export default function Page() {
             {/* Text & Buttons */}
             <div className="flex-1 text-left">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                Download <span className="text-[#4CAF50]">Foodyou</span> App
+                Download <span className="text-[#4CAF50]">FoodHUB</span> App
               </h2>
               <p className="text-lg md:text-xl text-[#757575] mb-8 max-w-xl">
-                Get the full Foodyou experience on your phone. Order food, track deliveries, and earn rewards — all in one app.
+                Get the full FoodHUB experience on your phone. Order food, track deliveries, and earn rewards — all in one app.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 {/* App Store Button */}
@@ -188,7 +188,7 @@ export default function Page() {
             <div className="flex-1 flex justify-center">
               <img
                 src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80"
-                alt="Foodyou Mobile App Preview"
+                alt="FoodHUB Mobile App Preview"
                 className="max-w-xs w-full rounded-3xl shadow-2xl object-cover"
               />
             </div>

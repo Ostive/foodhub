@@ -53,7 +53,7 @@ export default function DeliverSignup() {
       {/* Navbar */}
       <nav className="bg-white shadow-xs py-4 px-6 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-[#0072B2]">FoodYou<span className="text-[#64B5F6]">Deliver</span></Link>
+          <Link href="/" className="text-2xl font-bold text-[#0072B2]">FoodHUB<span className="text-[#64B5F6]">Deliver</span></Link>
           <div className="flex items-center space-x-6">
             <Link href="/deliver" className="text-gray-600 hover:text-[#0072B2] transition-colors">Back to Deliver</Link>
             <Link href="/deliver/login" className="bg-[#0072B2] text-white px-5 py-2 rounded-full font-medium hover:bg-[#0d47a1] transition-colors">Sign In</Link>
@@ -339,11 +339,11 @@ export default function DeliverSignup() {
                       <div className="bg-blue-50 p-6 rounded-xl border border-blue-100">
                         <h3 className="font-medium text-gray-900 mb-3 text-lg">Terms of Service</h3>
                         <div className="h-48 overflow-y-auto text-sm text-gray-600 bg-white p-4 rounded-xl border border-gray-200 mb-4">
-                          <p className="mb-3">Welcome to FoodYou's Delivery Partner Agreement. By checking the box below, you agree to the following terms:</p>
+                          <p className="mb-3">Welcome to FoodHUB's Delivery Partner Agreement. By checking the box below, you agree to the following terms:</p>
                           <p className="mb-3">1. You confirm that you are at least 18 years old and legally allowed to work.</p>
                           <p className="mb-3">2. You agree to maintain your vehicle in good working condition.</p>
                           <p className="mb-3">3. You will deliver orders promptly and professionally.</p>
-                          <p className="mb-3">4. FoodYou is not responsible for traffic violations or accidents during deliveries.</p>
+                          <p className="mb-3">4. FoodHUB is not responsible for traffic violations or accidents during deliveries.</p>
                           <p className="mb-3">5. Payment processing will occur on a weekly basis.</p>
                           <p>6. Either party may terminate this agreement with 7 days written notice.</p>
                         </div>
@@ -390,7 +390,7 @@ export default function DeliverSignup() {
                     </div>
                     <h2 className="text-3xl font-bold text-gray-900 mb-4">Application Submitted!</h2>
                     <p className="text-lg text-gray-600 mb-8 max-w-md mx-auto">
-                      Thank you for applying to be a FoodYou delivery partner. We'll review your application and get back to you within 24-48 hours.
+                      Thank you for applying to be a FoodHUB delivery partner. We'll review your application and get back to you within 24-48 hours.
                     </p>
                     <div className="space-y-4">
                       <div className="bg-blue-50 p-4 rounded-xl">
@@ -445,7 +445,7 @@ export default function DeliverSignup() {
                   </div>
                 </div>
                 <div className="p-8 text-white">
-                  <h3 className="text-xl font-semibold mb-6">Why Join FoodYou?</h3>
+                  <h3 className="text-xl font-semibold mb-6">Why Join FoodHUB?</h3>
                   <div className="space-y-4">
                     {benefits.map((benefit, index) => {
                       const Icon = benefit.icon;
@@ -497,8 +497,8 @@ export default function DeliverSignup() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 px-4 mt-12">
         <div className="max-w-7xl mx-auto text-center">
-          <Link href="/" className="text-2xl font-bold text-white">FoodYou<span className="text-[#64B5F6]">Deliver</span></Link>
-          <p className="mt-2 text-gray-400 text-sm">u00a9 {new Date().getFullYear()} FoodYou. All rights reserved.</p>
+          <Link href="/" className="text-2xl font-bold text-white">FoodHUB<span className="text-[#64B5F6]">Deliver</span></Link>
+          <p className="mt-2 text-gray-400 text-sm">u00a9 {new Date().getFullYear()} FoodHUB. All rights reserved.</p>
           <div className="mt-4 flex justify-center space-x-6">
             <Link href="#" className="text-gray-400 hover:text-white transition-colors">Terms</Link>
             <Link href="#" className="text-gray-400 hover:text-white transition-colors">Privacy</Link>

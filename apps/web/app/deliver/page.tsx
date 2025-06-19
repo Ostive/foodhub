@@ -83,7 +83,7 @@ export default function DeliverPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 text-white z-10 mb-10 md:mb-0">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Deliver & Earn <br />On Your Terms</h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100">Join thousands of delivery partners making money on their own schedule with FoodYou.</p>
+            <p className="text-xl md:text-2xl mb-8 text-blue-100">Join thousands of delivery partners making money on their own schedule with FoodHUB.</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <Link href="/deliver/signup" className="bg-white text-[#0072B2] px-8 py-4 rounded-full font-bold hover:bg-blue-50 transition-colors text-center">
                 Start Earning Today
@@ -164,7 +164,7 @@ export default function DeliverPage() {
       <section className="py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Deliver with FoodYou?</h2>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Deliver with FoodHUB?</h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">Join thousands of delivery partners enjoying these benefits</p>
           </div>
           
@@ -222,7 +222,7 @@ export default function DeliverPage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">What Our Delivery Partners Say</h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Hear from people already delivering with FoodYou</p>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">Hear from people already delivering with FoodHUB</p>
           </div>
           
           <div className="bg-linear-to-r from-[#0072B2] to-[#64B5F6] rounded-3xl p-10 text-white relative overflow-hidden">
@@ -281,7 +281,7 @@ export default function DeliverPage() {
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center">
           <div className="md:w-1/2 mb-10 md:mb-0">
             <h2 className="text-4xl font-bold text-gray-900 mb-6">Download Our Delivery App</h2>
-            <p className="text-xl text-gray-600 mb-8">Get the FoodYou Delivery app and start earning today. Available for iOS and Android devices.</p>
+            <p className="text-xl text-gray-600 mb-8">Get the FoodHUB Delivery app and start earning today. Available for iOS and Android devices.</p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a href="#" className="bg-black text-white px-6 py-3 rounded-xl font-medium inline-flex items-center hover:bg-gray-800 transition-colors">
                 <svg className="h-8 w-8 mr-2" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -342,7 +342,7 @@ export default function DeliverPage() {
       <section className="py-20 px-4 bg-linear-to-r from-[#0072B2] to-[#64B5F6] text-white">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Start Your Journey?</h2>
-          <p className="text-xl text-blue-100 mb-10 max-w-3xl mx-auto">Join thousands of delivery partners already earning with FoodYou. Apply today and start delivering tomorrow.</p>
+          <p className="text-xl text-blue-100 mb-10 max-w-3xl mx-auto">Join thousands of delivery partners already earning with FoodHUB. Apply today and start delivering tomorrow.</p>
           <Link href="/deliver/signup" className="bg-white text-[#0072B2] px-10 py-4 rounded-full font-bold text-xl hover:bg-blue-50 transition-colors inline-block">
             Apply Now
           </Link>
@@ -353,7 +353,7 @@ export default function DeliverPage() {
       <footer className="bg-gray-900 text-white py-12 px-4">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <Link href="/" className="text-2xl font-bold text-white">FoodYou<span className="text-[#64B5F6]">Deliver</span></Link>
+            <Link href="/" className="text-2xl font-bold text-white">FoodHUB<span className="text-[#64B5F6]">Deliver</span></Link>
             <p className="mt-4 text-gray-400">Earn money delivering food on your own schedule with the leading food delivery platform.</p>
           </div>
           <div>
@@ -384,7 +384,7 @@ export default function DeliverPage() {
           </div>
         </div>
         <div className="max-w-7xl mx-auto mt-12 pt-8 border-t border-gray-800 text-center text-gray-500">
-          <p> {new Date().getFullYear()} FoodYou. All rights reserved.</p>
+          <p> {new Date().getFullYear()} FoodHUB. All rights reserved.</p>
         </div>
       </footer>
     </main>

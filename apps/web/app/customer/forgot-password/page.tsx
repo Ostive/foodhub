@@ -77,7 +77,7 @@ export default function ForgotPasswordPage() {
         <div className="mx-auto w-full max-w-sm lg:max-w-md">
           <div className="text-center mb-8">
             <Link href="/customer" className="inline-block">
-              <span className="text-4xl font-bold text-[#009E73]">Foodyou</span>
+              <span className="text-4xl font-bold text-[#009E73]">FoodHUB</span>
             </Link>
             <h2 className="mt-6 text-3xl font-extrabold text-gray-900">Reset your password</h2>
             <p className="mt-2 text-sm text-gray-600">

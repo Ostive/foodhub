@@ -55,7 +55,7 @@ export default function RestaurantSignup() {
             />
             <div className="relative z-10 flex flex-col justify-center items-center h-full text-white p-8">
               <h2 className="text-3xl font-bold mb-4">Join Our Restaurant Network</h2>
-              <p className="text-lg text-center">Grow your business and reach more hungry customers with FoodYou.</p>
+              <p className="text-lg text-center">Grow your business and reach more hungry customers with FoodHUB.</p>
             </div>
           </div>
 
@@ -258,11 +258,11 @@ export default function RestaurantSignup() {
                   <div className="bg-orange-50 p-4 rounded-lg border border-orange-100">
                     <h3 className="font-medium text-gray-900 mb-2">Terms of Service</h3>
                     <div className="h-40 overflow-y-auto text-sm text-gray-600 bg-white p-3 rounded border border-gray-200 mb-3">
-                      <p className="mb-2">Welcome to FoodYou's Restaurant Partner Agreement. By checking the box below, you agree to the following terms:</p>
+                      <p className="mb-2">Welcome to FoodHUB's Restaurant Partner Agreement. By checking the box below, you agree to the following terms:</p>
                       <p className="mb-2">1. You confirm that you are authorized to represent the restaurant in this agreement.</p>
                       <p className="mb-2">2. You agree to maintain accurate menu information and pricing.</p>
                       <p className="mb-2">3. You will prepare food in accordance with all applicable health and safety regulations.</p>
-                      <p className="mb-2">4. FoodYou will charge a commission on orders processed through our platform.</p>
+                      <p className="mb-2">4. FoodHUB will charge a commission on orders processed through our platform.</p>
                       <p className="mb-2">5. Payment processing will occur on a weekly basis.</p>
                       <p>6. Either party may terminate this agreement with 30 days written notice.</p>
                     </div>
