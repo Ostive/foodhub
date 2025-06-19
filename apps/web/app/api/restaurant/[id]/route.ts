@@ -52,7 +52,7 @@ export async function GET(
 // Update restaurant
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { restaurantId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const id = params.id;
@@ -95,7 +95,7 @@ export async function PUT(
 // Delete restaurant
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { restaurantId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const id = params.id;
