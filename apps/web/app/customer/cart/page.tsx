@@ -8,7 +8,7 @@ import { ChevronLeft, Minus, Plus, Trash2, CreditCard, Clock, MapPin, X, Search,
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import CustomerNavbar from "../_components/CustomerNavbar";
-import { getCart, addToCart, removeFromCart, updateCartItemQuantity, clearCart } from '@/lib/api/cart_storage';
+import { useCart } from '@/contexts/CartContext';
 
 
 const userId = "CUSTOMER_ID_CONNECTE"; // Remplace par l'id user actuel (venant du contexte ou session)
@@ -43,7 +43,8 @@ const addressSuggestions = [
 
 export default function CartPage() {
   const router = useRouter();
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const { cartItems, addToCart, removeFromCart, getItemQuantity, clearCart } = useCart();
+  const [formattedCartItems, setFormattedCartItems] = useState<CartItem[]>([]);
   const [deliveryAddress, setDeliveryAddress] = useState<DeliveryAddress>({
     address: "123 Main St, Apt 4B, New York, NY 10001",
     latitude: 40.7128,
@@ -58,6 +59,7 @@ export default function CartPage() {
   const [promoCode, setPromoCode] = useState<string>("");
   const [promoCodeApplied, setPromoCodeApplied] = useState<boolean>(false);
   const [discount, setDiscount] = useState<number>(0);
+  const [menuItems, setMenuItems] = useState<any[]>([]);
   
   // Mock address suggestions for testing
   const addressSuggestions = [
@@ -80,24 +82,60 @@ export default function CartPage() {
   const [mapCoordinates, setMapCoordinates] = useState<[number, number]>([-74.006, 40.7128]);
   const [addressFromMap, setAddressFromMap] = useState<string>("");
   
-  // Load mock cart data
+  // Fetch menu items for all restaurants that have items in the cart
   useEffect(() => {
-    // This would normally come from a context or state management library
-    setCartItems([
-      {
-        id: "margherita-pizza",
-        name: "Margherita Pizza",
-        type: 'dish',
-        price: "$12.99",
-        image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80",
-        quantity: 1,
-        restaurantId: "pizza-palace",
-        restaurantName: "Pizza Palace"
-      },
-      {
-        id: "pepperoni-pizza",
-        name: "Pepperoni Pizza",
-        type: 'dish',
+    const fetchMenuItems = async () => {
+      try {
+        // For now, we'll use mock data
+        // In a real app, we would fetch menu items from the API based on the restaurant IDs in the cart
+        setMenuItems([
+          {
+            id: "margherita-pizza",
+            name: "Margherita Pizza",
+            price: "$12.99",
+            image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80",
+            restaurantId: "pizza-palace",
+            restaurantName: "Pizza Palace"
+          },
+          {
+            id: "pepperoni-pizza",
+            name: "Pepperoni Pizza",
+            price: "$14.99",
+            image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80",
+            restaurantId: "pizza-palace",
+            restaurantName: "Pizza Palace"
+          },
+        ]);
+      } catch (error) {
+        console.error('Error fetching menu items:', error);
+      }
+    };
+    
+    fetchMenuItems();
+  }, []);
+  
+  // Format cart items with menu item details
+  useEffect(() => {
+    if (menuItems.length > 0) {
+      const items = Object.entries(cartItems).map(([itemId, quantity]) => {
+        const menuItem = menuItems.find(item => item.id === itemId);
+        if (!menuItem) return null;
+        
+        return {
+          id: itemId,
+          type: 'dish',
+          name: menuItem.name,
+          price: menuItem.price,
+          image: menuItem.image,
+          quantity: quantity,
+          restaurantId: menuItem.restaurantId,
+          restaurantName: menuItem.restaurantName
+        } as CartItem;
+      }).filter(Boolean) as CartItem[];
+      
+      setFormattedCartItems(items);
+    }
+  }, [cartItems, menuItems]);
         price: "$14.99",
         image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80",
         quantity: 2,
@@ -148,7 +186,6 @@ export default function CartPage() {
 
     if (response.ok) {
       clearCart();
-      setCartItems([]);
       const { orderId } = await response.json();
       router.push(`/customer/order-confirmed/${orderId}`);
     } else {
@@ -156,115 +193,35 @@ export default function CartPage() {
     }
   };
   
-  // These functions are already defined below, removing duplicates
+  const handleClearCart = () => {
+    clearCart();
+  };
   
-  
-
-
-  // Filter addresses when search query changes
-  useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredAddresses(addressSuggestions);
+  const handleQuantityChange = (id: string, newQuantity: number) => {
+    if (newQuantity === 0) {
+      // Remove item if quantity is 0
+      removeFromCart(id);
     } else {
-      const filtered = addressSuggestions.filter(addr => 
-        addr.address.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      setFilteredAddresses(filtered);
-    }
-  }, [searchQuery]);
-  
-  // Focus search input when modal opens
-  useEffect(() => {
-    if (showLocationModal && searchInputRef.current && selectionMethod === 'text') {
-      searchInputRef.current.focus();
-    }
-  }, [showLocationModal, selectionMethod]);
-  
-  // Initialize map when modal opens with map selection method
-  useEffect(() => {
-    if (showLocationModal && selectionMethod === 'map' && mapContainer.current) {
-      if (!map.current) {
-        // Initialize map
-        map.current = new maplibregl.Map({
-          container: mapContainer.current,
-          style: "https://tiles.openfreemap.org/styles/liberty",
-          center: [deliveryAddress.longitude || -74.006, deliveryAddress.latitude || 40.7128],
-          zoom: 14
-        });
-        
-        // Add navigation controls
-        map.current.addControl(new maplibregl.NavigationControl());
-        
-        // Add marker for current location
-        marker.current = new maplibregl.Marker({
-          color: '#009E73',
-          draggable: true
-        })
-          .setLngLat([deliveryAddress.longitude || -74.006, deliveryAddress.latitude || 40.7128])
-          .addTo(map.current);
-        
-        // Update coordinates when marker is dragged
-        marker.current.on('dragend', () => {
-          if (marker.current) {
-            const lngLat = marker.current.getLngLat();
-            setMapCoordinates([lngLat.lng, lngLat.lat]);
-            // Simulate reverse geocoding (in a real app, you would call a geocoding API)
-            setAddressFromMap(`Location at ${lngLat.lat.toFixed(4)}, ${lngLat.lng.toFixed(4)}`);
-          }
-        });
-        
-        // Allow clicking on map to move marker
-        map.current.on('click', (e) => {
-          if (marker.current) {
-            marker.current.setLngLat([e.lngLat.lng, e.lngLat.lat]);
-            setMapCoordinates([e.lngLat.lng, e.lngLat.lat]);
-            // Simulate reverse geocoding
-            setAddressFromMap(`Location at ${e.lngLat.lat.toFixed(4)}, ${e.lngLat.lng.toFixed(4)}`);
-          }
-        });
+      // Update quantity by removing and adding the correct number of times
+      const currentQuantity = getItemQuantity(id);
+      if (newQuantity > currentQuantity) {
+        // Add more items
+        for (let i = 0; i < newQuantity - currentQuantity; i++) {
+          addToCart(id);
+        }
+      } else {
+        // Remove items
+        for (let i = 0; i < currentQuantity - newQuantity; i++) {
+          removeFromCart(id);
+        }
       }
     }
-    
-    // Clean up on unmount
-    return () => {
-      if (map.current && selectionMethod === 'map') {
-        map.current.remove();
-        map.current = null;
-      }
-    };
-  }, [showLocationModal, selectionMethod, deliveryAddress.longitude, deliveryAddress.latitude]);
-  
-  const updateQuantity = (itemId: string, newQuantity: number, type: 'dish'|'menu') => {
-    if (newQuantity < 1) {
-      removeItem(itemId, type);
-      return;
-    }
-    setCartItems(prev => prev.map(item =>
-      (item.id === itemId && item.type === type) ? { ...item, quantity: newQuantity } : item
-    ));
-    updateCartItemQuantity(itemId, type, newQuantity); // <-- MAJ localStorage
   };
   
-  
-  const removeItem = (itemId: string, type: 'dish'|'menu') => {
-    setCartItems(prev => prev.filter(item => !(item.id === itemId && item.type === type)));
-    removeFromCart(itemId, type); // <-- MAJ localStorage
-  };
-  
-  const applyPromoCode = () => {
-    if (promoCode.toUpperCase() === "WELCOME10") {
-      setPromoCodeApplied(true);
-      setDiscount(getSubtotal() * 0.1); // 10% discount
-    } else {
-      setPromoCodeApplied(false);
-      setDiscount(0);
-    }
-  };
-  
-  const getSubtotal = () => {
-    return cartItems.reduce((sum, item) => {
-      const price = parseFloat(item.price.replace('$', ''));
-      return sum + (price * item.quantity);
+  const calculateSubtotal = () => {
+    return formattedCartItems.reduce((total, item) => {
+      const price = parseFloat(item.price.replace(/[^0-9.]/g, ''));
+      return total + (price * item.quantity);
     }, 0);
   };
   
@@ -273,13 +230,12 @@ export default function CartPage() {
   };
   
   const getTaxes = () => {
-    return getSubtotal() * 0.08; // 8% tax
+    return calculateSubtotal() * 0.08; // 8% tax
   };
   
   const getTotal = () => {
-    return getSubtotal() + getDeliveryFee() + getTaxes() - discount;
+    return calculateSubtotal() + getDeliveryFee() + getTaxes() - discount;
   };
-  
   
   const handleSelectAddress = (address: string, lat?: number, lng?: number) => {
     setDeliveryAddress({ 
@@ -321,7 +277,7 @@ export default function CartPage() {
     }
   };
   
-  if (cartItems.length === 0) {
+  if (formattedCartItems.length === 0) {
     return (
       <div className="bg-[#f8f9fa] min-h-svh">
         {/* Dark overlay for navbar */}
@@ -380,10 +336,10 @@ export default function CartPage() {
           {/* Cart Items */}
           <div className="lg:w-7/12">
             <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Order from {cartItems[0]?.restaurantName}</h2>
+              <h2 className="text-xl font-bold text-gray-900 mb-4">Order from {formattedCartItems[0]?.restaurantName}</h2>
               
               <div className="space-y-4">
-                {cartItems.map((item) => (
+                {formattedCartItems.map((item) => (
                   <div key={item.id} className="flex border-b border-gray-100 pb-4 last:border-0 last:pb-0">
                     <div className="w-20 h-20 rounded-lg overflow-hidden mr-4 shrink-0">
                       <Image 
