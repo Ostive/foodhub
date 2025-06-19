@@ -205,7 +205,12 @@ export default function RestaurantPage() {
   const [showMap, setShowMap] = useState(false);
   
   const [liked, setLiked] = useState(false);
-  const [showOrderAgain, setShowOrderAgain] = useState(restaurantData.previousOrders.length > 0);
+  const [showOrderAgain, setShowOrderAgain] = useState(false);
+  
+  // Update showOrderAgain when restaurantData changes
+  useEffect(() => {
+    setShowOrderAgain(restaurantData.previousOrders.length > 0);
+  }, [restaurantData.previousOrders.length]);
   
   const previousItems = getAllPreviousItems(restaurantData.previousOrders);
   
