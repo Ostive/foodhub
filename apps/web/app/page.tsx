@@ -53,7 +53,7 @@ export default function Page() {
             </a>
             {/* Restaurant */}
             <a
-              href="/restaurant-dashboard"
+              href="/restaurant/login"
               className="group flex flex-col items-center rounded-3xl overflow-visible shadow-2xl bg-white/90 border border-gray-100 hover:shadow-3xl transition-all cursor-pointer focus:outline-hidden focus:ring-4 focus:ring-[#D55E00] p-0"
               style={{ minHeight: '420px' }}
             >
