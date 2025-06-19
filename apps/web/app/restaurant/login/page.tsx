@@ -67,7 +67,7 @@ export default function DeliveryLoginPage() {
           <div className="text-center mb-8">
             <div className="flex items-center gap-3 mb-4">
               <Link
-                href="./"
+                href="/"
                 className="inline-flex items-center justify-center rounded-full p-2 hover:bg-gray-100 transition"
                 aria-label="Go back"
               >
