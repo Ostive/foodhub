@@ -19,7 +19,7 @@ export async function GET(
     
     // Forward the request to the restaurant service
     const restaurantServiceUrl = process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002';
-    const response = await fetch(`${restaurantServiceUrl}/restaurants/${id}`, {
+    const response = await fetch(`${restaurantServiceUrl}/api/restaurants/${id}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export async function GET(
 // Update restaurant
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { restaurantId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const id = params.id;
@@ -68,7 +68,7 @@ export async function PUT(
     
     // Forward the request to the restaurant service
     const restaurantServiceUrl = process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002';
-    const response = await fetch(`${restaurantServiceUrl}/restaurants/${id}`, {
+    const response = await fetch(`${restaurantServiceUrl}/api/restaurants/${id}`, {
       method: 'PUT',
       headers: {
         'Authorization': authHeader,
@@ -95,7 +95,7 @@ export async function PUT(
 // Delete restaurant
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { restaurantId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const id = params.id;
@@ -108,7 +108,7 @@ export async function DELETE(
     
     // Forward the request to the restaurant service
     const restaurantServiceUrl = process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002';
-    const response = await fetch(`${restaurantServiceUrl}/restaurants/${id}`, {
+    const response = await fetch(`${restaurantServiceUrl}/api/restaurants/${id}`, {
       method: 'DELETE',
       headers: {
         'Authorization': authHeader,

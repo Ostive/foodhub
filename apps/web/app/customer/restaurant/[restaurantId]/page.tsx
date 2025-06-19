@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { Star, Clock, Bike, Heart, ChevronLeft, ChevronRight, Search, Plus, Minus, ShoppingBag, History, ArrowRight, MapPin } from "lucide-react";
+import { Star, Clock, Bike, Heart, ChevronLeft, ChevronRight, Search, Plus, Minus, ShoppingBag, History, ArrowRight, MapPin, Store } from "lucide-react";
 import Link from "next/link";
 import CustomerNavbar from "../../_components/CustomerNavbar";
 import { useParams } from "next/navigation";
@@ -10,6 +10,10 @@ import { useParams } from "next/navigation";
 import restaurantsData from "../restaurantData";
 import type { MenuItem, MenuCategory } from "../restaurantData";
 import MapComponent from "./MapComponent";
+import { useRestaurantDetails } from "@/hooks/useRestaurantDetails";
+import { useRestaurantDishes, Dish } from "@/hooks/useRestaurantDishes";
+import DishCard from "../../_components/DishCard";
+
 
 interface CartItem {
   id: string;
@@ -27,12 +31,47 @@ const getAllPreviousItems = (previousOrders: any[]) => {
 };
 
 export default function RestaurantPage() {
-
   const params = useParams();
   const restaurantId = params.restaurantId as string;
+  
+  // Fetch restaurant details from API
+  const { restaurant, loading: restaurantLoading, error: restaurantError } = useRestaurantDetails(restaurantId);
+  
+  // Fetch restaurant dishes from API
+  const { dishes, loading: dishesLoading, error: dishesError } = useRestaurantDishes(restaurantId);
+  
+  // Group dishes by category
+  const [dishCategories, setDishCategories] = useState<{[key: string]: Dish[]}>({});
+  
+  useEffect(() => {
+    if (dishes && dishes.length > 0) {
+      const categorized: {[key: string]: Dish[]} = {};
+      
+      dishes.forEach(dish => {
+        const category = dish.category || 'Other';
+        if (!categorized[category]) {
+          categorized[category] = [];
+        }
+        categorized[category].push(dish);
+      });
+      
+      setDishCategories(categorized);
+    }
+  }, [dishes]);
 
-  // Check if restaurant exists in our data
-  if (!restaurantId || !restaurantsData[restaurantId]) {
+  // Check if restaurant exists in our data or is loading from API
+  if (restaurantLoading) {
+    return (
+      <div className="min-h-screen bg-linear-to-br from-white to-gray-50 flex flex-col">
+        <CustomerNavbar />
+        <div className="flex-1 flex items-center justify-center p-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4CAF50]"></div>
+        </div>
+      </div>
+    );
+  }
+  
+  if (restaurantError || !restaurant) {
     return (
       <div className="min-h-screen bg-linear-to-br from-white to-gray-50 flex flex-col">
         <CustomerNavbar />
@@ -131,14 +170,46 @@ export default function RestaurantPage() {
 
 
   // Get restaurant data - we can use non-null assertion here because we've already checked it exists
-  const restaurantData = restaurantsData[restaurantId]!;
+  const restaurantData = restaurantsData[restaurantId] || {
+    name: restaurant?.firstName || 'Restaurant',
+    rating: restaurant?.rating || 4.0,
+    ratingCount: 100,
+    deliveryTime: restaurant?.averagePreparationTime || '25-35 min',
+    deliveryFee: '5€',
+    image: restaurant?.profilePicture || '/images/restaurant-placeholder.jpg',
+    address: restaurant?.address || 'Address unavailable',
+    cuisineType: restaurant?.cuisineType || 'Various',
+    menuCategories: [],
+    previousOrders: [],
+  };
   
-  const [activeCategory, setActiveCategory] = useState<string>(restaurantData.menuCategories[0]?.id || "");
-  const [cartItems, setCartItems] = useState<{[key: string]: number}>({});
+  // State for menu categories
+  const [activeCategory, setActiveCategory] = useState<string>(
+    Object.keys(dishCategories)[0] || 
+    (restaurantData.menuCategories[0]?.name || 'Menu')
+  );
+  
+  // Update active category when dish categories are loaded
+  useEffect(() => {
+    if (Object.keys(dishCategories).length > 0) {
+      setActiveCategory(Object.keys(dishCategories)[0]);
+    }
+  }, [dishCategories]);
+  
+  const menuCategoriesRef = useRef<HTMLDivElement>(null);
+  
+  // State for cart
+  const [cartItems, setCartItems] = useState<Record<string, number>>({});
+  
+  // State for order again slider
+  const orderAgainSliderRef = useRef<HTMLDivElement>(null);
+  
+  // State for showing map
+  const [showMap, setShowMap] = useState(false);
+  
   const [liked, setLiked] = useState(false);
   const [showOrderAgain, setShowOrderAgain] = useState(restaurantData.previousOrders.length > 0);
   
-  const orderAgainSliderRef = useRef<HTMLDivElement>(null);
   const previousItems = getAllPreviousItems(restaurantData.previousOrders);
   
   const scrollToCategory = (categoryId: string) => {
@@ -447,8 +518,8 @@ export default function RestaurantPage() {
       <div className="relative h-[400px] md:h-[500px]">
         <div className="absolute inset-0 bg-black/40 z-10"></div>
         <Image 
-          src={restaurantData.coverImage} 
-          alt={restaurantData.name} 
+          src={restaurant?.profilePicture || restaurantData.coverImage || '/images/restaurant-placeholder.jpg'} 
+          alt={restaurant?.firstName || restaurantData.name} 
           fill
           className="object-cover object-center" 
         />
@@ -472,22 +543,22 @@ export default function RestaurantPage() {
         
         <div className="absolute bottom-0 left-0 right-0 p-6 z-20">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{restaurantData.name}</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">{restaurant?.firstName || restaurantData.name}</h1>
             <div className="flex flex-wrap items-center text-white/90 gap-x-4 gap-y-2 mb-2">
               <div className="flex items-center">
                 <Star size={16} className="text-[#FFC107] mr-1" />
-                <span>{restaurantData.rating} ({restaurantData.reviewCount} reviews)</span>
+                <span>{restaurant?.rating || restaurantData.rating} ({restaurantData.reviewCount || 0} reviews)</span>
               </div>
               <div className="flex items-center">
                 <Clock size={16} className="mr-1" />
-                <span>{restaurantData.deliveryTime}</span>
+                <span>{restaurant?.averagePreparationTime || restaurantData.deliveryTime}</span>
               </div>
               <div className="flex items-center">
                 <Bike size={16} className="mr-1" />
-                <span>{restaurantData.deliveryFee} u2022 {restaurantData.distance}</span>
+                <span>{restaurantData.deliveryFee} • {restaurant?.address || restaurantData.distance}</span>
               </div>
             </div>
-            <p className="text-white/90 text-sm md:text-base">{restaurantData.description}</p>
+            <p className="text-white/90 text-sm md:text-base">{restaurant?.description || restaurantData.description || `${restaurant?.firstName || restaurantData.name} offers delicious ${restaurant?.cuisineType || 'cuisine'} for delivery.`}</p>
           </div>
         </div>
       </div>
@@ -587,15 +658,56 @@ export default function RestaurantPage() {
           </Link>
         </div>
         
-        {/* Menu Categories */}
-        <div>
-          {restaurantData.menuCategories.map((category) => (
-            <div key={category.id} id={category.id} className="mb-8 scroll-mt-24">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">{category.name}</h2>
-              {category.items.map((item) => renderMenuItem(item))}
+        {/* API Dishes Section */}
+        {!dishesLoading && !dishesError && Object.keys(dishCategories).length > 0 ? (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Menu</h2>
+            
+            {/* Category tabs */}
+            <div className="flex overflow-x-auto hide-scrollbar space-x-2 pb-4 mb-6">
+              {Object.keys(dishCategories).map((category) => (
+                <button
+                  key={category}
+                  onClick={() => setActiveCategory(category)}
+                  className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${activeCategory === category ? 'bg-[#4CAF50] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+                >
+                  {category}
+                </button>
+              ))}
             </div>
-          ))}
-        </div>
+            
+            {/* Display dishes for active category */}
+            {Object.keys(dishCategories).map((category) => (
+              <div key={category} className={`${activeCategory === category ? 'block' : 'hidden'}`}>
+                <h3 className="text-xl font-semibold text-gray-800 mb-4">{category}</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {dishCategories[category].map((dish) => (
+                    <DishCard key={dish.id} dish={dish} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : dishesLoading ? (
+          <div className="flex justify-center items-center py-12">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4CAF50]"></div>
+          </div>
+        ) : dishesError ? (
+          <div className="bg-red-50 border border-red-200 rounded-xl p-6 text-center mb-8">
+            <p className="text-red-600 mb-2">Unable to load menu items</p>
+            <p className="text-gray-600 text-sm">Please try again later</p>
+          </div>
+        ) : (
+          /* Fallback to static data if no API dishes */
+          <div>
+            {restaurantData.menuCategories.map((category) => (
+              <div key={category.id} id={category.id} className="mb-8 scroll-mt-24">
+                <h2 className="text-2xl font-bold text-gray-900 mb-4">{category.name}</h2>
+                {category.items.map((item) => renderMenuItem(item))}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
       
       {/* Cart Button */}
