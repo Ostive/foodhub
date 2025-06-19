@@ -25,8 +25,8 @@ export class OrderServiceService {
     
     // Create a new order with proper typing
     const newOrder = new Order();
-    newOrder.customerId = parseInt(createOrderDto.userId);
-    newOrder.restaurantId = parseInt(createOrderDto.restaurantId);
+    newOrder.customerId = createOrderDto.userId;
+    newOrder.restaurantId = createOrderDto.restaurantId;
     newOrder.deliveryLocalisation = createOrderDto.deliveryAddress || '';
     newOrder.time = new Date();
     newOrder.cost = 0; // Will be calculated based on items
@@ -38,21 +38,21 @@ export class OrderServiceService {
   }
   
 
-  async updateOrder(id: string, updateOrderDto: UpdateOrderDto) {
+  async updateOrder(id: number, updateOrderDto: UpdateOrderDto) {
     const order = await this.orderRepository.findOneBy({ orderId: +id });
     if (!order) throw new NotFoundException('Order not found');
     Object.assign(order, updateOrderDto);
     return this.orderRepository.save(order);
   }
 
-  async getOrderById(id: string) {
+  async getOrderById(id: number) {
     const order = await this.orderRepository.findOneBy({ orderId: +id });
     if (!order) throw new NotFoundException('Order not found');
     return order;
   }
 
   // Général pour changer de statut
-  async changeStatus(orderId: string, status: OrderStatus) {
+  async changeStatus(orderId: number, status: OrderStatus) {
     const order = await this.orderRepository.findOneBy({ orderId: +orderId });
     if (!order) throw new NotFoundException('Order not found');
     order.status = status;
@@ -60,7 +60,7 @@ export class OrderServiceService {
   }
 
   // Spécifique pour acceptation par le livreur
-  async acceptDelivery(orderId: string, deliveryId: number) {
+  async acceptDelivery(orderId: number, deliveryId: number) {
     const order = await this.orderRepository.findOneBy({ orderId: +orderId });
     if (!order) throw new NotFoundException('Order not found');
     
@@ -108,7 +108,7 @@ export class OrderServiceService {
   /**
    * Update order status with validation for proper status transitions
    */
-  async updateOrderStatus(orderId: string, newStatus: OrderStatus, deliveryPersonId?: number): Promise<Order> {
+  async updateOrderStatus(orderId: number, newStatus: OrderStatus, deliveryPersonId?: number): Promise<Order> {
     const order = await this.orderRepository.findOneBy({ orderId: +orderId });
     if (!order) throw new NotFoundException(`Order with ID ${orderId} not found`);
     

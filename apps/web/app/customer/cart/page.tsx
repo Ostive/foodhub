@@ -10,6 +10,62 @@ import { useRouter } from "next/navigation";
 import CustomerNavbar from "../_components/CustomerNavbar";
 import { getCart, addToCart, removeFromCart, updateCartItemQuantity, clearCart } from '@/lib/api/cart_storage';
 
+
+const userId = "CUSTOMER_ID_CONNECTE"; // Remplace par l'id user actuel (venant du contexte ou session)
+
+const handleCheckout = async () => {
+  const cartItems = getCart();
+  if (cartItems.length === 0) {
+    alert("Votre panier est vide");
+    return;
+  }
+  
+  const orderPayload = {
+    customerId: userId,
+    restaurantId: cartItems[0].restaurantId,
+    cost: cartItems.reduce((sum, item) => sum + item.quantity * Number(item.price.replace(/[^\d.-]/g, '')), 0),
+    state: "pending",
+    items: cartItems.map(item => ({
+      id: item.id,
+      type: item.type,
+      quantity: item.quantity,
+    })),
+  };
+  
+  const response = await fetch('/api/orders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderPayload)
+  });
+
+  if (response.ok) {
+    clearCart();
+    setCartItems([]);
+    const { orderId } = await response.json();
+    router.push(`/customer/order-confirmed/${orderId}`);
+  } else {
+    alert("Erreur: commande non envoyée.");
+  }
+};
+
+
+  const response = await fetch('/api/orders', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(orderPayload)
+  });
+
+  if (response.ok) {
+    clearCart();
+    setCartItems([]);
+    // Rediriger vers une page par exemple
+    const { orderId } = await response.json();
+    router.push(`/customer/order-confirmed/${orderId}`);
+  } else {
+    alert("Erreur: commande non envoyée.");
+  }
+}
+
 interface CartItem {
   id: string;
   type: 'dish' | 'menu';
@@ -233,14 +289,6 @@ export default function CartPage() {
     return getSubtotal() + getDeliveryFee() + getTaxes() - discount;
   };
   
-  const handleCheckout = () => {
-    // In a real app, this would submit the order to an API
-    // For now, we'll simulate order creation and redirect to tracking
-    const orderId = cartItems[0]?.restaurantId === 'pizza-palace' ? 'order-456' : 'order-123';
-    router.push(`/customer/order-tracking/${orderId}`);
-    clearCart();
-    setCartItems([]);
-  };
   
   const handleSelectAddress = (address: string, lat?: number, lng?: number) => {
     setDeliveryAddress({ 
