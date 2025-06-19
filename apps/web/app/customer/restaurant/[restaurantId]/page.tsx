@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 
 import restaurantsData from "../restaurantData";
 import type { MenuItem, MenuCategory } from "../restaurantData";
-import MapComponent from "./MapComponent";
+import GeocodedMapComponent from "./GeocodedMapComponent";
 import { useRestaurantDetails } from "@/hooks/useRestaurantDetails";
 import { useRestaurantDishes, Dish } from "@/hooks/useRestaurantDishes";
 import DishCard from "../../_components/DishCard";
@@ -49,8 +49,28 @@ export default function RestaurantPage() {
   // Fetch restaurant details from API
   const { restaurant, loading: restaurantLoading, error: restaurantError } = useRestaurantDetails(restaurantId);
   
-  // Fetch restaurant dishes from API
+  // Fetch dishes for the restaurant
   const { dishes, loading: dishesLoading, error: dishesError } = useRestaurantDishes(restaurantId);
+  
+  // Adapter function to convert Dish to MenuItem type
+  const adaptDishToMenuItem = (dish: Dish): MenuItem => ({
+    id: String(dish.id),
+    name: dish.name,
+    description: dish.description,
+    price: `$${dish.price.toFixed(2)}`,
+    image: dish.image || 'https://via.placeholder.com/300',
+    popular: false,
+    vegetarian: dish.isVegetarian,
+    spicy: false,
+    customizationOptions: dish.ingredients ? {
+      ingredients: dish.ingredients.map(ingredient => ({
+        name: ingredient,
+        price: "$0.00",
+        default: true
+      }))
+    } : undefined,
+    offer: undefined
+  });
   
   // Get restaurant data with fallbacks
   const restaurantData = restaurantsData[restaurantId] || {
@@ -493,3 +513,218 @@ export default function RestaurantPage() {
       </div>
     );
   };
+  
+  // Main UI rendering
+  return (
+    <div className="min-h-screen bg-linear-to-br from-white to-gray-50 flex flex-col">
+      <CustomerNavbar />
+      
+      {/* Restaurant Hero Section */}
+      <div className="relative h-64 md:h-80 w-full">
+        <Image 
+          src={restaurantData.image} 
+          alt={restaurantData.name}
+          fill
+          className="object-cover brightness-90"
+          priority
+        />
+        
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+          <div className="flex justify-between items-end">
+            <div>
+              <h1 className="text-3xl font-bold text-white mb-2">{restaurantData.name}</h1>
+              <div className="flex items-center space-x-4 text-white">
+                <div className="flex items-center">
+                  <Star size={16} className="text-yellow-400 mr-1" />
+                  <span>{restaurantData.rating} ({restaurantData.reviewCount}+)</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock size={16} className="mr-1" />
+                  <span>{restaurantData.deliveryTime}</span>
+                </div>
+                <div className="flex items-center">
+                  <Bike size={16} className="mr-1" />
+                  <span>{restaurantData.deliveryFee}</span>
+                </div>
+              </div>
+            </div>
+            
+            <button 
+              onClick={() => setLiked(!liked)}
+              className={`p-2 rounded-full ${liked ? 'bg-red-500 text-white' : 'bg-white/20 text-white'}`}
+            >
+              <Heart size={20} fill={liked ? "currentColor" : "none"} />
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      {/* Restaurant Details and Menu */}
+      <div className="flex-1 max-w-6xl mx-auto w-full px-4 py-6">
+        {/* Order Again Section (if there are previous orders) */}
+        {previousItems.length > 0 && showOrderAgain && (
+          <div className="mb-8">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-900 flex items-center">
+                <History size={20} className="mr-2 text-[#4CAF50]" />
+                Order Again
+              </h2>
+              <div className="flex space-x-2">
+                <button 
+                  onClick={() => scrollOrderAgain('left')}
+                  className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700"
+                >
+                  <ChevronLeft size={20} />
+                </button>
+                <button 
+                  onClick={() => scrollOrderAgain('right')}
+                  className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700"
+                >
+                  <ChevronRight size={20} />
+                </button>
+                <button 
+                  onClick={() => setShowOrderAgain(false)}
+                  className="p-1 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            
+            <div 
+              ref={orderAgainSliderRef}
+              className="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide"
+            >
+              {previousItems.map((item, index) => (
+                <div key={`${item.id}-${index}`} className="flex-shrink-0 w-48 bg-white rounded-xl shadow-sm overflow-hidden">
+                  <div className="h-32 relative">
+                    <Image 
+                      src={item.image} 
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-3">
+                    <h3 className="font-medium text-gray-900 mb-1 truncate">{item.name}</h3>
+                    <p className="text-sm text-gray-500 mb-2">{item.price}</p>
+                    <button 
+                      onClick={() => addToCart(item.id)}
+                      className="w-full bg-[#4CAF50] hover:bg-[#388E3C] text-white text-sm py-1.5 rounded-lg transition-colors flex items-center justify-center"
+                    >
+                      <Plus size={16} className="mr-1" />
+                      Add Again
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        {/* Menu Categories Navigation */}
+        <div className="sticky top-16 bg-white z-10 border-b border-gray-200">
+          <div 
+            ref={menuCategoriesRef}
+            className="flex space-x-1 overflow-x-auto py-3 scrollbar-hide"
+          >
+            {Object.keys(dishCategories).map((category) => (
+              <button
+                key={category}
+                onClick={() => scrollToCategory(category)}
+                className={`px-4 py-2 rounded-full whitespace-nowrap text-sm font-medium transition-colors ${activeCategory === category ? 'bg-[#4CAF50] text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+        
+        {/* Restaurant Details Link */}
+        <div className="my-6">
+          <button 
+            onClick={() => setShowMap(!showMap)}
+            className="w-full bg-white rounded-xl shadow-sm p-4 flex justify-between items-center hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex items-center">
+              <div className="bg-[#4CAF50]/10 p-2 rounded-full mr-3">
+                <MapPin size={20} className="text-[#4CAF50]" />
+              </div>
+              <div className="text-left">
+                <h3 className="font-medium text-gray-900">Restaurant Details</h3>
+                <p className="text-sm text-gray-500">{restaurantData.address}</p>
+              </div>
+            </div>
+            <ChevronRight size={20} className="text-gray-400" />
+          </button>
+          
+          {/* Map Component (conditionally rendered) */}
+          {showMap && (
+            <div className="mt-4 bg-white rounded-xl shadow-sm overflow-hidden">
+              <div className="h-64 relative">
+                <GeocodedMapComponent address={restaurantData.address} />
+              </div>
+              <div className="p-4 border-t border-gray-100">
+                <div className="flex items-start mb-3">
+                  <Store size={18} className="text-[#4CAF50] mr-2 mt-0.5" />
+                  <div>
+                    <h4 className="font-medium text-gray-900">{restaurantData.name}</h4>
+                    <p className="text-sm text-gray-500">{restaurantData.cuisine}</p>
+                  </div>
+                </div>
+                <div className="flex items-start">
+                  <MapPin size={18} className="text-[#4CAF50] mr-2 mt-0.5" />
+                  <p className="text-sm text-gray-600">{restaurantData.address}</p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+        
+        {/* Dishes by Category */}
+        {dishesLoading ? (
+          <div className="py-8 flex justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4CAF50]"></div>
+          </div>
+        ) : dishesError ? (
+          <div className="py-8 text-center">
+            <div className="bg-red-50 p-4 rounded-xl inline-block mx-auto">
+              <p className="text-red-600">Failed to load menu items. Please try again later.</p>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-8 pb-24">
+            {Object.entries(dishCategories).map(([category, categoryDishes]) => (
+              <div key={category} id={category} className="scroll-mt-32">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">{category}</h2>
+                <div className="space-y-4">
+                  {categoryDishes.map((dish) => (
+                    <div key={dish.id} className="bg-white rounded-xl shadow-sm overflow-hidden">
+                      {renderMenuItem(adaptDishToMenuItem(dish))}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+      
+      {/* Cart Button (fixed at bottom) */}
+      {getTotalItems() > 0 && (
+        <div className="fixed bottom-0 left-0 right-0 p-4 flex justify-center bg-gradient-to-t from-white via-white to-transparent">
+          <Link 
+            href={`/customer/restaurant/${params.restaurantId}/cart`}
+            className="bg-[#4CAF50] hover:bg-[#388E3C] text-white py-3 px-6 rounded-full shadow-lg flex items-center justify-center transition-colors w-full max-w-md"
+          >
+            <ShoppingBag size={20} className="mr-2" />
+            <span className="font-medium">View Cart ({getTotalItems()} items)</span>
+            <span className="ml-auto font-bold">{getCartTotal()}</span>
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+}
