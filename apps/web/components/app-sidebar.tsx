@@ -40,16 +40,16 @@ const data = {
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
-    {
+    /*{
       title: "Dashboard",
       url: "../admin",
       icon: IconDashboard,
-    },
+    },*/
     {
       title: "APIs",
       url: "../admin/admin-api",
       icon: IconListDetails,
-    },
+    },/*
     {
       title: "Data Base",
       url: "../admin/admin-db",
@@ -59,16 +59,16 @@ const data = {
       title: "Visits",
       url: "../admin/admin-visit",
       icon: IconFolder,
-    },
+   },*/ 
     {
       title: "System",
       url: "../admin/admin-system",
-      icon: IconUsers,
+      icon: IconReport,
     },
     {
       title: "Components",
       url: "../admin/admin-component",
-      icon: IconUsers,
+      icon: IconFileWord,
     },
   ],
   navClouds: [
@@ -76,7 +76,7 @@ const data = {
       title: "Capture",
       icon: IconCamera,
       isActive: true,
-      url: "#",
+      url: "#", 
       items: [
         {
           title: "Active Proposals",

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 import { User } from '../../../libs/database/entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { CreateDeliveryPersonDto } from './dto/create-delivery-person.dto';
@@ -41,9 +41,23 @@ export class DeliverServiceService {
    * Get all delivery persons
    */
   async findAll(): Promise<User[]> {
-    return this.userRepository.find({
+    // Get users with delivery_person role
+    const deliveryPersons = await this.userRepository.find({
       where: { role: 'delivery_person' },
-      select: ['userId', 'firstName', 'lastName', 'email', 'phone', 'address', 'transport', 'profilePicture', 'rib']
+      select: ['userId', 'firstName', 'lastName', 'email', 'phone', 'address', 'transport', 'profilePicture', 'rib', 'role']
+    });
+    
+    // If we have delivery persons with the correct role, return them
+    if (deliveryPersons.length > 0) {
+      return deliveryPersons;
+    }
+    
+    // Otherwise, find users by email pattern (temporary solution until data is fixed)
+    return this.userRepository.find({
+      where: [
+        { email: ILike('%delivery_person%') }
+      ],
+      select: ['userId', 'firstName', 'lastName', 'email', 'phone', 'address', 'transport', 'profilePicture', 'rib', 'role']
     });
   }
 
@@ -51,25 +65,55 @@ export class DeliverServiceService {
    * Get delivery person by ID
    */
   async findOne(id: number): Promise<User> {
-    const driver = await this.userRepository.findOne({
+    // Try to find by ID and role first
+    const deliveryPerson = await this.userRepository.findOne({
       where: { userId: id, role: 'delivery_person' },
-      select: ['userId', 'firstName', 'lastName', 'email', 'phone', 'address', 'transport', 'profilePicture', 'rib']
+      select: ['userId', 'firstName', 'lastName', 'email', 'phone', 'address', 'transport', 'profilePicture', 'rib', 'role']
     });
 
-    if (!driver) {
-      throw new NotFoundException(`Delivery driver with ID ${id} not found`);
+    if (deliveryPerson) {
+      return deliveryPerson;
+    }
+    
+    // If not found, try to find by ID and email pattern
+    const userByEmail = await this.userRepository.findOne({
+      where: { 
+        userId: id,
+        email: ILike('%delivery_person%')
+      },
+      select: ['userId', 'firstName', 'lastName', 'email', 'phone', 'address', 'transport', 'profilePicture', 'rib', 'role']
+    });
+
+    if (userByEmail) {
+      return userByEmail;
     }
 
-    return driver;
+    throw new NotFoundException(`Delivery person with ID ${id} not found`);
   }
 
   /**
    * Update delivery person
    */
   async update(id: number, updateDto: UpdateDeliveryPersonDto): Promise<User> {
-    const deliveryPerson = await this.userRepository.findOne({
+    // Try to find by ID and role first
+    let deliveryPerson = await this.userRepository.findOne({
       where: { userId: id, role: 'delivery_person' }
     });
+
+    // If not found, try to find by ID and email pattern
+    if (!deliveryPerson) {
+      deliveryPerson = await this.userRepository.findOne({
+        where: { 
+          userId: id,
+          email: ILike('%delivery_person%')
+        }
+      });
+      
+      // If found by email, update the role to be correct
+      if (deliveryPerson) {
+        deliveryPerson.role = 'delivery_person';
+      }
+    }
 
     if (!deliveryPerson) {
       throw new NotFoundException(`Delivery person with ID ${id} not found`);
@@ -100,9 +144,20 @@ export class DeliverServiceService {
    * Delete delivery person
    */
   async remove(id: number): Promise<void> {
-    const deliveryPerson = await this.userRepository.findOne({
+    // Try to find by ID and role first
+    let deliveryPerson = await this.userRepository.findOne({
       where: { userId: id, role: 'delivery_person' }
     });
+
+    // If not found, try to find by ID and email pattern
+    if (!deliveryPerson) {
+      deliveryPerson = await this.userRepository.findOne({
+        where: { 
+          userId: id,
+          email: ILike('%delivery_person%')
+        }
+      });
+    }
 
     if (!deliveryPerson) {
       throw new NotFoundException(`Delivery person with ID ${id} not found`);
@@ -115,10 +170,22 @@ export class DeliverServiceService {
    * Get delivery person's orders
    */
   async findOrders(id: number): Promise<any[]> {
-    const deliveryPerson = await this.userRepository.findOne({
+    // Try to find by ID and role first
+    let deliveryPerson = await this.userRepository.findOne({
       where: { userId: id, role: 'delivery_person' },
       relations: ['deliveryOrders']
     });
+
+    // If not found, try to find by ID and email pattern
+    if (!deliveryPerson) {
+      deliveryPerson = await this.userRepository.findOne({
+        where: { 
+          userId: id,
+          email: ILike('%delivery_person%')
+        },
+        relations: ['deliveryOrders']
+      });
+    }
 
     if (!deliveryPerson) {
       throw new NotFoundException(`Delivery person with ID ${id} not found`);

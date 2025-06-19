@@ -20,9 +20,21 @@ export class OrderServiceService {
   }
 
   async createOrder(createOrderDto: CreateOrderDto) {
-  //   const newOrder = this.orderRepository.create(createOrderDto);
-  //   newOrder.status = OrderStatus.CREATED;
-  //   return this.orderRepository.save(newOrder);
+    // Generate a 6-digit verification code
+    const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // Create a new order with proper typing
+    const newOrder = new Order();
+    newOrder.customerId = parseInt(createOrderDto.userId);
+    newOrder.restaurantId = parseInt(createOrderDto.restaurantId);
+    newOrder.deliveryLocalisation = createOrderDto.deliveryAddress || '';
+    newOrder.time = new Date();
+    newOrder.cost = 0; // Will be calculated based on items
+    newOrder.status = OrderStatus.CREATED;
+    newOrder.verificationCode = verificationCode;
+    // Items will be handled separately
+    
+    return this.orderRepository.save(newOrder);
   }
   
 
@@ -51,7 +63,13 @@ export class OrderServiceService {
   async acceptDelivery(orderId: string, deliveryId: number) {
     const order = await this.orderRepository.findOneBy({ orderId: +orderId });
     if (!order) throw new NotFoundException('Order not found');
-    order.deleveryId = deliveryId;
+    
+    // Check if the order is in a valid state to be accepted by delivery person
+    if (order.status !== OrderStatus.ACCEPTED_RESTAURANT) {
+      throw new Error('Order must be accepted by restaurant before being accepted by delivery person');
+    }
+    
+    order.deliveryId = deliveryId;
     order.status = OrderStatus.ACCEPTED_DELIVERY;
     return this.orderRepository.save(order);
   }
@@ -64,6 +82,82 @@ export class OrderServiceService {
     if (restaurantId) {
       return this.orderRepository.find({ where: { restaurantId } });
     }
-    return this.orderRepository.find();
+    return this.orderRepository.find();}
+  
+  /**
+   * Get all orders assigned to a specific delivery person
+   */
+  async getDeliveryPersonOrders(deliveryPersonId: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { deliveryId: deliveryPersonId },
+      relations: ['customer', 'restaurant']
+    });
+  }
+
+  /**
+   * Get all orders available for delivery (accepted by restaurant but not yet assigned to a delivery person)
+   */
+  async getOrdersAvailableForDelivery(): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { status: OrderStatus.ACCEPTED_RESTAURANT },
+      relations: ['restaurant']
+    });
+  }
+
+  /**
+   * Update order status with validation for proper status transitions
+   */
+  async updateOrderStatus(orderId: string, newStatus: OrderStatus, deliveryPersonId?: number): Promise<Order> {
+    const order = await this.orderRepository.findOneBy({ orderId: +orderId });
+    if (!order) throw new NotFoundException(`Order with ID ${orderId} not found`);
+    
+    // Validate status transition
+    const validTransitions = this.getValidStatusTransitions(order.status);
+    if (!validTransitions.includes(newStatus)) {
+      throw new Error(`Invalid status transition from ${order.status} to ${newStatus}`);
+    }
+    
+    // If transitioning to ACCEPTED_DELIVERY, ensure deliveryPersonId is provided
+    if (newStatus === OrderStatus.ACCEPTED_DELIVERY) {
+      if (!deliveryPersonId) {
+        throw new Error('Delivery person ID is required when accepting an order for delivery');
+      }
+      order.deliveryId = deliveryPersonId;
+    }
+    
+    order.status = newStatus;
+    return this.orderRepository.save(order);
+  }
+
+  /**
+   * Helper method to determine valid status transitions
+   */
+  private getValidStatusTransitions(currentStatus: OrderStatus): OrderStatus[] {
+    const transitions = {
+      [OrderStatus.CREATED]: [OrderStatus.ACCEPTED_RESTAURANT],
+      [OrderStatus.ACCEPTED_RESTAURANT]: [OrderStatus.ACCEPTED_DELIVERY],
+      [OrderStatus.ACCEPTED_DELIVERY]: [OrderStatus.PREPARING],
+      [OrderStatus.PREPARING]: [OrderStatus.OUT_FOR_DELIVERY],
+      [OrderStatus.OUT_FOR_DELIVERY]: [OrderStatus.DELIVERED],
+      [OrderStatus.DELIVERED]: []
+    };
+    
+    return transitions[currentStatus] || [];
+  }
+  
+  /**
+   * Verify the delivery code provided by the customer
+   */
+  async verifyDeliveryCode(orderId: string, code: string): Promise<{ valid: boolean }> {
+    const order = await this.orderRepository.findOneBy({ orderId: +orderId });
+    
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
+    }
+    
+    // Check if the verification code matches
+    const isValid = order.verificationCode === code;
+    
+    return { valid: isValid };
   }
 }

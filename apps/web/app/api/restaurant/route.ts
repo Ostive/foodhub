@@ -26,7 +26,9 @@ export async function GET(request: NextRequest) {
     
     // Forward the request to the restaurant service
     const restaurantServiceUrl = process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002';
-    const url = `${restaurantServiceUrl}/restaurants${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+    const url = `${restaurantServiceUrl}/api/restaurants${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+    
+    console.log('Forwarding request to:', url);
     
     const response = await fetch(url, {
       method: 'GET',

@@ -34,6 +34,9 @@ export class Order {
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.CREATED })
   status: OrderStatus;
 
+  @Column({ type: 'varchar', length: 6, nullable: true })
+  verificationCode: string;
+
   // Relations utilisateurs, tous pointant vers User (mais différenciés par leur rôle l’app)
   @ManyToOne(() => User, user => user.customerOrders, { onDelete: 'SET NULL' })
   @JoinColumn({ name: 'customerId' })
