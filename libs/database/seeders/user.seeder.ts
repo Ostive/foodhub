@@ -56,9 +56,16 @@ export class UserSeeder {
           user.website = `https://${restaurantName.toLowerCase().replace(/\s+/g, '-')}.com`;
           user.rib = `FR76${faker.finance.accountNumber(18)}`;
           user.deliveryRadius = faker.number.int({ min: 5, max: 20 });
-          user.averagePreparationTime = faker.number.int({ min: 15, max: 60 });
+          // Format average preparation time as "20-30 min"
+          const minTime = faker.number.int({ min: 15, max: 25 });
+          const maxTime = faker.number.int({ min: 26, max: 45 });
+          user.averagePreparationTime = `${minTime}-${maxTime} min`;
+          
           user.minimumPurchase = faker.number.float({ min: 10, max: 30, fractionDigits: 2 });
           user.tags = [faker.helpers.arrayElement(['pizza', 'burger', 'sushi', 'pasta', 'dessert'])];
+          
+          // Set default restaurant picture
+          user.profilePicture = 'https://cwdaust.com.au/wpress/wp-content/uploads/2015/04/placeholder-restaurant.png';
         } else {
           user.firstName = faker.person.firstName();
           user.lastName = faker.person.lastName();
@@ -104,11 +111,19 @@ export class UserSeeder {
           user.website = faker.internet.url();
           user.rib = faker.finance.iban();
           user.deliveryRadius = faker.number.float({ min: 1, max: 20, fractionDigits: 1 });
-          user.averagePreparationTime = faker.number.int({ min: 10, max: 60 });
+          
+          // Format average preparation time as "20-30 min"
+          const minTime = faker.number.int({ min: 10, max: 25 });
+          const maxTime = faker.number.int({ min: 26, max: 45 });
+          user.averagePreparationTime = `${minTime}-${maxTime} min`;
+          
           user.minimumPurchase = faker.number.float({ min: 10, max: 50, fractionDigits: 2 });
           user.tags = ['italian', 'pizza', 'pasta', 'french', 'burger', 'sushi', 'vegan', 'dessert']
             .sort(() => 0.5 - Math.random())
             .slice(0, faker.number.int({ min: 1, max: 3 }));
+            
+          // Set default restaurant picture
+          user.profilePicture = 'https://cwdaust.com.au/wpress/wp-content/uploads/2015/04/placeholder-restaurant.png';
         }
         
         // Additional fields for delivery persons

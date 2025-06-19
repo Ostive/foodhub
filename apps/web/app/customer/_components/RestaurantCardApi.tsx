@@ -67,17 +67,11 @@ export default function RestaurantCardApi({ restaurant }: RestaurantCardApiProps
             <p className="text-sm text-gray-500 mb-2">{restaurant.cuisineType}</p>
           )}
           
-          <div className="flex justify-between items-center mb-2">
-            <div className="flex items-center text-sm text-gray-500">
-              <MapPin size={14} className="mr-1" />
-              <span className="truncate max-w-[150px]">{restaurant.address || "Address unavailable"}</span>
+          {restaurant.priceRange && (
+            <div className="flex items-center text-sm font-medium text-gray-900 mb-2">
+              <span>{restaurant.priceRange}</span>
             </div>
-            {restaurant.priceRange && (
-              <div className="flex items-center text-sm font-medium text-gray-900">
-                <span>{restaurant.priceRange}</span>
-              </div>
-            )}
-          </div>
+          )}
           
           <div className="flex justify-between items-center">
             <div className="flex items-center text-sm text-gray-500">

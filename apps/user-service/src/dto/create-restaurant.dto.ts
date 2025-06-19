@@ -120,9 +120,11 @@ export class CreateRestaurantDto {
   deliveryRadius: number;
 
   @IsNotEmpty({ message: 'Average preparation time is required' })
-  @IsNumber({}, { message: 'Average preparation time must be a number' })
-  @Min(0, { message: 'Average preparation time cannot be negative' })
-  averagePreparationTime: number;
+  @IsString({ message: 'Average preparation time must be a string' })
+  @Matches(/^\d+-\d+\s*min$/, {
+    message: 'Preparation time must be in format "20-30 min"',
+  })
+  averagePreparationTime: string;
 
   @IsNotEmpty({ message: 'Planning is required' })
   @ValidateNested()
