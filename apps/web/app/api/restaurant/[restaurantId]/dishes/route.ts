@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Restaurant Dishes API endpoint
@@ -10,11 +10,11 @@ import { NextResponse } from 'next/server';
 // Get all dishes for a restaurant
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { restaurantId: string } }
 ) {
   try {
-    const id = params.id;
-    const restaurantServiceUrl = process.env.RESTAURANT_SERVICE_URL;
+    const restaurantId = params.restaurantId;
+    const restaurantServiceUrl = process.env.RESTAURANT_SERVICE_URL || 'http://localhost:3002';
 
     if (!restaurantServiceUrl) {
       return NextResponse.json(
@@ -24,7 +24,7 @@ export async function GET(
     }
 
     // Forward the request to the restaurant service
-    const response = await fetch(`${restaurantServiceUrl}/api/restaurants/${id}/dishes`, {
+    const response = await fetch(`${restaurantServiceUrl}/api/restaurants/${restaurantId}/dishes`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

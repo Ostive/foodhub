@@ -184,10 +184,7 @@ export default function RestaurantPage() {
   };
   
   // State for menu categories
-  const [activeCategory, setActiveCategory] = useState<string>(
-    Object.keys(dishCategories)[0] || 
-    (restaurantData.menuCategories[0]?.name || 'Menu')
-  );
+  const [activeCategory, setActiveCategory] = useState<string>('Menu');
   
   // Update active category when dish categories are loaded
   useEffect(() => {
