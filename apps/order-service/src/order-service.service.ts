@@ -78,6 +78,7 @@ export class OrderServiceService {
     return this.orderRepository.find({ where: { status } });
   }
 
+  // Get all orders, optionally filtered by restaurant ID
   async getAllOrders(restaurantId?: number): Promise<Order[]> {
     if (restaurantId) {
       return this.orderRepository.find({ where: { restaurantId } });

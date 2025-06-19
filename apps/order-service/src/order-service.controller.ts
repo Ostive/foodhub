@@ -123,7 +123,7 @@ export class OrderServiceController {
   getOrdersByStatus(@Param('status') status: OrderStatus) {
     return this.orderServiceService.getOrdersByStatus(status);
   }
-
+    // Get all orders for a specific restaurant
     @ApiOperation({ summary: 'Get all orders' })
     @Get()
     async getOrders(@Query('restaurantId') restaurantId: number) {
