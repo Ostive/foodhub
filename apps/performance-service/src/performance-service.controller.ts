@@ -10,7 +10,7 @@ export class PerformanceServiceController {
     try {
       return await this.performanceServiceService.getPerformanceMetrics();
     } catch (error) {
-      console.error('❌ Error in PerformanceServiceController:', error);
+      console.error('Error in PerformanceServiceController:', error);
       throw error;
     }
   }

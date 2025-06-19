@@ -108,13 +108,13 @@ export class PerformanceServiceService {
         if (result.status === 'fulfilled') {
           results.push(result.value);
         } else {
-          console.warn('⚠️ Failed to retrieve container stats:', result.reason);
+          console.warn('Failed to retrieve container stats:', result.reason);
         }
       }
 
       return results;
     } catch (err) {
-      console.error('🔥 Error in getPerformanceMetrics:', err.stack || err.message || err);
+      console.error('Error in getPerformanceMetrics:', err.stack || err.message || err);
       throw new Error('Unable to retrieve performance metrics');
       
     }
