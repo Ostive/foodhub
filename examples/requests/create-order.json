@@ -33,3 +33,16 @@
     "promoCode": "SUMMER2025"
   }
 }
+
+{
+  "orderId": 3,
+  "customerId": 3,
+  "restaurantId": 20,
+  "deliveryId": null,
+  "promoId": null,
+  "deliveryLocalisation": "123 Main St, Anytown, AN 12345",
+  "time": "2025-06-19T00:52:18.422Z",
+  "cost": 0,
+  "status": "created",
+  "verificationCode": "353294"
+}
