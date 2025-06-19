@@ -35,7 +35,7 @@ export class OrderServiceController {
   @ApiResponse({ status: 404, description: 'Order not found' })
   @Put(':id')
   updateOrder(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.orderServiceService.updateOrder(id, updateOrderDto);
+    return this.orderServiceService.updateOrder(+id, updateOrderDto);
   }
 
   @ApiOperation({ summary: 'Get an order by ID' })
@@ -44,7 +44,7 @@ export class OrderServiceController {
   @ApiResponse({ status: 404, description: 'Order not found' })
   @Get(':id')
   getOrderById(@Param('id') id: string) {
-    return this.orderServiceService.getOrderById(id);
+    return this.orderServiceService.getOrderById(+id);
   }
   
   @ApiOperation({ summary: 'Accept order by restaurant' })
@@ -54,7 +54,7 @@ export class OrderServiceController {
   @ApiResponse({ status: 400, description: 'Invalid status change' })
   @Patch(':id/accept-restaurant')
   acceptByRestaurant(@Param('id') id: string) {
-    return this.orderServiceService.changeStatus(id, OrderStatus.ACCEPTED_RESTAURANT);
+    return this.orderServiceService.changeStatus(+id, OrderStatus.ACCEPTED_RESTAURANT);
   }
 
   @ApiOperation({ summary: 'Accept order by delivery person' })
@@ -73,7 +73,7 @@ export class OrderServiceController {
   @ApiResponse({ status: 400, description: 'Invalid status change or missing delivery ID' })
   @Patch(':id/accept-delivery')
   acceptByDelivery(@Param('id') id: string, @Body() body: { deliveryId: number }) {
-    return this.orderServiceService.acceptDelivery(id, body.deliveryId); 
+    return this.orderServiceService.acceptDelivery(+id, body.deliveryId); 
   }
 
   @ApiOperation({ summary: 'Set order status to preparing' })
@@ -83,7 +83,7 @@ export class OrderServiceController {
   @ApiResponse({ status: 400, description: 'Invalid status change' })
   @Patch(':id/preparing')
   setPreparing(@Param('id') id: string) {
-    return this.orderServiceService.changeStatus(id, OrderStatus.PREPARING);
+    return this.orderServiceService.changeStatus(+id, OrderStatus.PREPARING);
   }
 
   @ApiOperation({ summary: 'Set order status to out for delivery' })
@@ -93,7 +93,7 @@ export class OrderServiceController {
   @ApiResponse({ status: 400, description: 'Invalid status change' })
   @Patch(':id/out-for-delivery')
   setOutForDelivery(@Param('id') id: string) {
-    return this.orderServiceService.changeStatus(id, OrderStatus.OUT_FOR_DELIVERY);
+    return this.orderServiceService.changeStatus(+id, OrderStatus.OUT_FOR_DELIVERY);
   }
 
   @ApiOperation({ summary: 'Set order status to delivered' })
@@ -103,7 +103,7 @@ export class OrderServiceController {
   @ApiResponse({ status: 400, description: 'Invalid status change' })
   @Patch(':id/delivered')
   setDelivered(@Param('id') id: string) {
-    return this.orderServiceService.changeStatus(id, OrderStatus.DELIVERED);
+    return this.orderServiceService.changeStatus(+id, OrderStatus.DELIVERED);
   }
 
   @ApiOperation({ summary: 'Get orders by status' })
@@ -165,17 +165,6 @@ export class OrderServiceController {
     description: 'Order ID',
     example: '1'
   })
-  @ApiBody({
-    description: 'New status and optional delivery person ID',
-    schema: {
-      type: 'object',
-      properties: {
-        status: { type: 'string', enum: Object.values(OrderStatus), example: OrderStatus.ACCEPTED_DELIVERY },
-        deliveryPersonId: { type: 'number', example: 1, nullable: true }
-      },
-      required: ['status']
-    }
-  })
   @ApiResponse({ status: 200, description: 'Order status updated successfully' })
   @ApiResponse({ status: 400, description: 'Invalid status transition' })
   @ApiResponse({ status: 404, description: 'Order not found' })
@@ -184,7 +173,7 @@ export class OrderServiceController {
     @Param('id') id: string,
     @Body() body: { status: OrderStatus; deliveryPersonId?: number }
   ) {
-    return this.orderServiceService.updateOrderStatus(id, body.status, body.deliveryPersonId);
+    return this.orderServiceService.updateOrderStatus(+id, body.status, body.deliveryPersonId);
   }
 
   @ApiOperation({ summary: 'Verify delivery code' })

@@ -25,8 +25,8 @@ export class OrderServiceService {
     
     // Create a new order with proper typing
     const newOrder = new Order();
-    newOrder.customerId = parseInt(createOrderDto.userId);
-    newOrder.restaurantId = parseInt(createOrderDto.restaurantId);
+    newOrder.customerId = createOrderDto.userId;
+    newOrder.restaurantId = createOrderDto.restaurantId;
     newOrder.deliveryLocalisation = createOrderDto.deliveryAddress || '';
     newOrder.time = new Date();
     newOrder.cost = 0; // Will be calculated based on items
@@ -38,21 +38,21 @@ export class OrderServiceService {
   }
   
 
-  async updateOrder(id: string, updateOrderDto: UpdateOrderDto) {
+  async updateOrder(id: number, updateOrderDto: UpdateOrderDto) {
     const order = await this.orderRepository.findOneBy({ orderId: +id });
     if (!order) throw new NotFoundException('Order not found');
     Object.assign(order, updateOrderDto);
     return this.orderRepository.save(order);
   }
 
-  async getOrderById(id: string) {
+  async getOrderById(id: number) {
     const order = await this.orderRepository.findOneBy({ orderId: +id });
     if (!order) throw new NotFoundException('Order not found');
     return order;
   }
 
   // Général pour changer de statut
-  async changeStatus(orderId: string, status: OrderStatus) {
+  async changeStatus(orderId: number, status: OrderStatus) {
     const order = await this.orderRepository.findOneBy({ orderId: +orderId });
     if (!order) throw new NotFoundException('Order not found');
     order.status = status;
@@ -60,7 +60,7 @@ export class OrderServiceService {
   }
 
   // Spécifique pour acceptation par le livreur
-  async acceptDelivery(orderId: string, deliveryId: number) {
+  async acceptDelivery(orderId: number, deliveryId: number) {
     const order = await this.orderRepository.findOneBy({ orderId: +orderId });
     if (!order) throw new NotFoundException('Order not found');
     
@@ -70,7 +70,6 @@ export class OrderServiceService {
     }
     
     order.deliveryId = deliveryId;
-    order.status = OrderStatus.ACCEPTED_DELIVERY;
     return this.orderRepository.save(order);
   }
 
@@ -78,6 +77,7 @@ export class OrderServiceService {
     return this.orderRepository.find({ where: { status } });
   }
 
+  // Get all orders, optionally filtered by restaurant ID
   async getAllOrders(restaurantId?: number): Promise<Order[]> {
     if (restaurantId) {
       return this.orderRepository.find({ where: { restaurantId } });
@@ -107,7 +107,7 @@ export class OrderServiceService {
   /**
    * Update order status with validation for proper status transitions
    */
-  async updateOrderStatus(orderId: string, newStatus: OrderStatus, deliveryPersonId?: number): Promise<Order> {
+  async updateOrderStatus(orderId: number, newStatus: OrderStatus, deliveryPersonId?: number): Promise<Order> {
     const order = await this.orderRepository.findOneBy({ orderId: +orderId });
     if (!order) throw new NotFoundException(`Order with ID ${orderId} not found`);
     
@@ -117,13 +117,6 @@ export class OrderServiceService {
       throw new Error(`Invalid status transition from ${order.status} to ${newStatus}`);
     }
     
-    // If transitioning to ACCEPTED_DELIVERY, ensure deliveryPersonId is provided
-    if (newStatus === OrderStatus.ACCEPTED_DELIVERY) {
-      if (!deliveryPersonId) {
-        throw new Error('Delivery person ID is required when accepting an order for delivery');
-      }
-      order.deliveryId = deliveryPersonId;
-    }
     
     order.status = newStatus;
     return this.orderRepository.save(order);
@@ -135,8 +128,7 @@ export class OrderServiceService {
   private getValidStatusTransitions(currentStatus: OrderStatus): OrderStatus[] {
     const transitions = {
       [OrderStatus.CREATED]: [OrderStatus.ACCEPTED_RESTAURANT],
-      [OrderStatus.ACCEPTED_RESTAURANT]: [OrderStatus.ACCEPTED_DELIVERY],
-      [OrderStatus.ACCEPTED_DELIVERY]: [OrderStatus.PREPARING],
+      [OrderStatus.ACCEPTED_RESTAURANT]: [OrderStatus.PREPARING],
       [OrderStatus.PREPARING]: [OrderStatus.OUT_FOR_DELIVERY],
       [OrderStatus.OUT_FOR_DELIVERY]: [OrderStatus.DELIVERED],
       [OrderStatus.DELIVERED]: []

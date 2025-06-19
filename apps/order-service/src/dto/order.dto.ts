@@ -5,11 +5,10 @@ export class OrderItemDto {
   @ApiProperty({
     description: 'ID of the menu item',
     example: '123e4567-e89b-12d3-a456-426614174002',
-    format: 'uuid'
+    format: 'id'
   })
   @IsNotEmpty()
-  @IsUUID()
-  itemId: string;
+  itemId: number;
 
   @ApiProperty({
     description: 'Quantity of the item',
@@ -34,20 +33,18 @@ export class CreateOrderDto {
   @ApiProperty({
     description: 'ID of the user placing the order',
     example: '123e4567-e89b-12d3-a456-426614174000',
-    format: 'uuid'
+    format: 'id'
   })
   @IsNotEmpty()
-  @IsUUID()
-  userId: string;
+  userId: number;
 
   @ApiProperty({
     description: 'ID of the restaurant the order is placed with',
     example: '123e4567-e89b-12d3-a456-426614174001',
-    format: 'uuid'
+    format: 'id'
   })
   @IsNotEmpty()
-  @IsUUID()
-  restaurantId: string;
+  restaurantId: number;
 
   @ApiProperty({
     description: 'Array of items in the order',

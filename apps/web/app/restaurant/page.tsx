@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowRight, Eye, EyeOff, AlertCircle, ArrowLeft } from "lucide-react";
+import { addToCart } from '@/lib/api/cart_storage'; 
 
 export default function DeliveryLoginPage() {
   const router = useRouter();
