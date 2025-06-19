@@ -12,7 +12,7 @@ export default function DeliverPage() {
     {
       name: "James Wilson",
       role: "Delivery Partner - 2 years",
-      quote: "I love the flexibility of delivering with Food'EM. I can work around my college schedule and still make great money.",
+      quote: "I love the flexibility of delivering with FoodHUB. I can work around my college schedule and still make great money.",
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
       rating: 5
     },
@@ -55,9 +55,9 @@ export default function DeliverPage() {
   return (
     <main className="min-h-svh bg-white">
       {/* Navbar */}
-      <nav className="bg-white shadow-xs py-4 px-6 sticky top-0 z-10">
+      <nav className="bg-white shadow-xs py-4 px-6 sticky top-0 z-20">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/" className="text-2xl font-bold text-[#0072B2]">Food'EM</Link>
+          <Link href="/" className="text-2xl font-bold text-[#0072B2]">FoodHUB</Link>
           <div className="flex items-center space-x-6">
             <Link href="/" className="text-gray-600 hover:text-[#0072B2] transition-colors">Home</Link>
             <Link href="#earnings" className="text-gray-600 hover:text-[#0072B2] transition-colors">Earnings</Link>
@@ -93,7 +93,7 @@ export default function DeliverPage() {
               </Link>
             </div>
           </div>
-          <div className="md:w-1/2 relative z-10">
+          <div className="md:w-1/2 relative ">
             <div className="relative h-[400px] w-full md:w-[500px] mx-auto">
               <Image 
                 src="https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=800&q=80" 
@@ -161,7 +161,7 @@ export default function DeliverPage() {
       </section>
 
       {/* Benefits Section */}
-      <section className="py-20 px-4">
+      <section className="relative z-0 py-20 px-4">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Deliver with FoodHUB?</h2>
@@ -197,7 +197,7 @@ export default function DeliverPage() {
             {/* Connecting Line */}
             <div className="absolute top-1/2 left-0 right-0 h-1 bg-blue-200 -translate-y-1/2 hidden md:block"></div>
             
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative z-10">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
               {steps.map((step, index) => (
                 <div key={index} className="bg-white rounded-2xl shadow-lg p-8 text-center relative">
                   <div className="w-12 h-12 bg-[#0072B2] text-white rounded-full flex items-center justify-center text-xl font-bold mx-auto mb-6">
@@ -237,7 +237,7 @@ export default function DeliverPage() {
               </defs>
             </div>
             
-            <div className="relative z-10">
+            <div className="relative ">
               <div className="flex flex-col md:flex-row items-center">
                 <div className="md:w-1/3 mb-8 md:mb-0 flex justify-center">
                   <div className="relative">

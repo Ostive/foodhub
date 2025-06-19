@@ -57,7 +57,7 @@ export default function CustomerNavbarNew() {
           width={30}
           height={30}
         />
-        <span className="font-display text-3xl font-bold text-[#4CAF50]">
+        <span className="font-display text-3xl font-bold text-[#009e73]">
           FoodHUB
         </span>
       </Link>

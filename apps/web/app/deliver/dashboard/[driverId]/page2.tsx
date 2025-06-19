@@ -230,7 +230,7 @@ export default function DriverDashboard() {
       <header className="bg-white shadow-xs py-4 px-6 sticky top-0 z-10">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           <div className="flex items-center">
-            <Link href="/deliver" className="text-2xl font-bold text-[#1976d2]">Food'EM</Link>
+            <Link href="/deliver" className="text-2xl font-bold text-[#1976d2]">FoodHUB</Link>
             <span className="ml-2 text-sm bg-gray-100 text-gray-800 px-2 py-1 rounded-full">Driver</span>
           </div>
           

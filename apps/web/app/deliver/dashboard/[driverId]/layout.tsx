@@ -279,11 +279,11 @@ export default function DeliverDashboardLayout({
         }`}
       >
         <div className="p-4 flex items-center justify-between border-b">
-          <Link href="/" className="text-xl font-bold text-[#FF9800]">
+          <Link href="/" className="text-xl font-bold text-[#0072B2]">
             {sidebarOpen ? (
               <>
                 <span className="text-gray-800">Food</span>
-                <span className="text-[#FF9800]">HUB</span>
+                <span className="text-[#0072B2]">HUB</span>
               </>
             ) : (
               <>FH</>
@@ -304,8 +304,8 @@ export default function DeliverDashboardLayout({
                     onClick={() => handleNavigation(item.path)}
                     className={`w-full flex items-center space-x-3 rounded-lg p-3 transition-colors ${
                       isActive(item.path)
-                        ? "text-[#FF9800] bg-orange-50"
-                        : "text-gray-700 hover:bg-orange-50 hover:text-[#FF9800]"
+                        ? "text-[#0072B2] bg-orange-50"
+                        : "text-gray-700 hover:bg-orange-50 hover:text-[#0072B2]"
                     }`}
                     disabled={isLoading}
                   >
@@ -334,7 +334,7 @@ export default function DeliverDashboardLayout({
             <input
               type="text"
               placeholder="Search orders..."
-              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#FF9800] focus:border-transparent"
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-200 focus:outline-hidden focus:ring-2 focus:ring-[#0072B2] focus:border-transparent"
             />
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
               <svg
@@ -365,7 +365,7 @@ export default function DeliverDashboardLayout({
                 <Button
                   variant="outline"
                   size="icon"
-                  className="h-10 w-10 rounded-full p-0 overflow-hidden border-2 border-[#FF9800] hover:border-orange-600 transition-colors"
+                  className="h-10 w-10 rounded-full p-0 overflow-hidden border-2 border-[#0072B2] hover:border-orange-600 transition-colors"
                 >
                   <Image src={driver.image} alt={driver.name} width={40} height={40} />
                 </Button>
@@ -400,7 +400,7 @@ export default function DeliverDashboardLayout({
           {isLoading && (
             <div className="fixed inset-0 bg-white/50 backdrop-blur-xs flex items-center justify-center z-50">
               <div className="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
-                <Loader2 className="h-10 w-10 animate-spin text-[#FF9800]" />
+                <Loader2 className="h-10 w-10 animate-spin text-[#0072B2]" />
                 <p className="mt-4 text-gray-600">Loading...</p>
               </div>
             </div>

@@ -83,7 +83,7 @@ export default function DeliveryLoginPage() {
       {/* Header */}
       <header className="bg-white shadow-xs py-4 px-6">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <Link href="/deliver" className="text-2xl font-bold text-[#0072B2]">Food'EM</Link>
+          <Link href="/deliver" className="text-2xl font-bold text-[#0072B2]">FoodHUB</Link>
           <Link 
             href="/deliver/signup"
             className="text-[#0072B2] font-medium hover:underline"
@@ -179,7 +179,7 @@ export default function DeliveryLoginPage() {
       {/* Footer */}
       <footer className="bg-white py-4 px-6 border-t border-gray-200">
         <div className="max-w-7xl mx-auto text-center text-gray-500 text-sm">
-          &copy; {new Date().getFullYear()} Food'EM. All rights reserved.
+          &copy; {new Date().getFullYear()} FoodHUB. All rights reserved.
         </div>
       </footer>
     </div>
