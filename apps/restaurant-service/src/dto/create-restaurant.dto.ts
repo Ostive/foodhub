@@ -193,14 +193,16 @@ export class CreateRestaurantDto {
   deliveryRadius?: number;
 
   @ApiProperty({
-    description: 'Average food preparation time in minutes (optional)',
-    example: 30,
+    description: 'Average food preparation time range (e.g., "20-30 min")',
+    example: '20-30 min',
     required: false
   })
   @IsOptional()
-  @IsNumber()
-  @Type(() => Number)
-  averagePreparationTime?: number;
+  @IsString()
+  @Matches(/^\d+-\d+\s*min$/, {
+    message: 'Preparation time must be in format "20-30 min"',
+  })
+  averagePreparationTime?: string;
 
   @ApiProperty({
     description: 'Restaurant operating hours (optional)',

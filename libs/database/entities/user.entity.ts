@@ -63,8 +63,8 @@ export class User {
     @Column({ type: 'float' , nullable: true })
     deliveryRadius: number;   
 
-    @Column({ type: 'int' , nullable: true })
-    averagePreparationTime: number;   
+    @Column({ type: 'varchar', length: 20, nullable: true })
+    averagePreparationTime: string;
 
     @OneToMany(() => CreditCard, creditCard => creditCard.user)
     creditCards: CreditCard[];

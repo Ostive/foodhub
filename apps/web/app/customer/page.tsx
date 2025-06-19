@@ -3,16 +3,19 @@
 import CustomerNavbar from "./_components/CustomerNavbar";
 import OverlayCard from "./_components/OverlayCard";
 import RestaurantCard from "./_components/RestaurantCard";
+import RestaurantCardApi from "./_components/RestaurantCardApi";
 import SpecialOfferCard from "./_components/SpecialOfferCard"; // Import SpecialOfferCard
 import AddressSelectionModal from "./_components/AddressSelectionModal";
 import Image from "next/image";
-import { Search, MapPin, Filter, ChevronDown, Star, Clock, Percent, Heart, ShoppingBag, ArrowRight, TrendingUp, Award, Bookmark, Users, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, MapPin, Filter, ChevronDown, Star, Clock, Percent, Heart, ShoppingBag, ArrowRight, TrendingUp, Award, Bookmark, Users, ChevronLeft, ChevronRight, Store } from "lucide-react";
 import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import restaurantsData from "./restaurant/restaurantData";
-import { MenuItem, OfferType, Restaurant } from "./restaurant/restaurantData";
+import { MenuItem, OfferType, Restaurant as StaticRestaurant } from "./restaurant/restaurantData";
 import NavbarDemo from "../_components/topbar";
+import { useRestaurants } from "@/hooks/useRestaurants";
+import { Restaurant } from "@/hooks/useRestaurants";
 
 
 const categories = [
@@ -311,9 +314,9 @@ export default function CustomerPage() {
   const [isAddressModalOpen, setIsAddressModalOpen] = useState(false);
   const router = useRouter();
   
-  // All restaurants section state
-  const [allRestaurants, setAllRestaurants] = useState<Restaurant[]>([]);
-  const [visibleRestaurants, setVisibleRestaurants] = useState<Restaurant[]>([]);
+  // Static restaurants data for the original sections
+  const [staticRestaurants, setStaticRestaurants] = useState<StaticRestaurant[]>([]);
+  const [visibleStaticRestaurants, setVisibleStaticRestaurants] = useState<StaticRestaurant[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -321,12 +324,15 @@ export default function CustomerPage() {
   const allRestaurantsRef = useRef<HTMLDivElement>(null);
   const loadingRef = useRef<HTMLDivElement>(null);
   
+  // API restaurants data
+  const { restaurants: apiRestaurants, loading: apiLoading, error: apiError } = useRestaurants();
+  
   // Convert restaurantsData object to array for pagination
   useEffect(() => {
     const restaurantsArray = Object.values(restaurantsData);
-    setAllRestaurants(restaurantsArray);
+    setStaticRestaurants(restaurantsArray);
     // Initialize with first batch
-    setVisibleRestaurants(restaurantsArray.slice(0, restaurantsPerPage));
+    setVisibleStaticRestaurants(restaurantsArray.slice(0, restaurantsPerPage));
   }, []);
   
   // Intersection Observer for infinite scrolling
@@ -366,23 +372,23 @@ export default function CustomerPage() {
       const startIndex = (nextPage - 1) * restaurantsPerPage;
       const endIndex = startIndex + restaurantsPerPage;
       
-      if (startIndex >= allRestaurants.length) {
+      if (startIndex >= staticRestaurants.length) {
         setHasMore(false);
         setIsLoading(false);
         return;
       }
       
-      const nextBatch = allRestaurants.slice(startIndex, endIndex);
-      setVisibleRestaurants(prev => [...prev, ...nextBatch]);
+      const nextBatch = staticRestaurants.slice(startIndex, endIndex);
+      setVisibleStaticRestaurants(prev => [...prev, ...nextBatch]);
       setCurrentPage(nextPage);
       setIsLoading(false);
       
       // Check if we've loaded all restaurants
-      if (endIndex >= allRestaurants.length) {
+      if (endIndex >= staticRestaurants.length) {
         setHasMore(false);
       }
     }, 800); // Simulate network delay
-  }, [currentPage, allRestaurants, isLoading, hasMore]);
+  }, [currentPage, staticRestaurants, isLoading, hasMore]);
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -754,63 +760,48 @@ export default function CustomerPage() {
             </div>
           </section>
 
-          {/* All Restaurants Section with Infinite Scrolling */}
+          {/* All Restaurants from API */}
           <section className="mb-12" ref={allRestaurantsRef}>
             <div className="flex justify-between items-center mb-6">
               <div className="flex items-center">
-                <Bookmark className="h-6 w-6 text-[#009E73] mr-2" />
+                <Store className="h-6 w-6 text-[#FF9800] mr-2" />
                 <h2 className="text-2xl font-bold text-gray-900">All Restaurants</h2>
               </div>
               <div className="flex items-center">
-                <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2">
-                  <span className="text-sm text-gray-700 mr-2">Showing {visibleRestaurants.length} of {allRestaurants.length}</span>
-                </div>
+                <Link href="/customer/all-restaurants" className="flex items-center text-[#009E73] hover:text-[#388E3C] mr-4 font-medium transition-colors">
+                  View All
+                  <ArrowRight className="h-4 w-4 ml-1" />
+                </Link>
               </div>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {visibleRestaurants.map((restaurant) => {
-                // Create an adapter object that matches the RestaurantCard props interface
-                const restaurantAdapter = {
-                  id: restaurant.id,
-                  name: restaurant.name,
-                  image: restaurant.image,
-                  rating: restaurant.rating,
-                  cuisine: restaurant.cuisine || "Various",
-                  delivery: restaurant.deliveryTime || "30-45 min",
-                  deliveryFee: restaurant.deliveryFee || "$1.99",
-                  distance: restaurant.distance || "1.5 mi",
-                  featured: false, // Default value since it's not in the Restaurant type
-                  reviewCount: restaurant.reviewCount,
-                  description: restaurant.description
-                };
+            {apiLoading ? (
+              <div className="flex justify-center items-center py-8">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#009E73]"></div>
+              </div>
+            ) : apiError ? (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                <p>Unable to load restaurants. Please try again later.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {apiRestaurants && apiRestaurants.slice(0, 6).map((restaurant) => (
+                  <RestaurantCardApi key={restaurant.userId} restaurant={restaurant} />
+                ))}
                 
-                return (
-                  <RestaurantCard key={restaurant.id} restaurant={restaurantAdapter} />
-                );
-              })}
-            </div>
-            
-            {/* Loading indicator and intersection observer target */}
-            <div ref={loadingRef} className="mt-8 flex justify-center">
-              {isLoading ? (
-                <div className="flex flex-col items-center">
-                  <div className="w-12 h-12 rounded-full border-4 border-[#009E73]/20 border-t-[#009E73] animate-spin"></div>
-                  <p className="mt-4 text-gray-600">Loading more restaurants...</p>
-                </div>
-              ) : hasMore ? (
-                <button 
-                  onClick={loadMoreRestaurants}
-                  className="bg-white hover:bg-gray-50 text-[#009E73] font-medium px-6 py-3 rounded-lg shadow-xs border border-gray-200 transition-all duration-300 flex items-center"
-                >
-                  Load More Restaurants
-                  <ChevronDown className="h-4 w-4 ml-2" />
-                </button>
-              ) : (
-                <p className="text-gray-600 py-4">You've reached the end of the list</p>
-              )}
-            </div>
+                {apiRestaurants && apiRestaurants.length === 0 && (
+                  <div className="col-span-full text-center py-8">
+                    <p className="text-gray-500">No restaurants found.</p>
+                  </div>
+                )}
+              </div>
+            )}
           </section>
+
+          {/* Loading indicator and intersection observer target for infinite scrolling */}
+          <div ref={loadingRef} className="mt-8 flex justify-center">
+            {/* This div is used as a target for intersection observer */}
+          </div>
         </div>
       </main>
       
