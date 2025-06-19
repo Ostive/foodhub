@@ -56,6 +56,13 @@ export default function RestaurantPage() {
   // Fetch dishes for the restaurant
   const { dishes, loading: dishesLoading, error: dishesError } = useRestaurantDishes(restaurantId);
   
+  // Store the current restaurant ID in localStorage for cart reference
+  useEffect(() => {
+    if (typeof window !== 'undefined' && restaurantId) {
+      localStorage.setItem('lastVisitedRestaurantId', restaurantId);
+    }
+  }, [restaurantId]);
+  
   // Adapter function to convert Dish to MenuItem type
   const adaptDishToMenuItem = (dish: Dish): MenuItem => ({
     id: String(dish.dishId),

@@ -51,7 +51,15 @@ export default function CartPage() {
     longitude: -74.006
   });
   const [deliveryInstructions, setDeliveryInstructions] = useState<string>("");
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([
+  // Define payment method interface
+interface PaymentMethod {
+  id: string;
+  type: "card" | "cash";
+  lastFour?: string;
+  cardType?: string;
+}
+
+const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([
     { id: "card-1", type: "card", lastFour: "4242", cardType: "Visa" },
     { id: "cash", type: "cash" }
   ]);
@@ -86,42 +94,178 @@ export default function CartPage() {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        // For now, we'll use mock data
-        // In a real app, we would fetch menu items from the API based on the restaurant IDs in the cart
-        setMenuItems([
-          {
-            id: "margherita-pizza",
+        // Get unique dish IDs from cart
+        const dishIds = Object.keys(cartItems);
+        console.log('Cart items in fetchMenuItems:', cartItems);
+        console.log('Dish IDs from cart:', dishIds);
+        
+        if (dishIds.length === 0) {
+          console.log('No dish IDs found in cart, setting formatted cart items to empty array');
+          setFormattedCartItems([]);
+          return;
+        }
+        
+        // Define the type for menu items
+        type MenuItem = {
+          id: string;
+          name: string;
+          price: string;
+          image: string;
+          restaurantId: string;
+          restaurantName: string;
+        };
+        
+        // For now, we'll use a combination of real data for dishes in cart and fallback data
+        // This ensures we can display something even if the API call fails
+        const fallbackItems: Record<string, MenuItem> = {
+          // Add fallback data for common dish IDs that might be in the cart
+          // These will only be used if the API doesn't return data for these items
+          "1": {
+            id: "1",
             name: "Margherita Pizza",
             price: "$12.99",
             image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80",
-            restaurantId: "pizza-palace",
+            restaurantId: "1",
             restaurantName: "Pizza Palace"
           },
-          {
-            id: "pepperoni-pizza",
+          "2": {
+            id: "2",
             name: "Pepperoni Pizza",
             price: "$14.99",
             image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80",
-            restaurantId: "pizza-palace",
+            restaurantId: "1",
             restaurantName: "Pizza Palace"
           },
-        ]);
+        };
+        
+        // Try to fetch real dish data from API for each restaurant
+        const fetchedItems: any[] = [];
+        
+        // Get unique restaurant IDs from cart items (we'll need to fetch from each restaurant)
+        const restaurantIds = new Set<string>();
+        
+        // In a real app, each cart item would have its restaurant ID stored
+        // For now, we'll check localStorage for any stored restaurant ID from previous navigation
+        if (typeof window !== 'undefined') {
+          const lastVisitedRestaurant = localStorage.getItem('lastVisitedRestaurantId');
+          console.log('Last visited restaurant from localStorage:', lastVisitedRestaurant);
+          if (lastVisitedRestaurant) {
+            restaurantIds.add(lastVisitedRestaurant);
+          } else {
+            // Fallback to restaurant ID 1 if no restaurant was visited
+            console.log('No last visited restaurant found, using default ID 1');
+            restaurantIds.add("1");
+          }
+        } else {
+          restaurantIds.add("1");
+        }
+        
+        console.log('Restaurant IDs to fetch dishes from:', Array.from(restaurantIds));
+        
+        // Fetch dishes from each restaurant
+        for (const restaurantId of restaurantIds) {
+          try {
+            const response = await fetch(`/api/restaurant/${restaurantId}/dishes`);
+            if (response.ok) {
+              const data = await response.json();
+              console.log(`API response for restaurant ${restaurantId}:`, data);
+              
+              // Process the dishes from this restaurant
+              if (data && data.dishes) {
+                // Flatten the categories to get all dishes
+                const allDishes = data.dishes.flatMap((category: any) => {
+                  console.log(`Processing category:`, category);
+                  return category.dishes.map((dish: any) => {
+                    console.log(`Processing dish:`, dish);
+                    return {
+                      id: String(dish.dishId),
+                      name: dish.name,
+                      price: `$${dish.cost.toFixed(2)}`,
+                      image: dish.image || "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80",
+                      restaurantId: restaurantId,
+                      restaurantName: data.name || "Restaurant"
+                    };
+                  });
+                });
+                
+                console.log(`Processed dishes for restaurant ${restaurantId}:`, allDishes);
+                fetchedItems.push(...allDishes);
+              }
+            }
+          } catch (error) {
+            console.error(`Error fetching dishes for restaurant ${restaurantId}:`, error);
+          }
+        }
+        
+        // Combine fetched items with fallback items for any missing dishes
+        const combinedItems = [...fetchedItems];
+        
+        // Add fallback items for any dish IDs not found in the API response
+        dishIds.forEach(dishId => {
+          // Check if we already have this dish ID in our combined items
+          const hasItem = combinedItems.some(item => 
+            item.id === dishId || 
+            String(item.id) === String(dishId) || 
+            Number(item.id) === Number(dishId)
+          );
+          
+          // If not found and we have a fallback, use it
+          if (!hasItem) {
+            if (fallbackItems[dishId]) {
+              console.log(`Using fallback item for dish ID ${dishId}`);
+              combinedItems.push(fallbackItems[dishId]);
+            } else {
+              // Create a generic fallback item if we don't have one
+              console.log(`Creating generic fallback item for dish ID ${dishId}`);
+              combinedItems.push({
+                id: dishId,
+                name: `Item #${dishId}`,
+                price: "$0.00",
+                image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80",
+                restaurantId: Array.from(restaurantIds)[0] || "1",
+                restaurantName: "Restaurant"
+              });
+            }
+          }
+        });
+        
+        console.log('Combined menu items:', combinedItems);
+        setMenuItems(combinedItems);
       } catch (error) {
         console.error('Error fetching menu items:', error);
       }
     };
     
     fetchMenuItems();
-  }, []);
+  }, [cartItems]); // Re-fetch when cart items change
   
   // Format cart items with menu item details
   useEffect(() => {
+    console.log('Formatting cart items with menu items:', { cartItems, menuItems });
+    
     if (menuItems.length > 0) {
       const items = Object.entries(cartItems).map(([itemId, quantity]) => {
-        const menuItem = menuItems.find(item => item.id === itemId);
-        if (!menuItem) return null;
+        console.log(`Looking for menu item with id ${itemId}`);
+        // Try to find the menu item by exact ID match first
+        let menuItem = menuItems.find(item => item.id === itemId);
         
-        return {
+        // If not found, try to match by converting both to strings and trimming
+        if (!menuItem) {
+          menuItem = menuItems.find(item => 
+            String(item.id).trim() === String(itemId).trim() ||
+            String(item.id) === String(itemId) ||
+            Number(item.id) === Number(itemId)
+          );
+        }
+        
+        console.log(`Found menu item:`, menuItem);
+        
+        if (!menuItem) {
+          console.log(`No menu item found for id ${itemId}`);
+          return null;
+        }
+        
+        const cartItem = {
           id: itemId,
           type: 'dish',
           name: menuItem.name,
@@ -131,47 +275,32 @@ export default function CartPage() {
           restaurantId: menuItem.restaurantId,
           restaurantName: menuItem.restaurantName
         } as CartItem;
+        
+        console.log(`Created cart item:`, cartItem);
+        return cartItem;
       }).filter(Boolean) as CartItem[];
       
+      console.log('Final formatted cart items:', items);
       setFormattedCartItems(items);
+    } else {
+      console.log('No menu items available to format cart items');
     }
   }, [cartItems, menuItems]);
-        price: "$14.99",
-        image: "https://images.unsplash.com/photo-1628840042765-356cda07504e?auto=format&fit=crop&w=600&q=80",
-        quantity: 2,
-        restaurantId: "pizza-palace",
-        restaurantName: "Pizza Palace"
-      },
-      {
-        id: "garlic-bread",
-        name: "Garlic Bread",
-        type: 'dish',
-        price: "$5.99",
-        image: "https://images.unsplash.com/photo-1573140247632-f8fd74997d5c?auto=format&fit=crop&w=600&q=80",
-        quantity: 1,
-        restaurantId: "pizza-palace",
-        restaurantName: "Pizza Palace"
-      }
-    ]);
-  }, []);
-
-  useEffect(() => {
-    setCartItems(getCart());
-  }, []);
   
+  // This function was moved to line 192
+
   const handleCheckout = async () => {
-    const currentCartItems = getCart();
-    if (currentCartItems.length === 0) {
-      alert("Votre panier est vide");
+    if (formattedCartItems.length === 0) {
+      alert("Your cart is empty");
       return;
     }
     
     const orderPayload = {
       customerId: userId,
-      restaurantId: currentCartItems[0].restaurantId,
-      cost: currentCartItems.reduce((sum, item) => sum + item.quantity * Number(item.price.replace(/[^\d.-]/g, '')), 0),
+      restaurantId: formattedCartItems[0].restaurantId,
+      cost: formattedCartItems.reduce((sum: number, item: CartItem) => sum + item.quantity * Number(item.price.replace(/[^\d.-]/g, '')), 0),
       state: "pending",
-      items: currentCartItems.map(item => ({
+      items: formattedCartItems.map((item: CartItem) => ({
         id: item.id,
         type: item.type,
         quantity: item.quantity,
@@ -219,11 +348,13 @@ export default function CartPage() {
   };
   
   const calculateSubtotal = () => {
-    return formattedCartItems.reduce((total, item) => {
+    return formattedCartItems.reduce((total: number, item: CartItem) => {
       const price = parseFloat(item.price.replace(/[^0-9.]/g, ''));
       return total + (price * item.quantity);
     }, 0);
   };
+  
+  const getSubtotal = () => calculateSubtotal();
   
   const getDeliveryFee = () => {
     return 2.99;
@@ -335,124 +466,143 @@ export default function CartPage() {
         <div className="flex flex-col lg:flex-row gap-6">
           {/* Cart Items */}
           <div className="lg:w-7/12">
-            <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Order from {formattedCartItems[0]?.restaurantName}</h2>
-              
-              <div className="space-y-4">
-                {formattedCartItems.map((item) => (
-                  <div key={item.id} className="flex border-b border-gray-100 pb-4 last:border-0 last:pb-0">
-                    <div className="w-20 h-20 rounded-lg overflow-hidden mr-4 shrink-0">
-                      <Image 
-                        src={item.image} 
-                        alt={item.name} 
-                        width={80} 
-                        height={80} 
-                        className="w-full h-full object-cover" 
-                      />
+            {formattedCartItems.length > 0 ? (
+              <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+                <h2 className="text-xl font-bold text-gray-900 mb-4">Order from {formattedCartItems[0]?.restaurantName}</h2>
+                
+                <div className="space-y-4">
+                  {formattedCartItems.map((item) => (
+                    <div key={item.id} className="flex border-b border-gray-100 pb-4 last:border-0 last:pb-0">
+                      <div className="w-20 h-20 rounded-lg overflow-hidden mr-4 shrink-0">
+                        <Image 
+                          src={item.image} 
+                          alt={item.name} 
+                          width={80} 
+                          height={80} 
+                          className="w-full h-full object-cover" 
+                        />
+                      </div>
+                      
+                      <div className="grow">
+                        <h3 className="font-medium text-gray-900">{item.name}</h3>
+                        <p className="text-[#009E73] font-medium">{item.price}</p>
+                      </div>
+                      
+                      <div className="flex items-center">
+                        <button 
+                          onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                          className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-1 rounded-full"
+                        >
+                          <Minus size={16} />
+                        </button>
+                        <span className="mx-3 font-medium text-gray-800">{item.quantity}</span>
+                        <button 
+                          onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                          className="bg-[#009E73] hover:bg-[#388E3C] text-white p-1 rounded-full"
+                        >
+                          <Plus size={16} />
+                        </button>
+                        <button 
+                          onClick={() => removeFromCart(item.id)}
+                          className="ml-4 text-gray-400 hover:text-red-500"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
                     </div>
-                    
-                    <div className="grow">
-                      <h3 className="font-medium text-gray-900">{item.name}</h3>
-                      <p className="text-[#009E73] font-medium">{item.price}</p>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <button 
-                        onClick={() => updateQuantity(item.id, item.quantity - 1, item.type)}
-                        className="bg-gray-100 hover:bg-gray-200 text-gray-700 p-1 rounded-full"
-                      >
-                        <Minus size={16} />
-                      </button>
-                      <span className="mx-3 font-medium text-gray-800">{item.quantity}</span>
-                      <button 
-                        onClick={() => updateQuantity(item.id, item.quantity - 1, item.type)}
-                        className="bg-[#009E73] hover:bg-[#388E3C] text-white p-1 rounded-full"
-                      >
-                        <Plus size={16} />
-                      </button>
-                      <button 
-                        onClick={() => removeItem(item.id, item.type)}
-                        className="ml-4 text-gray-400 hover:text-red-500"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            
-            {/* Delivery Address */}
-            <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-xl font-bold text-gray-900">Delivery Details</h2>
-                <button 
-                  onClick={() => setShowLocationModal(true)}
-                  className="text-[#009E73] font-medium hover:underline"
-                >
-                  Change
-                </button>
-              </div>
-              
-              <div className="flex items-start mb-4">
-                <MapPin className="w-5 h-5 text-[#009E73] mt-1 mr-3" />
-                <div>
-                  <h3 className="font-medium text-gray-900">Delivery Address</h3>
-                  <p className="text-gray-600">{deliveryAddress.address}</p>
+                  ))}
                 </div>
               </div>
-              
-              <div className="mt-4">
-                <label htmlFor="delivery-instructions" className="block text-sm font-medium text-gray-700 mb-1">
-                  Delivery Instructions (optional)
-                </label>
-                <textarea
-                  id="delivery-instructions"
-                  rows={2}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
-                  placeholder="E.g., Ring doorbell, leave at door, call upon arrival, etc."
-                  value={deliveryInstructions}
-                  onChange={(e) => setDeliveryInstructions(e.target.value)}
-                />
-              </div>
-            </div>
-            
-            {/* Payment Method */}
-            <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">Payment Method</h2>
-              
-              <div className="space-y-3">
-                {paymentMethods.map((method) => (
-                  <div 
-                    key={method.id}
-                    className={`flex items-center p-3 border rounded-lg cursor-pointer ${selectedPaymentMethod === method.id ? 'border-[#009E73] bg-[#009E73]/5' : 'border-gray-200 hover:border-gray-300'}`}
-                    onClick={() => setSelectedPaymentMethod(method.id)}
-                  >
-                    <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3 ${selectedPaymentMethod === method.id ? 'border-[#009E73]' : 'border-gray-400'}">
-                      {selectedPaymentMethod === method.id && (
-                        <div className="w-3 h-3 rounded-full bg-[#009E73]"></div>
-                      )}
-                    </div>
-                    
-                    {method.type === "card" ? (
-                      <div className="flex items-center">
-                        <CreditCard className="w-5 h-5 text-gray-700 mr-3" />
-                        <div>
-                          <p className="font-medium text-gray-900">{method.cardType} •••• {method.lastFour}</p>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex items-center">
-                        <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center mr-3 text-gray-700">
-                          $
-                        </div>
-                        <p className="font-medium text-gray-900">Cash on Delivery</p>
-                      </div>
-                    )}
+            ) : (
+              <div className="bg-white rounded-xl shadow-md p-6 mb-6 text-center">
+                <div className="py-8">
+                  <div className="w-20 h-20 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                    <Trash2 className="w-10 h-10 text-gray-400" />
                   </div>
-                ))}
+                  <h2 className="text-xl font-bold text-gray-900 mb-2">Your cart is empty</h2>
+                  <p className="text-gray-600 mb-6">Add items from a restaurant to get started</p>
+                  <Link href="/customer" className="bg-[#009E73] hover:bg-[#388E3C] text-white px-6 py-3 rounded-lg font-medium transition-colors inline-block">
+                    Browse Restaurants
+                  </Link>
+                </div>
               </div>
-            </div>
+            )}
+            
+            {formattedCartItems.length > 0 && (
+              <>
+                {/* Delivery Address */}
+                <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+                  <div className="flex justify-between items-center mb-4">
+                    <h2 className="text-xl font-bold text-gray-900">Delivery Details</h2>
+                    <button 
+                      onClick={() => setShowLocationModal(true)}
+                      className="text-[#009E73] font-medium hover:underline"
+                    >
+                      Change
+                    </button>
+                  </div>
+                  
+                  <div className="flex items-start mb-4">
+                    <MapPin className="w-5 h-5 text-[#009E73] mt-1 mr-3" />
+                    <div>
+                      <h3 className="font-medium text-gray-900">Delivery Address</h3>
+                      <p className="text-gray-600">{deliveryAddress.address}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4">
+                    <label htmlFor="delivery-instructions" className="block text-sm font-medium text-gray-700 mb-1">
+                      Delivery Instructions (optional)
+                    </label>
+                    <textarea
+                      id="delivery-instructions"
+                      rows={2}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-[#009E73] focus:border-transparent"
+                      placeholder="E.g., Ring doorbell, leave at door, call upon arrival, etc."
+                      value={deliveryInstructions}
+                      onChange={(e) => setDeliveryInstructions(e.target.value)}
+                    />
+                  </div>
+                </div>
+            
+                {/* Payment Method */}
+                <div className="bg-white rounded-xl shadow-md p-6 mb-6">
+                  <h2 className="text-xl font-bold text-gray-900 mb-4">Payment Method</h2>
+                  
+                  <div className="space-y-3">
+                    {paymentMethods.map((method) => (
+                      <div 
+                        key={method.id}
+                        className={`flex items-center p-3 border rounded-lg cursor-pointer ${selectedPaymentMethod === method.id ? 'border-[#009E73] bg-[#009E73]/5' : 'border-gray-200 hover:border-gray-300'}`}
+                        onClick={() => setSelectedPaymentMethod(method.id)}
+                      >
+                        <div className="w-5 h-5 rounded-full border-2 flex items-center justify-center mr-3 ${selectedPaymentMethod === method.id ? 'border-[#009E73]' : 'border-gray-400'}">
+                          {selectedPaymentMethod === method.id && (
+                            <div className="w-3 h-3 rounded-full bg-[#009E73]"></div>
+                          )}
+                        </div>
+                        
+                        {method.type === "card" ? (
+                          <div className="flex items-center">
+                            <CreditCard className="w-5 h-5 text-gray-700 mr-3" />
+                            <div>
+                              <p className="font-medium text-gray-900">{method.cardType} •••• {method.lastFour}</p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center">
+                            <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center mr-3 text-gray-700">
+                              $
+                            </div>
+                            <p className="font-medium text-gray-900">Cash on Delivery</p>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           
           {/* Order Summary */}
@@ -505,7 +655,15 @@ export default function CartPage() {
                       onChange={(e) => setPromoCode(e.target.value)}
                     />
                     <button
-                      onClick={applyPromoCode}
+                      onClick={() => {
+                        if (promoCode.toUpperCase() === "WELCOME10") {
+                          setPromoCodeApplied(true);
+                          setDiscount(calculateSubtotal() * 0.1); // 10% discount
+                        } else {
+                          setPromoCodeApplied(false);
+                          setDiscount(0);
+                        }
+                      }}
                       className="bg-[#009E73] hover:bg-[#388E3C] text-white px-4 py-2 rounded-r-lg font-medium transition-colors"
                     >
                       Apply
@@ -663,6 +821,7 @@ export default function CartPage() {
   );
 }
 
+// Define payment method interface
 interface PaymentMethod {
   id: string;
   type: "card" | "cash";

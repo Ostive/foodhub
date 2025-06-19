@@ -8,6 +8,7 @@ import Link from "next/link";
 export default function CreateEstablishmentForm() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
     firstName: "", // Restaurant name
@@ -39,8 +40,24 @@ export default function CreateEstablishmentForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(""); // Clear any previous errors
 
     try {
+      // Validate form data before submission
+      if (!formData.firstName || !formData.email || !formData.password || !formData.phone || !formData.address || !formData.rib) {
+        setError("Please fill in all required fields");
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Validate password strength
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/;
+      if (!passwordRegex.test(formData.password)) {
+        setError("Password must be at least 8 characters with uppercase, lowercase, and numbers");
+        setIsSubmitting(false);
+        return;
+      }
+
       // Prepare data in the format expected by the API
       const apiData = {
         role: "restaurant",
@@ -53,41 +70,68 @@ export default function CreateEstablishmentForm() {
         profilePicture: formData.profilePicture,
         website: formData.website || undefined,
         rib: formData.rib,
-        minimumPurchase: Number(formData.minimumPurchase),
-        deliveryRadius: Number(formData.deliveryRadius),
-        averagePreparationTime: formData.averagePreparationTime,
-        tags: formData.tags.split(',').map(tag => tag.trim())
+        minimumPurchase: Number(formData.minimumPurchase) || 10,
+        deliveryRadius: Number(formData.deliveryRadius) || 3,
+        averagePreparationTime: formData.averagePreparationTime || "20-30 min",
+        tags: formData.tags ? formData.tags.split(",").map((tag) => tag.trim()) : ["pizza", "italian", "pasta"],
       };
 
-      console.log("Submitting restaurant data:", apiData);
-      
-      // Send data to your API
-      const response = await fetch('http://localhost:3002/api/restaurants/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(apiData)
-      });
+      // Send the data to the API with timeout protection
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Registration failed');
+      try {
+        const response = await fetch("http://localhost:3002/api/restaurants/", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(apiData),
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId); // Clear the timeout if request completes
+
+        // Check for network errors
+        if (!response) {
+          throw new Error("Network error - no response received");
+        }
+
+        const data = await response.json().catch(e => {
+          throw new Error("Error parsing server response");
+        });
+
+        if (!response.ok) {
+          throw new Error(`Failed to create restaurant: ${data?.message || response.statusText || 'Unknown error'}`);
+        }
+
+        if (!data || !data.id || !data.token) {
+          throw new Error("Invalid response data from server");
+        }
+
+        // Store user data in localStorage
+        try {
+          localStorage.setItem('user', JSON.stringify({
+            userId: data.id,
+            role: 'restaurant',
+            token: data.token
+          }));
+        } catch (storageError) {
+          console.warn("Could not store user data in localStorage", storageError);
+          // Continue anyway as this is not critical
+        }
+
+        // Redirect to the restaurant dashboard
+        router.push(`/restaurant-dashboard/${data.id}`);
+      } catch (fetchError: any) {
+        if (fetchError.name === 'AbortError') {
+          throw new Error("Request timed out. Please try again.");
+        }
+        throw fetchError;
       }
-
-      const data = await response.json();
-      
-      // Store user data in localStorage for authentication
-      localStorage.setItem('user', JSON.stringify({
-        userId: data.id,
-        role: 'restaurant',
-        token: data.token // Assuming your API returns a token
-      }));
-      
-      // Redirect to restaurant dashboard
-      router.push(`/restaurant-dashboard/${data.id}`);
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    } catch (error: any) {
+      console.error("Error creating restaurant:", error);
+      setError(error.message || "An unexpected error occurred");
       setIsSubmitting(false);
     }
   };
@@ -386,6 +430,13 @@ export default function CreateEstablishmentForm() {
               Enter cuisine types separated by commas
             </p>
           </div>
+
+          {/* Error message */}
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg">
+              {error}
+            </div>
+          )}
 
           {/* Submit */}
           <div className="flex justify-end space-x-4">

@@ -46,14 +46,24 @@ export default function RestaurantDashboard() {
   useEffect(() => {
     const fetchRestaurantData = async () => {
       try {
-        // Get user info from localStorage (set during login)
-        const userInfo = localStorage.getItem('user');
+        // Safely get user info from localStorage with error handling
+        let userInfo;
         let userId = restaurantId;
         let token = '';
+        let user = null;
         
-        // If we have user info and this is the current logged-in restaurant
-        if (userInfo) {
-          const user = JSON.parse(userInfo);
+        try {
+          userInfo = localStorage.getItem('user');
+          if (userInfo) {
+            user = JSON.parse(userInfo);
+          }
+        } catch (parseError) {
+          console.warn('Error parsing user info from localStorage:', parseError);
+          // Continue with default values
+        }
+        
+        // If we have valid user info and this is the current logged-in restaurant
+        if (user) {
           if (user.role === 'restaurant' && user.userId) {
             userId = user.userId.toString();
           }
@@ -61,23 +71,29 @@ export default function RestaurantDashboard() {
           token = user.token || '';
         }
         
+        // Handle missing data gracefully
         if (!userId) {
-          throw new Error('No restaurant ID available');
+          console.warn('No restaurant ID available, using URL parameter as fallback');
+          userId = restaurantId as string;
         }
         
-        if (!token) {
-          throw new Error('No authentication token available');
+        // Try to fetch data even without token (public data might be available)
+        const headers: HeadersInit = {
+          'Content-Type': 'application/json'
+        };
+        
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
         }
         
         const response = await fetch(`http://localhost:3002/api/restaurants/${userId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+          headers,
+          // Add timeout to prevent hanging requests
+          signal: AbortSignal.timeout(10000) // 10 second timeout
         });
         
         if (!response.ok) {
-          throw new Error('Failed to fetch restaurant data');
+          throw new Error(`Server returned ${response.status}: ${response.statusText}`);
         }
         
         const data = await response.json();
