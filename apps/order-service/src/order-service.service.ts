@@ -59,5 +59,11 @@ export class OrderServiceService {
   async getOrdersByStatus(status: OrderStatus): Promise<Order[]> {
     return this.orderRepository.find({ where: { status } });
   }
-  
+
+  async getAllOrders(restaurantId?: number): Promise<Order[]> {
+    if (restaurantId) {
+      return this.orderRepository.find({ where: { restaurantId } });
+    }
+    return this.orderRepository.find();
+  }
 }

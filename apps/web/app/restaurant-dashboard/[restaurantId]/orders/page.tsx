@@ -1,34 +1,62 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import { Clock, Search, Filter, ChevronDown, Eye, Truck, CheckCircle, XCircle } from "lucide-react";
 
 export default function OrdersPage() {
+  const params = useParams();
+  const restaurantId = params.restaurantId as string;
+
+  const [orders, setOrders] = useState<any[]>([]);
   const [filterStatus, setFilterStatus] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   
   // Mock data
-  const orders = [
-    { id: "#ORD-7829", customer: "Emma Wilson", items: "2u00d7 Margherita, 1u00d7 Garlic Bread", total: "$32.50", time: "10:15 AM", date: "Today", status: "Preparing" },
-    { id: "#ORD-7830", customer: "James Brown", items: "1u00d7 Pepperoni, 1u00d7 Coke", total: "$18.99", time: "10:20 AM", date: "Today", status: "New" },
-    { id: "#ORD-7831", customer: "Sophia Garcia", items: "1u00d7 Vegetarian, 2u00d7 Water", total: "$22.50", time: "10:25 AM", date: "Today", status: "New" },
-    { id: "#ORD-7825", customer: "Michael Chen", items: "1u00d7 Hawaiian, 1u00d7 Wings, 1u00d7 Sprite", total: "$29.99", time: "9:30 AM", date: "Today", status: "Out for Delivery" },
-    { id: "#ORD-7820", customer: "Sarah Johnson", items: "1u00d7 Meat Lovers, 1u00d7 Garlic Knots", total: "$26.50", time: "8:45 AM", date: "Today", status: "Delivered" },
-    { id: "#ORD-7815", customer: "David Wilson", items: "1u00d7 Veggie Supreme, 1u00d7 Caesar Salad", total: "$24.99", time: "8:15 AM", date: "Today", status: "Delivered" },
-    { id: "#ORD-7810", customer: "Lisa Rodriguez", items: "2u00d7 Cheese Pizza, 1u00d7 Breadsticks", total: "$27.50", time: "7:45 PM", date: "Yesterday", status: "Delivered" },
-    { id: "#ORD-7805", customer: "Robert Taylor", items: "1u00d7 BBQ Chicken, 1u00d7 Onion Rings", total: "$23.99", time: "7:15 PM", date: "Yesterday", status: "Delivered" },
-    { id: "#ORD-7800", customer: "Jennifer Lee", items: "1u00d7 Margherita, 1u00d7 Greek Salad", total: "$21.50", time: "6:30 PM", date: "Yesterday", status: "Cancelled" },
-  ];
+  //const orders = [
+  //  { id: "#ORD-7829", customer: "Emma Wilson", items: "2u00d7 Margherita, 1u00d7 Garlic Bread", total: "$32.50", time: "10:15 AM", date: "Today", status: "Preparing" },
+  //  { id: "#ORD-7830", customer: "James Brown", items: "1u00d7 Pepperoni, 1u00d7 Coke", total: "$18.99", time: "10:20 AM", date: "Today", status: "New" },
+  //  { id: "#ORD-7831", customer: "Sophia Garcia", items: "1u00d7 Vegetarian, 2u00d7 Water", total: "$22.50", time: "10:25 AM", date: "Today", status: "New" },
+  //  { id: "#ORD-7825", customer: "Michael Chen", items: "1u00d7 Hawaiian, 1u00d7 Wings, 1u00d7 Sprite", total: "$29.99", time: "9:30 AM", date: "Today", status: "Out for Delivery" },
+  //  { id: "#ORD-7820", customer: "Sarah Johnson", items: "1u00d7 Meat Lovers, 1u00d7 Garlic Knots", total: "$26.50", time: "8:45 AM", date: "Today", status: "Delivered" },
+  //  { id: "#ORD-7815", customer: "David Wilson", items: "1u00d7 Veggie Supreme, 1u00d7 Caesar Salad", total: "$24.99", time: "8:15 AM", date: "Today", status: "Delivered" },
+  //  { id: "#ORD-7810", customer: "Lisa Rodriguez", items: "2u00d7 Cheese Pizza, 1u00d7 Breadsticks", total: "$27.50", time: "7:45 PM", date: "Yesterday", status: "Delivered" },
+  //  { id: "#ORD-7805", customer: "Robert Taylor", items: "1u00d7 BBQ Chicken, 1u00d7 Onion Rings", total: "$23.99", time: "7:15 PM", date: "Yesterday", status: "Delivered" },
+  //  { id: "#ORD-7800", customer: "Jennifer Lee", items: "1u00d7 Margherita, 1u00d7 Greek Salad", total: "$21.50", time: "6:30 PM", date: "Yesterday", status: "Cancelled" },
+  //];
 
-  // Filter orders based on status and search query
-  const filteredOrders = orders.filter(order => {
-    const matchesStatus = filterStatus === "all" || order.status.toLowerCase() === filterStatus.toLowerCase();
-    const matchesSearch = order.id.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          order.customer.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesStatus && matchesSearch;
-  });
+  
 
-  const getStatusColor = (status) => {
+  // Récupérer les commandes du restaurant
+  useEffect(() => {
+  let intervalId: NodeJS.Timeout;
+
+  const fetchOrders = () => {
+    setLoading(true);
+    setError(null);
+    fetch(`/api/order?restaurantId=${restaurantId}`)
+      .then(res => res.json())
+      .then(data => {
+        setOrders(data.orders || []);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError("Erreur lors du chargement des commandes");
+        setLoading(false);
+      });
+  };
+
+  fetchOrders(); // Appel initial
+
+  intervalId = setInterval(fetchOrders, 10000); // Toutes les 10 secondes
+
+  return () => clearInterval(intervalId); // Nettoyage à la destruction du composant
+}, [restaurantId]);
+
+
+  const getStatusColor = (status: string) => {
     switch(status.toLowerCase()) {
       case 'new': return 'bg-blue-100 text-blue-800';
       case 'preparing': return 'bg-yellow-100 text-yellow-800';

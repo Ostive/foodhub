@@ -50,3 +50,26 @@ export async function sendOrder({
 
     return data;
 }
+
+export async function getOrder(orderId: string) {
+    // 1. Récupérer le JWT depuis le localStorage
+    //const token = localStorage.getItem('token');
+
+    // 2. Appeler l’API /api/order/:id
+    const response = await fetch(`/api/order/${orderId}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            //'Authorization': `Bearer ${token}`,
+        },
+    });
+
+    // 3. Gérer la réponse
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.error || 'Erreur lors de la récupération de la commande');
+    }
+
+    return data;
+}

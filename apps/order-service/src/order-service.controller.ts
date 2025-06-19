@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Patch } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Patch, Query, BadRequestException } from '@nestjs/common';
 import { OrderServiceService } from './order-service.service';
 import { CreateOrderDto, UpdateOrderDto } from './dto/order.dto';
 import { OrderStatus } from 'libs/database/entities/order_status.enum';
@@ -13,7 +13,7 @@ export class OrderServiceController {
 
   @ApiOperation({ summary: 'Get welcome message' })
   @ApiResponse({ status: 200, description: 'Returns a welcome message' })
-  @Get()
+  @Get('hello')
   getHello(): string {
     return this.orderServiceService.getHello();
   }
@@ -124,5 +124,13 @@ export class OrderServiceController {
     return this.orderServiceService.getOrdersByStatus(status);
   }
 
+    @ApiOperation({ summary: 'Get all orders' })
+    @Get()
+    async getOrders(@Query('restaurantId') restaurantId: number) {
+      if (!restaurantId) {
+        throw new BadRequestException('restaurantId is required');
+      }
+      return this.orderServiceService.getAllOrders(restaurantId);
+    }
 
 }
