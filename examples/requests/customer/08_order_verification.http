@@ -1,0 +1,37 @@
+### Verify Order Delivery with Code
+POST http://localhost:3003/api/orders/501/verify
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "verificationCode": "ABC123"
+}
+
+### Expected Response (200 OK)
+# {
+#   "message": "Order verified successfully",
+#   "order": {
+#     "orderId": 501,
+#     "status": "DELIVERED",
+#     "deliveredAt": "2025-06-19T15:28:00.000Z"
+#   }
+# }
+
+### Submit Order Rating and Feedback
+POST http://localhost:3003/api/orders/501/rating
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "rating": 5,
+  "comment": "Excellent service and delicious food!",
+  "restaurantRating": 5,
+  "deliveryPersonRating": 5
+}
+
+### Expected Response (200 OK)
+# {
+#   "message": "Thank you for your feedback!",
+#   "orderId": 501,
+#   "rating": 5
+# }

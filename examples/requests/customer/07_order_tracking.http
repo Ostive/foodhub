@@ -1,0 +1,111 @@
+### Get Customer Orders
+GET http://localhost:3003/api/customers/orders
+Authorization: Bearer {{accessToken}}
+
+### Expected Response (200 OK)
+# {
+#   "orders": [
+#     {
+#       "orderId": 501,
+#       "restaurantName": "La Belle Équipe",
+#       "status": "PREPARING",
+#       "time": "2025-06-19T14:45:00.000Z",
+#       "cost": 32.98,
+#       "estimatedDeliveryTime": "2025-06-19T15:30:00.000Z"
+#     },
+#     {
+#       "orderId": 498,
+#       "restaurantName": "Pizzeria Roma",
+#       "status": "DELIVERED",
+#       "time": "2025-06-18T19:30:00.000Z",
+#       "cost": 24.99,
+#       "deliveredAt": "2025-06-18T20:15:00.000Z"
+#     }
+#   ]
+# }
+
+### Get Order Details
+GET http://localhost:3003/api/orders/501
+Authorization: Bearer {{accessToken}}
+
+### Expected Response (200 OK)
+# {
+#   "orderId": 501,
+#   "customerId": 123,
+#   "restaurantId": 201,
+#   "restaurantName": "La Belle Équipe",
+#   "status": "PREPARING",
+#   "statusHistory": [
+#     {
+#       "status": "CREATED",
+#       "timestamp": "2025-06-19T14:45:00.000Z"
+#     },
+#     {
+#       "status": "ACCEPTED_RESTAURANT",
+#       "timestamp": "2025-06-19T14:47:00.000Z"
+#     },
+#     {
+#       "status": "PREPARING",
+#       "timestamp": "2025-06-19T14:50:00.000Z"
+#     }
+#   ],
+#   "time": "2025-06-19T14:45:00.000Z",
+#   "cost": 32.98,
+#   "deliveryLocalisation": "123 Main Street, Paris, 75001",
+#   "verificationCode": "ABC123",
+#   "dishes": [
+#     {
+#       "dishId": 101,
+#       "name": "Soupe à l'Oignon",
+#       "quantity": 1,
+#       "unitPrice": 8.99,
+#       "totalPrice": 10.49,
+#       "personalizationChoices": [
+#         {
+#           "optionId": 501,
+#           "optionName": "Cheese",
+#           "choiceIds": [5002],
+#           "choiceNames": ["Comté"],
+#           "additionalPrice": 1.50
+#         }
+#       ]
+#     }
+#   ],
+#   "menus": [
+#     {
+#       "menuId": 301,
+#       "name": "French Classic Menu",
+#       "quantity": 1,
+#       "unitPrice": 29.99,
+#       "totalPrice": 29.99
+#     }
+#   ],
+#   "estimatedDeliveryTime": "2025-06-19T15:30:00.000Z",
+#   "deliveryPerson": {
+#     "userId": 301,
+#     "firstName": "Pierre",
+#     "lastName": "Dupont",
+#     "phoneNumber": "+33678901234"
+#   }
+# }
+
+### Track Order Live Location
+GET http://localhost:3003/api/orders/501/tracking
+Authorization: Bearer {{accessToken}}
+
+### Expected Response (200 OK)
+# {
+#   "orderId": 501,
+#   "status": "OUT_FOR_DELIVERY",
+#   "currentLocation": {
+#     "latitude": 48.8584,
+#     "longitude": 2.2945
+#   },
+#   "estimatedArrival": "2025-06-19T15:25:00.000Z",
+#   "deliveryPerson": {
+#     "userId": 301,
+#     "firstName": "Pierre",
+#     "lastName": "Dupont",
+#     "phoneNumber": "+33678901234"
+#   }
+# }

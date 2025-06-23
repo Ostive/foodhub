@@ -1,5 +1,6 @@
 import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { CartItemDto } from './cart-item.dto';
 
 export class OrderItemDto {
   @ApiProperty({
@@ -47,7 +48,7 @@ export class CreateOrderDto {
   restaurantId: number;
 
   @ApiProperty({
-    description: 'Array of items in the order',
+    description: 'Array of items in the order (legacy format)',
     type: [OrderItemDto],
     example: [{
       itemId: '123e4567-e89b-12d3-a456-426614174002',
@@ -55,9 +56,27 @@ export class CreateOrderDto {
       specialInstructions: 'No onions please'
     }]
   })
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
-  items: OrderItemDto[];
+  items?: OrderItemDto[];
+  
+  @ApiProperty({
+    description: 'Array of cart items in the order (new format supporting both dishes and menus)',
+    type: [CartItemDto],
+    example: [{
+      id: '1',
+      type: 'dish',
+      quantity: 2,
+      specialInstructions: 'No onions please'
+    }, {
+      id: '3',
+      type: 'menu',
+      quantity: 1
+    }]
+  })
+  @IsOptional()
+  @IsArray()
+  cartItems?: CartItemDto[];
 
   @ApiPropertyOptional({
     description: 'Address where the order should be delivered',
@@ -86,7 +105,7 @@ export class UpdateOrderDto {
   status?: string;
 
   @ApiPropertyOptional({
-    description: 'Updated array of items in the order',
+    description: 'Updated array of items in the order (legacy format)',
     type: [OrderItemDto],
     example: [{
       itemId: '123e4567-e89b-12d3-a456-426614174002',
@@ -97,6 +116,24 @@ export class UpdateOrderDto {
   @IsOptional()
   @IsArray()
   items?: OrderItemDto[];
+  
+  @ApiPropertyOptional({
+    description: 'Updated array of cart items in the order (new format supporting both dishes and menus)',
+    type: [CartItemDto],
+    example: [{
+      id: '1',
+      type: 'dish',
+      quantity: 2,
+      specialInstructions: 'No onions please'
+    }, {
+      id: '3',
+      type: 'menu',
+      quantity: 1
+    }]
+  })
+  @IsOptional()
+  @IsArray()
+  cartItems?: CartItemDto[];
 
   @ApiPropertyOptional({
     description: 'Updated delivery address',

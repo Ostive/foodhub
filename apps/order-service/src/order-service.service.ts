@@ -5,6 +5,8 @@ import { Order } from 'libs/database/entities/order.entity';
 import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { CartItemService, OrderItemsService } from './cart';
+import { CartItemType } from './dto/cart-item.dto';
 
 
 @Injectable()
@@ -13,6 +15,8 @@ export class OrderServiceService {
   constructor(
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
+    private readonly cartItemService: CartItemService,
+    private readonly orderItemsService: OrderItemsService,
   ) {}
 
   getHello(): string {
@@ -29,20 +33,79 @@ export class OrderServiceService {
     newOrder.restaurantId = createOrderDto.restaurantId;
     newOrder.deliveryLocalisation = createOrderDto.deliveryAddress || '';
     newOrder.time = new Date();
-    newOrder.cost = 0; // Will be calculated based on items
+    newOrder.cost = 0; // Will be calculated after items are processed
     newOrder.status = OrderStatus.CREATED;
     newOrder.verificationCode = verificationCode;
-    // Items will be handled separately
     
-    return this.orderRepository.save(newOrder);
+    // Save the order first to get the order ID
+    const savedOrder = await this.orderRepository.save(newOrder);
+    
+    // Process cart items if they exist (new format)
+    if (createOrderDto.cartItems && createOrderDto.cartItems.length > 0) {
+      await this.cartItemService.processCartItems(savedOrder, createOrderDto.cartItems);
+    }
+    // Process legacy items if they exist and no cart items were provided
+    else if (createOrderDto.items && createOrderDto.items.length > 0) {
+      // Convert legacy items to cart items format
+      const cartItems = createOrderDto.items.map(item => ({
+        id: item.itemId.toString(),
+        type: CartItemType.DISH, // Legacy items are always dishes
+        quantity: item.quantity,
+        specialInstructions: item.specialInstructions
+      }));
+      
+      await this.cartItemService.processCartItems(savedOrder, cartItems);
+    }
+    
+    // Calculate the total cost of the order based on the items
+    const totalCost = await this.calculateOrderTotal(savedOrder.orderId);
+    savedOrder.cost = totalCost;
+    await this.orderRepository.save(savedOrder);
+    
+    return savedOrder;
   }
   
 
   async updateOrder(id: number, updateOrderDto: UpdateOrderDto) {
     const order = await this.orderRepository.findOneBy({ orderId: +id });
     if (!order) throw new NotFoundException('Order not found');
-    Object.assign(order, updateOrderDto);
-    return this.orderRepository.save(order);
+    
+    // Update order properties
+    const { items, cartItems, ...orderProps } = updateOrderDto;
+    Object.assign(order, orderProps);
+    
+    // Save the updated order
+    const updatedOrder = await this.orderRepository.save(order);
+    
+    // Process cart items if they exist (new format)
+    if (cartItems && cartItems.length > 0) {
+      // Clear existing items first
+      await this.cartItemService.clearOrderItems(order.orderId);
+      // Add new items
+      await this.cartItemService.processCartItems(updatedOrder, cartItems);
+    }
+    // Process legacy items if they exist and no cart items were provided
+    else if (items && items.length > 0) {
+      // Clear existing items first
+      await this.cartItemService.clearOrderItems(order.orderId);
+      
+      // Convert legacy items to cart items format
+      const cartItemsFromLegacy = items.map(item => ({
+        id: item.itemId.toString(),
+        type: CartItemType.DISH, // Legacy items are always dishes
+        quantity: item.quantity,
+        specialInstructions: item.specialInstructions
+      }));
+      
+      await this.cartItemService.processCartItems(updatedOrder, cartItemsFromLegacy);
+    }
+    
+    // Recalculate the total cost after updating items
+    const totalCost = await this.calculateOrderTotal(updatedOrder.orderId);
+    updatedOrder.cost = totalCost;
+    await this.orderRepository.save(updatedOrder);
+    
+    return updatedOrder;
   }
 
   async getOrderById(id: number) {
@@ -151,5 +214,53 @@ export class OrderServiceService {
     const isValid = order.verificationCode === code;
     
     return { valid: isValid };
+  }
+
+  async findOne(orderId: number) {
+    const order = await this.orderRepository.findOne({ where: { orderId } });
+    if (!order) {
+      throw new NotFoundException(`Order with ID ${orderId} not found`);
+    }
+    return order;
+  }
+  
+  /**
+   * Find an order by ID and include its associated dishes and menus
+   * @param orderId The order ID
+   * @returns Order with dishes and menus
+   */
+  async findOneWithItems(orderId: number) {
+    const order = await this.findOne(orderId);
+    const orderItems = await this.orderItemsService.findOrderItems(orderId);
+    
+    return {
+      ...order,
+      items: orderItems
+    };
+  }
+  
+  /**
+   * Calculate the total cost of an order based on the prices of its dishes and menus
+   * @param orderId The order ID
+   * @returns The total cost of the order
+   */
+  async calculateOrderTotal(orderId: number): Promise<number> {
+    // Get all dishes and menus for this order
+    const { dishes, menus } = await this.orderItemsService.findOrderItems(orderId);
+    
+    // Calculate total from dishes
+    const dishesTotal = dishes.reduce((total, item) => {
+      const dishPrice = item.dish.cost || 0;
+      return total + (dishPrice * item.quantity);
+    }, 0);
+    
+    // Calculate total from menus
+    const menusTotal = menus.reduce((total, item) => {
+      const menuPrice = item.menu.cost || 0;
+      return total + (menuPrice * item.quantity);
+    }, 0);
+    
+    // Return the sum of both totals
+    return dishesTotal + menusTotal;
   }
 }

@@ -1,0 +1,233 @@
+### Get Current Cart
+GET http://localhost:3003/api/cart
+Authorization: Bearer {{accessToken}}
+
+### Expected Response (200 OK)
+# {
+#   "cartId": 401,
+#   "customerId": 123,
+#   "restaurantId": 201,
+#   "items": [
+#     {
+#       "type": "dish",
+#       "id": 101,
+#       "name": "Soupe à l'Oignon",
+#       "quantity": 1,
+#       "unitPrice": 8.99,
+#       "totalPrice": 10.49,
+#       "personalizationChoices": [
+#         {
+#           "optionId": 501,
+#           "optionName": "Cheese",
+#           "choiceIds": [5002],
+#           "choiceNames": ["Comté"],
+#           "additionalPrice": 1.50
+#         }
+#       ]
+#     }
+#   ],
+#   "subtotal": 10.49,
+#   "deliveryFee": 2.99,
+#   "total": 13.48
+# }
+
+### Add Dish to Cart
+POST http://localhost:3003/api/cart/dishes
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "dishId": 101,
+  "quantity": 1,
+  "restaurantId": 201,
+  "personalizationChoices": [
+    {
+      "optionId": 501,
+      "choiceIds": [5002]
+    }
+  ],
+  "specialInstructions": "Extra hot please"
+}
+
+### Expected Response (200 OK)
+# {
+#   "message": "Item added to cart",
+#   "cart": {
+#     "cartId": 401,
+#     "customerId": 123,
+#     "restaurantId": 201,
+#     "items": [
+#       {
+#         "type": "dish",
+#         "id": 101,
+#         "name": "Soupe à l'Oignon",
+#         "quantity": 1,
+#         "unitPrice": 8.99,
+#         "totalPrice": 10.49,
+#         "personalizationChoices": [
+#           {
+#             "optionId": 501,
+#             "optionName": "Cheese",
+#             "choiceIds": [5002],
+#             "choiceNames": ["Comté"],
+#             "additionalPrice": 1.50
+#           }
+#         ],
+#         "specialInstructions": "Extra hot please"
+#       }
+#     ],
+#     "subtotal": 10.49,
+#     "deliveryFee": 2.99,
+#     "total": 13.48
+#   }
+# }
+
+### Add Menu to Cart
+POST http://localhost:3003/api/cart/menus
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "menuId": 301,
+  "quantity": 1,
+  "restaurantId": 201,
+  "specialInstructions": "No garlic in any dishes please"
+}
+
+### Expected Response (200 OK)
+# {
+#   "message": "Item added to cart",
+#   "cart": {
+#     "cartId": 401,
+#     "customerId": 123,
+#     "restaurantId": 201,
+#     "items": [
+#       {
+#         "type": "dish",
+#         "id": 101,
+#         "name": "Soupe à l'Oignon",
+#         "quantity": 1,
+#         "unitPrice": 8.99,
+#         "totalPrice": 10.49,
+#         "personalizationChoices": [
+#           {
+#             "optionId": 501,
+#             "optionName": "Cheese",
+#             "choiceIds": [5002],
+#             "choiceNames": ["Comté"],
+#             "additionalPrice": 1.50
+#           }
+#         ],
+#         "specialInstructions": "Extra hot please"
+#       },
+#       {
+#         "type": "menu",
+#         "id": 301,
+#         "name": "French Classic Menu",
+#         "quantity": 1,
+#         "unitPrice": 29.99,
+#         "totalPrice": 29.99,
+#         "specialInstructions": "No garlic in any dishes please"
+#       }
+#     ],
+#     "subtotal": 40.48,
+#     "deliveryFee": 2.99,
+#     "total": 43.47
+#   }
+# }
+
+### Update Cart Item Quantity
+PATCH http://localhost:3003/api/cart/dishes/101
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "quantity": 2
+}
+
+### Expected Response (200 OK)
+# {
+#   "message": "Cart updated",
+#   "cart": {
+#     "cartId": 401,
+#     "customerId": 123,
+#     "restaurantId": 201,
+#     "items": [
+#       {
+#         "type": "dish",
+#         "id": 101,
+#         "name": "Soupe à l'Oignon",
+#         "quantity": 2,
+#         "unitPrice": 8.99,
+#         "totalPrice": 20.98,
+#         "personalizationChoices": [
+#           {
+#             "optionId": 501,
+#             "optionName": "Cheese",
+#             "choiceIds": [5002],
+#             "choiceNames": ["Comté"],
+#             "additionalPrice": 1.50
+#           }
+#         ],
+#         "specialInstructions": "Extra hot please"
+#       },
+#       {
+#         "type": "menu",
+#         "id": 301,
+#         "name": "French Classic Menu",
+#         "quantity": 1,
+#         "unitPrice": 29.99,
+#         "totalPrice": 29.99,
+#         "specialInstructions": "No garlic in any dishes please"
+#       }
+#     ],
+#     "subtotal": 50.97,
+#     "deliveryFee": 2.99,
+#     "total": 53.96
+#   }
+# }
+
+### Remove Item from Cart
+DELETE http://localhost:3003/api/cart/dishes/101
+Authorization: Bearer {{accessToken}}
+
+### Expected Response (200 OK)
+# {
+#   "message": "Item removed from cart",
+#   "cart": {
+#     "cartId": 401,
+#     "customerId": 123,
+#     "restaurantId": 201,
+#     "items": [
+#       {
+#         "type": "menu",
+#         "id": 301,
+#         "name": "French Classic Menu",
+#         "quantity": 1,
+#         "unitPrice": 29.99,
+#         "totalPrice": 29.99,
+#         "specialInstructions": "No garlic in any dishes please"
+#       }
+#     ],
+#     "subtotal": 29.99,
+#     "deliveryFee": 2.99,
+#     "total": 32.98
+#   }
+# }
+
+### Clear Cart
+DELETE http://localhost:3003/api/cart
+Authorization: Bearer {{accessToken}}
+
+### Expected Response (200 OK)
+# {
+#   "message": "Cart cleared",
+#   "cart": {
+#     "cartId": 401,
+#     "customerId": 123,
+#     "items": [],
+#     "subtotal": 0,
+#     "deliveryFee": 0,
+#     "total": 0
+#   }
+# }

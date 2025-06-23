@@ -1,0 +1,110 @@
+### Get All Restaurants
+GET http://localhost:3003/api/restaurants
+Authorization: Bearer {{accessToken}}
+
+### Expected Response (200 OK)
+# {
+#   "restaurants": [
+#     {
+#       "userId": 201,
+#       "firstName": "La Belle Équipe",
+#       "address": "22 Rue de la Paix, Paris, 75002",
+#       "phone": "+33145678901",
+#       "rating": 4.8,
+#       "cuisineType": "French",
+#       "openingHours": "11:00-23:00",
+#       "profileImage": "labelle.jpg"
+#     },
+#     {
+#       "userId": 202,
+#       "firstName": "Pizzeria Roma",
+#       "address": "15 Avenue Victor Hugo, Paris, 75016",
+#       "phone": "+33156789012",
+#       "rating": 4.5,
+#       "cuisineType": "Italian",
+#       "openingHours": "12:00-22:30",
+#       "profileImage": "roma.jpg"
+#     }
+#   ]
+# }
+
+### Get Restaurant Details
+GET http://localhost:3003/api/restaurants/201
+Authorization: Bearer {{accessToken}}
+
+### Expected Response (200 OK)
+# {
+#   "userId": 201,
+#   "firstName": "La Belle Équipe",
+#   "address": "22 Rue de la Paix, Paris, 75002",
+#   "phoneNumber": "+33145678901",
+#   "rating": 4.8,
+#   "cuisineType": "French",
+#   "openingHours": "11:00-23:00",
+#   "profileImage": "labelle.jpg",
+#   "description": "Authentic French cuisine in the heart of Paris",
+#   "dishes": [
+#     {
+#       "dishId": 101,
+#       "name": "Soupe à l'Oignon",
+#       "description": "Classic French onion soup with gruyère crouton",
+#       "cost": 8.99,
+#       "category": "Starter",
+#       "picture": "onion-soup.jpg",
+#       "isVegetarian": true,
+#       "spicyLevel": 0,
+#       "isSoldAlone": true,
+#       "personalizationOptions": [
+#         {
+#           "optionId": 501,
+#           "name": "Cheese",
+#           "type": "single",
+#           "required": true,
+#           "choices": [
+#             {
+#               "choiceId": 5001,
+#               "name": "Gruyère",
+#               "additionalPrice": 0,
+#               "isDefault": true
+#             },
+#             {
+#               "choiceId": 5002,
+#               "name": "Comté",
+#               "additionalPrice": 1.50,
+#               "isDefault": false
+#             }
+#           ]
+#         }
+#       ]
+#     }
+#   ],
+#   "menus": [
+#     {
+#       "menuId": 301,
+#       "name": "French Classic Menu",
+#       "description": "Traditional three-course French meal",
+#       "cost": 29.99,
+#       "dishes": [101, 102, 103]
+#     }
+#   ]
+# }
+
+### Search Restaurants
+GET http://localhost:3003/api/restaurants/search?query=italian&location=paris
+Authorization: Bearer {{accessToken}}
+
+### Expected Response (200 OK)
+# {
+#   "restaurants": [
+#     {
+#       "userId": 202,
+#       "firstName": "Pizzeria Roma",
+#       "address": "15 Avenue Victor Hugo, Paris, 75016",
+#       "phone": "+33156789012",
+#       "rating": 4.5,
+#       "cuisineType": "Italian",
+#       "openingHours": "12:00-22:30",
+#       "profileImage": "roma.jpg"
+#     }
+#   ]
+# }

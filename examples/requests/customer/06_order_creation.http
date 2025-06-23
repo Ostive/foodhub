@@ -1,0 +1,56 @@
+### Create Order from Cart
+POST http://localhost:3003/api/orders
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "deliveryAddress": "123 Main Street, Paris, 75001",
+  "paymentMethod": "credit_card",
+  "paymentDetails": {
+    "cardNumber": "4111111111111111",
+    "expiryMonth": "12",
+    "expiryYear": "2028",
+    "cvv": "123",
+    "cardholderName": "John Doe"
+  }
+}
+
+### Expected Response (201 Created)
+# {
+#   "orderId": 501,
+#   "customerId": 123,
+#   "restaurantId": 201,
+#   "status": "CREATED",
+#   "time": "2025-06-19T14:45:00.000Z",
+#   "cost": 32.98,
+#   "deliveryLocalisation": "123 Main Street, Paris, 75001",
+#   "verificationCode": "ABC123",
+#   "dishes": [
+#     {
+#       "dishId": 101,
+#       "name": "Soupe à l'Oignon",
+#       "quantity": 1,
+#       "unitPrice": 8.99,
+#       "totalPrice": 10.49,
+#       "personalizationChoices": [
+#         {
+#           "optionId": 501,
+#           "optionName": "Cheese",
+#           "choiceIds": [5002],
+#           "choiceNames": ["Comté"],
+#           "additionalPrice": 1.50
+#         }
+#       ]
+#     }
+#   ],
+#   "menus": [
+#     {
+#       "menuId": 301,
+#       "name": "French Classic Menu",
+#       "quantity": 1,
+#       "unitPrice": 29.99,
+#       "totalPrice": 29.99
+#     }
+#   ],
+#   "estimatedDeliveryTime": "2025-06-19T15:30:00.000Z"
+# }

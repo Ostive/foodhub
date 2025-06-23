@@ -1,0 +1,26 @@
+### Customer Registration
+POST http://localhost:3003/api/users/customer
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com",
+  "password": "SecurePassword123!",
+  "phone": "+33612345678",
+  "address": "123 Main Street, Paris, 75001",
+  "profilePicture": "https://example.com/profile.jpg"
+}
+
+### Expected Response (201 Created)
+# {
+#   "userId": 123,
+#   "firstName": "John",
+#   "lastName": "Doe",
+#   "email": "john.doe@example.com",
+#   "phone": "+33612345678",
+#   "address": "123 Main Street, Paris, 75001",
+#   "profilePicture": "https://example.com/profile.jpg",
+#   "role": "customer",
+#   "createdAt": "2025-06-19T12:20:00.000Z"
+# }

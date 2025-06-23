@@ -4,6 +4,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateCustomerDto } from './dto/create-customer.dto';
 import { CreateDeliveryPersonDto } from './dto/create-delivery_person.dto';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
+import { CreateManagerDto } from './dto/create-manager.dto';
+import { CreateAdminDto } from './dto/create-admin.dto';
 import { User } from '../../../libs/database/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -141,7 +143,16 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    const users = await this.userRepository.find();
+    const users = await this.userRepository.find({ where: { isActive: true } });
+    // Remove passwords from the response
+    return users.map(user => {
+      const { password, ...userWithoutPassword } = user;
+      return userWithoutPassword as User;
+    });
+  }
+
+  async findAllByRole(role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin'): Promise<User[]> {
+    const users = await this.userRepository.find({ where: { role, isActive: true } });
     // Remove passwords from the response
     return users.map(user => {
       const { password, ...userWithoutPassword } = user;
@@ -150,7 +161,7 @@ export class UsersService {
   }
 
   async findOne(id: number): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { userId: id } });
+    const user = await this.userRepository.findOne({ where: { userId: id, isActive: true } });
     
     if (!user) {
       throw new NotFoundException(`User with ID ${id} not found`);
@@ -160,9 +171,25 @@ export class UsersService {
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword as User;
   }
+  
+  async findOneByRole(id: number, role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin'): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { userId: id, isActive: true } });
+    
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    
+    if (user.role !== role) {
+      throw new BadRequestException(`User with ID ${id} is not a ${role}`);
+    }
+    
+    // Remove password from the response
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword as User;
+  }
 
   async findByEmail(email: string): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { email } });
+    const user = await this.userRepository.findOne({ where: { email, isActive: true } });
     
     if (!user) {
       throw new NotFoundException(`User with email ${email} not found`);
@@ -205,6 +232,36 @@ export class UsersService {
     const { password, ...userWithoutPassword } = updatedUser;
     return userWithoutPassword as User;
   }
+  
+  async updateByRole(id: number, role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin', updateUserDto: UpdateUserDto): Promise<User> {
+    // Check if user exists and has the correct role
+    const user = await this.userRepository.findOne({ where: { userId: id } });
+    
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    
+    if (user.role !== role) {
+      throw new BadRequestException(`User with ID ${id} is not a ${role}`);
+    }
+    
+    // If password is being updated, hash it
+    if ('password' in updateUserDto && updateUserDto.password) {
+      const hashedPassword = await bcrypt.hash(updateUserDto.password as string, 10);
+      updateUserDto = { ...updateUserDto, password: hashedPassword };
+    }
+    
+    // Update user
+    await this.userRepository.update(id, updateUserDto);
+    
+    // Return updated user
+    const updatedUser = await this.userRepository.findOne({ where: { userId: id } });
+    if (!updatedUser) {
+      throw new NotFoundException(`User with ID ${id} not found after update`);
+    }
+    const { password, ...userWithoutPassword } = updatedUser;
+    return userWithoutPassword as User;
+  }
 
   async remove(id: number): Promise<void> {
     const result = await this.userRepository.delete(id);
@@ -212,6 +269,82 @@ export class UsersService {
     if (result.affected === 0) {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
+  }
+
+  async removeByRole(id: number, role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin'): Promise<void> {
+    // Check if user exists and has the correct role
+    const user = await this.userRepository.findOne({ where: { userId: id } });
+    
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    
+    if (user.role !== role) {
+      throw new BadRequestException(`User with ID ${id} is not a ${role}`);
+    }
+    
+    // Delete the user
+    const result = await this.userRepository.delete(id);
+    
+    if (result.affected === 0) {
+      throw new NotFoundException(`User with ID ${id} not found after verification`);
+    }
+  }
+
+  async softDelete(id: number): Promise<void> {
+    // Check if user exists
+    const user = await this.userRepository.findOne({ where: { userId: id } });
+    
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    
+    // Soft delete by setting isActive to false
+    await this.userRepository.update(id, { isActive: false });
+  }
+
+  async softDeleteByRole(id: number, role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin'): Promise<void> {
+    // Check if user exists and has the correct role
+    const user = await this.userRepository.findOne({ where: { userId: id } });
+    
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    
+    if (user.role !== role) {
+      throw new BadRequestException(`User with ID ${id} is not a ${role}`);
+    }
+    
+    // Soft delete by setting isActive to false
+    await this.userRepository.update(id, { isActive: false });
+  }
+
+  async reactivate(id: number): Promise<void> {
+    // Check if user exists
+    const user = await this.userRepository.findOne({ where: { userId: id } });
+    
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    
+    // Reactivate by setting isActive to true
+    await this.userRepository.update(id, { isActive: true });
+  }
+
+  async reactivateByRole(id: number, role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin'): Promise<void> {
+    // Check if user exists and has the correct role
+    const user = await this.userRepository.findOne({ where: { userId: id } });
+    
+    if (!user) {
+      throw new NotFoundException(`User with ID ${id} not found`);
+    }
+    
+    if (user.role !== role) {
+      throw new BadRequestException(`User with ID ${id} is not a ${role}`);
+    }
+    
+    // Reactivate by setting isActive to true
+    await this.userRepository.update(id, { isActive: true });
   }
 
   async createDeveloper(createDeveloperDto: any): Promise<User> {
@@ -227,6 +360,42 @@ export class UsersService {
     } as any);
 
     const savedUser = await this.userRepository.save(developer);
+    // Using type assertion to handle the password removal correctly
+    const { password, ...userWithoutPassword } = savedUser as any;
+    return userWithoutPassword as unknown as User;
+  }
+
+  async createManager(createManagerDto: CreateManagerDto): Promise<User> {
+    await this.checkEmailExists(createManagerDto.email);
+
+    const hashedPassword = await this.hashPassword(createManagerDto.password);
+    
+    const manager = this.userRepository.create({
+      ...createManagerDto,
+      role: 'manager',
+      referralCode: this.generateReferralCode(),
+      password: hashedPassword,
+    } as any);
+
+    const savedUser = await this.userRepository.save(manager);
+    // Using type assertion to handle the password removal correctly
+    const { password, ...userWithoutPassword } = savedUser as any;
+    return userWithoutPassword as unknown as User;
+  }
+
+  async createAdmin(createAdminDto: CreateAdminDto): Promise<User> {
+    await this.checkEmailExists(createAdminDto.email);
+
+    const hashedPassword = await this.hashPassword(createAdminDto.password);
+    
+    const admin = this.userRepository.create({
+      ...createAdminDto,
+      role: 'admin',
+      referralCode: this.generateReferralCode(),
+      password: hashedPassword,
+    } as any);
+
+    const savedUser = await this.userRepository.save(admin);
     // Using type assertion to handle the password removal correctly
     const { password, ...userWithoutPassword } = savedUser as any;
     return userWithoutPassword as unknown as User;

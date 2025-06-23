@@ -1,0 +1,55 @@
+### Get Customer Profile
+GET http://localhost:3003/api/users/customers/me
+Authorization: Bearer {{accessToken}}
+
+### Expected Response (200 OK)
+# {
+#   "userId": 123,
+#   "firstName": "John",
+#   "lastName": "Doe",
+#   "email": "john.doe@example.com",
+#   "role": "customer",
+#   "phone": "+33612345678",
+#   "address": "123 Main Street, Paris, 75001",
+#   "createdAt": "2025-06-19T12:20:00.000Z",
+#   "updatedAt": "2025-06-19T12:20:00.000Z"
+# }
+
+### Update Customer Profile
+PATCH http://localhost:3003/api/users/me
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "phone": "+33612345679",
+  "address": "456 New Street, Paris, 75002"
+}
+
+### Expected Response (200 OK)
+# {
+#   "userId": 123,
+#   "firstName": "John",
+#   "lastName": "Doe",
+#   "email": "john.doe@example.com",
+#   "role": "customer",
+#   "phone": "+33612345679",
+#   "address": "456 New Street, Paris, 75002",
+#   "updatedAt": "2025-06-19T14:30:00.000Z"
+# }
+
+### Change Password
+PATCH http://localhost:3003/api/users/me/password
+Authorization: Bearer {{accessToken}}
+Content-Type: application/json
+
+{
+  "currentPassword": "SecurePassword123!",
+  "newPassword": "EvenMoreSecure456!"
+}
+
+### Expected Response (200 OK)
+# {
+#   "message": "Password updated successfully"
+# }

@@ -47,6 +47,15 @@ export class OrderServiceController {
     return this.orderServiceService.getOrderById(+id);
   }
   
+  @ApiOperation({ summary: 'Get an order with its items (dishes and menus)' })
+  @ApiParam({ name: 'id', description: 'Order ID', example: '1' })
+  @ApiResponse({ status: 200, description: 'Returns the order with its associated dishes and menus' })
+  @ApiResponse({ status: 404, description: 'Order not found' })
+  @Get(':id/items')
+  getOrderWithItems(@Param('id') id: string) {
+    return this.orderServiceService.findOneWithItems(+id);
+  }
+  
   @ApiOperation({ summary: 'Accept order by restaurant' })
   @ApiParam({ name: 'id', description: 'Order ID', example: '1' })
   @ApiResponse({ status: 200, description: 'Order accepted by restaurant' })
