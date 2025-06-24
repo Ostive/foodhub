@@ -44,12 +44,12 @@ const data = {
       title: "Dashboard",
       url: "../admin",
       icon: IconDashboard,
-    },*/
+    },
     {
       title: "APIs",
       url: "../admin/admin-api",
       icon: IconListDetails,
-    },/*
+    },
     {
       title: "Data Base",
       url: "../admin/admin-db",
@@ -59,17 +59,17 @@ const data = {
       title: "Visits",
       url: "../admin/admin-visit",
       icon: IconFolder,
-   },
+   },*/ 
     {
       title: "System",
-      url: "../admin/admin-system",
+      url: "../tech-support/ts-system",
       icon: IconReport,
-    },*/ 
-    {
+    },
+    /*{
       title: "Components",
       url: "../admin/admin-component",
       icon: IconFileWord,
-    },
+    },*/
   ],
   navClouds: [
     {

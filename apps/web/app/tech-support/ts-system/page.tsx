@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { AppSidebar } from "@/components/app-sidebar"
+import { AppSidebar } from "@/components/app-sidebar-ts"
 import { ChartAreaInteractive } from "@/components/chart-area-interactive-perf"
 import { DataTable } from "@/components/data-table"
 import { DockerMetricsCards } from "@/components/section-cards-perf"
