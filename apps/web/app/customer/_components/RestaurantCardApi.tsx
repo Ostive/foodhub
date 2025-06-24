@@ -4,10 +4,22 @@ import Image from "next/image";
 import { Bike, Clock, Heart, Star, MapPin, Store } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
-import { Restaurant } from "@/hooks/useRestaurants";
+// Define a more flexible restaurant type for the card component
+interface RestaurantCardType {
+  userId?: number | string;
+  name?: string;
+  firstName?: string;
+  lastName?: string;
+  profilePicture?: string;
+  rating?: number;
+  cuisineType?: string[];
+  priceRange?: string;
+  averagePreparationTime?: string;
+  [key: string]: any; // Allow for other properties
+}
 
 interface RestaurantCardApiProps {
-  restaurant: Restaurant;
+  restaurant: RestaurantCardType;
 }
 
 export default function RestaurantCardApi({ restaurant }: RestaurantCardApiProps) {
@@ -28,7 +40,7 @@ export default function RestaurantCardApi({ restaurant }: RestaurantCardApiProps
           <div className="rounded-xl overflow-hidden h-full w-full shadow-md">
             <Image 
               src={restaurantImage}
-              alt={restaurant.firstName}
+              alt={restaurant.name || restaurant.firstName || 'Restaurant'}
               width={400}
               height={300}
               className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
@@ -61,7 +73,7 @@ export default function RestaurantCardApi({ restaurant }: RestaurantCardApiProps
         
         {/* Content below image */}
         <div className="px-1 py-1">
-          <h3 className="text-lg font-bold text-gray-900 mb-1">{restaurant.firstName}</h3>
+          <h3 className="text-lg font-bold text-gray-900 mb-1">{restaurant.name || restaurant.firstName || 'Restaurant'}</h3>
           
           {restaurant.cuisineType && (
             <p className="text-sm text-gray-500 mb-2">{restaurant.cuisineType}</p>

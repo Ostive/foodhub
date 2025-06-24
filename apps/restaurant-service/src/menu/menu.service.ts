@@ -163,7 +163,7 @@ export class MenuService {
     };
   }
 
-  async getMenuItemById(restaurantId: string, menuItemId: string) {
+  async findOneMenuItem(restaurantId: string, menuItemId: string) {
     // Verify the restaurant exists
     const restaurant = await this.userRepository.findOne({ 
       where: { 
@@ -266,6 +266,8 @@ export class MenuService {
     const sortOrder = filterDto?.sortOrder || 'DESC';
     const order: any = {};
     order[sortBy] = sortOrder;
+
+    console.log('Executing query with parameters:', { query, relations: ['user', 'menuDishes', 'menuDishes.dish'], skip, limit, order });
 
     // Find menus with filters, pagination, and sorting
     const [menus, totalCount] = await this.menuRepository.findAndCount({
@@ -469,6 +471,64 @@ export class MenuService {
       message: 'Dish removed from menu successfully',
       dish: dishInfo,
       menuId: parseInt(menuId)
+    };
+  }
+
+  /**
+   * Find dishes for a specific menu
+   */
+  async findMenuDishes(restaurantId: string, menuId: string) {
+    // Verify the restaurant exists
+    const restaurant = await this.userRepository.findOne({ 
+      where: { 
+        userId: parseInt(restaurantId),
+        role: 'restaurant'
+      } 
+    });
+    
+    if (!restaurant) {
+      throw new NotFoundException(`Restaurant with ID ${restaurantId} not found`);
+    }
+
+    // Find the menu for this restaurant
+    const menu = await this.menuRepository.findOne({
+      where: { 
+        menuId: parseInt(menuId),
+        user: { userId: parseInt(restaurantId) } 
+      },
+      relations: ['user', 'menuDishes', 'menuDishes.dish']
+    });
+
+    if (!menu) {
+      throw new NotFoundException(`Menu with ID ${menuId} not found for restaurant ${restaurantId}`);
+    }
+    
+    // Extract dishes from the menu
+    const dishes = menu.menuDishes?.map(md => ({
+      dishId: md.dish.dishId,
+      name: md.dish.name,
+      description: md.dish.description || '',
+      cost: md.dish.cost,
+      picture: md.dish.picture || '',
+      isVegetarian: md.dish.isVegetarian,
+      spicyLevel: md.dish.spicyLevel || 0,
+      tags: md.dish.tags || [],
+      additionalAllergens: md.dish.additionalAllergens || '',
+      userId: md.dish.userId,
+      restaurantId: parseInt(restaurantId)
+    })) || [];
+
+    // Return paginated response format
+    return { 
+      success: true,
+      message: 'Menu dishes retrieved successfully',
+      count: dishes.length,
+      page: 1,
+      limit: 100,
+      totalPages: 1,
+      hasNext: false,
+      hasPrevious: false,
+      dishes
     };
   }
 

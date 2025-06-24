@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { User } from './user.entity';
 import { OneToMany } from "typeorm";
 import { DishesTopping } from './dish_topping.entity';
@@ -68,5 +68,9 @@ export class Dish {
   @OneToMany(() => OrderDish, od => od.dish)
   orderDishes: OrderDish[];
 
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
 
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 }

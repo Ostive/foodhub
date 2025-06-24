@@ -10,7 +10,7 @@ interface DishCardProps {
 
 export default function DishCard({ dish }: DishCardProps) {
   // Default image if none is provided
-  const dishImage = dish.image || "/images/dish-placeholder.jpg";
+  const dishImage = dish.picture || "/images/dish-placeholder.jpg";
 
   return (
     <div className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
@@ -30,7 +30,7 @@ export default function DishCard({ dish }: DishCardProps) {
         
         {/* Price badge */}
         <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-xs rounded-full px-3 py-1 shadow-md">
-          <span className="text-sm font-bold text-gray-900">{dish.price.toFixed(2)}€</span>
+          <span className="text-sm font-bold text-gray-900">{dish.cost.toFixed(2)}€</span>
         </div>
         
         {/* Dietary badges */}
@@ -41,15 +41,10 @@ export default function DishCard({ dish }: DishCardProps) {
               Vegetarian
             </div>
           )}
-          {dish.isVegan && (
+          {dish.isVegetarian && (
             <div className="bg-green-100 text-green-800 rounded-full px-2 py-1 text-xs font-medium flex items-center">
               <Leaf size={12} className="mr-1" />
               Vegan
-            </div>
-          )}
-          {dish.isGlutenFree && (
-            <div className="bg-blue-100 text-blue-800 rounded-full px-2 py-1 text-xs font-medium">
-              GF
             </div>
           )}
         </div>
@@ -61,16 +56,16 @@ export default function DishCard({ dish }: DishCardProps) {
         <p className="text-sm text-gray-500 mb-3 line-clamp-2">{dish.description}</p>
         
         <div className="flex justify-between items-center">
-          {dish.category && (
+          {dish.tags && (
             <span className="text-xs bg-gray-100 text-gray-800 rounded-full px-2 py-1">
-              {dish.category}
+              {dish.tags.join(', ')}
             </span>
           )}
           
-          {dish.preparationTime && (
+          {dish.spicyLevel && (
             <div className="flex items-center text-xs text-gray-500">
               <Clock size={12} className="mr-1" />
-              <span>{dish.preparationTime}</span>
+              <span>{dish.spicyLevel}</span>
             </div>
           )}
         </div>

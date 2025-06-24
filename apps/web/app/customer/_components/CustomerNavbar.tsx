@@ -26,12 +26,12 @@ import { useCart } from "@/contexts/CartContext";
 export default function CustomerNavbarNew() {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
-  const { getTotalItems } = useCart();
+  const { getCartItemCount } = useCart();
   
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const cartItemCount = getTotalItems();
+  const cartItemCount = getCartItemCount();
 
   // Use user data from auth context or fallback to default
   const userData = {
@@ -50,42 +50,42 @@ export default function CustomerNavbarNew() {
 
   return (
     <>
-      <Navbar className="bg-transparent">
+      <Navbar className="bg-white shadow-md sticky top-0 z-50 border-b border-green-100">
         <NavBody>
           <Link href="/" className="flex items-center space-x-2">
-        <img
+        <Image
           src="/FOOD-LOGO.png"
-          alt="logo"
+          alt="FoodHUB Logo"
           width={30}
           height={30}
         />
-        <span className="font-display text-3xl font-bold text-[#009e73]">
+        <span className="font-display text-3xl font-bold text-green-600">
           FoodHUB
         </span>
       </Link>
 
           <form
             onSubmit={handleSearchSubmit}
-            className="flex flex-1 mx-8 max-w-md rounded-full bg-gray-100 px-4 py-2 items-center"
+            className="flex flex-1 mx-8 max-w-md rounded-full bg-green-50 px-4 py-2 items-center border border-green-100 hover:border-green-200 transition-colors"
           >
-            <Search className="text-gray-600 w-5 h-5" />
+            <Search className="text-green-600 w-5 h-5" />
             <input
               type="text"
               placeholder="Search for restaurants"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="ml-2 bg-transparent flex-grow border-none focus:outline-none text-gray-700 placeholder-gray-400"
+              className="ml-2 bg-transparent flex-grow border-none focus:outline-none text-gray-700 placeholder-gray-500 focus:ring-0"
             />
           </form>
 
           <Link
             href="/customer/cart"
-            className="relative flex items-center bg-white/20 px-4 py-2 rounded-full text-white hover:bg-white/30 transition ml-4"
+            className="relative flex items-center bg-green-600 px-4 py-2 rounded-full text-white hover:bg-green-700 transition ml-4 shadow-sm"
           >
             <ShoppingBag className="w-5 h-5 mr-2" />
             Cart
             {cartItemCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#009E73] text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-white text-green-600 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center border border-green-600">
                 {cartItemCount}
               </span>
             )}
@@ -98,8 +98,8 @@ export default function CustomerNavbarNew() {
                   <Image src={userData.avatar} alt="User" width={40} height={40} />
                 </div>
               </button>
-              <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg py-3 px-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 origin-top-right">
-                <div className="flex items-center space-x-3 mb-3 pb-3 border-b border-gray-100">
+              <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-lg py-3 px-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 origin-top-right border border-green-100">
+                <div className="flex items-center space-x-3 mb-3 pb-3 border-b border-green-100">
                   <div className="h-12 w-12 rounded-full overflow-hidden">
                     <Image src={userData.avatar} alt="User" width={48} height={48} />
                   </div>
@@ -111,7 +111,7 @@ export default function CustomerNavbarNew() {
                     </div>
                   </div>
                 </div>
-                <Link href="/customer/profile" className="block py-2 text-sm text-gray-700 hover:text-[#009E73] flex items-center">
+                <Link href="/customer/profile" className="block py-2 text-sm text-gray-700 hover:text-green-600 flex items-center">
                   <User className="w-4 h-4 mr-2" /> My Profile
                 </Link>
                 <div className="w-full text-left py-2">

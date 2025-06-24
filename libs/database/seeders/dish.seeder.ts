@@ -10,6 +10,7 @@ type DishData = {
   cost: number;
   category: string;
   picture?: string;
+  isSoldAlone?: boolean;
   personalizationOptions?: Array<{
     name: string;
     type: 'single' | 'multiple';
@@ -33,13 +34,14 @@ export class DishSeeder {
         description: 'Freshly baked assortment of breads with herb butter',
         cost: 4.99,
         category: 'Starter',
-        picture: 'bread-basket.jpg'
+        picture: 'https://static.vecteezy.com/system/resources/previews/005/007/528/non_2x/restaurant-food-kitchen-line-icon-illustration-logo-template-suitable-for-many-purposes-free-vector.jpg'
       },
       {
         name: 'Seasonal Sorbet',
         description: 'Refreshing sorbet made with seasonal fruits',
         cost: 5.50,
         category: 'Dessert',
+        isSoldAlone: false, // Example of a dish that can't be sold alone
         personalizationOptions: [
           {
             name: 'Flavor',
@@ -355,14 +357,58 @@ export class DishSeeder {
     ];
   }
 
+  private async createDish(user: User, dishData: DishData) {
+    const dishRepository = this.dataSource.getRepository(Dish);
+    const optionRepository = this.dataSource.getRepository(PersonalizationOption);
+    const choiceRepository = this.dataSource.getRepository(PersonalizationOptionChoice);
+    
+    const dish = new Dish();
+    dish.name = dishData.name;
+    dish.description = dishData.description;
+    dish.cost = dishData.cost;
+    dish.picture = dishData.picture || 'https://static.vecteezy.com/system/resources/previews/005/007/528/non_2x/restaurant-food-kitchen-line-icon-illustration-logo-template-suitable-for-many-purposes-free-vector.jpg';
+    dish.user = user;
+    dish.userId = user.userId;
+    dish.isSoldAlone = dishData.isSoldAlone !== false; // Default to true if not specified
+    dish.isVegetarian = dishData.name.toLowerCase().includes('vegetarian') || 
+                      dishData.name.toLowerCase().includes('salad');
+    dish.spicyLevel = dishData.name.toLowerCase().includes('spicy') ? 3 : 0;
+    dish.tags = [dishData.category.toLowerCase()];
+    
+    await dishRepository.save(dish);
+    
+    // Add personalization options if they exist
+    if (dishData.personalizationOptions) {
+      for (const optionData of dishData.personalizationOptions) {
+        const option = new PersonalizationOption();
+        option.name = optionData.name;
+        option.type = optionData.type;
+        option.required = optionData.required;
+        option.dish = dish;
+        
+        await optionRepository.save(option);
+        
+        // Add choices for this option
+        for (const choiceData of optionData.choices) {
+          const choice = new PersonalizationOptionChoice();
+          choice.name = choiceData.name;
+          choice.additionalPrice = choiceData.additionalPrice;
+          choice.isDefault = choiceData.isDefault;
+          choice.option = option;
+          
+          await choiceRepository.save(choice);
+        }
+      }
+    }
+    
+    console.log(`🍽️  Added ${dish.name} to ${user.firstName}`);
+  }
+
   async run() {
     console.log('🌱 Seeding dishes...');
     
     const userRepository = this.dataSource.getRepository(User);
-    const dishRepository = this.dataSource.getRepository(Dish);
-    const optionRepository = this.dataSource.getRepository(PersonalizationOption);
-    const choiceRepository = this.dataSource.getRepository(PersonalizationOptionChoice);
-
+    
     // Get all restaurants
     const restaurants = await userRepository.find({
       where: { role: 'restaurant' },
@@ -373,46 +419,7 @@ export class DishSeeder {
       const dishesData = this.getDishData(restaurant.firstName);
       
       for (const dishData of dishesData) {
-        const dish = new Dish();
-        dish.name = dishData.name;
-        dish.description = dishData.description;
-        dish.cost = dishData.cost;
-        dish.picture = dishData.picture || 'default-dish.jpg';
-        dish.user = restaurant;
-        dish.userId = restaurant.userId;
-        dish.isSoldAlone = true;
-        dish.isVegetarian = dishData.name.toLowerCase().includes('vegetarian') || 
-                          dishData.name.toLowerCase().includes('salad');
-        dish.spicyLevel = dishData.name.toLowerCase().includes('spicy') ? 3 : 0;
-        dish.tags = [dishData.category.toLowerCase()];
-        
-        await dishRepository.save(dish);
-        
-        // Add personalization options if they exist
-        if (dishData.personalizationOptions) {
-          for (const optionData of dishData.personalizationOptions) {
-            const option = new PersonalizationOption();
-            option.name = optionData.name;
-            option.type = optionData.type;
-            option.required = optionData.required;
-            option.dish = dish;
-            
-            await optionRepository.save(option);
-            
-            // Add choices for this option
-            for (const choiceData of optionData.choices) {
-              const choice = new PersonalizationOptionChoice();
-              choice.name = choiceData.name;
-              choice.additionalPrice = choiceData.additionalPrice;
-              choice.isDefault = choiceData.isDefault;
-              choice.option = option;
-              
-              await choiceRepository.save(choice);
-            }
-          }
-        }
-        
-        console.log(`🍽️  Added ${dish.name} to ${restaurant.firstName}`);
+        await this.createDish(restaurant, dishData);
       }
     }
     

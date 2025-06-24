@@ -1,0 +1,503 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import { User, MapPin, Phone, Mail, Lock, Edit, Save, X, Camera, CreditCard, Bell, Shield, Clock, Heart, LogOut, Trash2, Plus } from "lucide-react";
+import { useAuth } from "@/lib/auth/auth-context";
+import CustomerNavbar from "../_components/CustomerNavbar";
+
+type PaymentMethod = {
+  id: string;
+  type: "card" | "paypal";
+  name: string;
+  last4?: string;
+  expiry?: string;
+  icon: string;
+};
+
+type NotificationSetting = {
+  id: string;
+  name: string;
+  description: string;
+  enabled: boolean;
+};
+
+type ProfileTab = "personal" | "payment" | "notifications" | "security";
+
+interface ProfileClientProps {
+  initialUserData: any;
+  initialPaymentMethods: PaymentMethod[];
+  initialNotificationSettings: NotificationSetting[];
+  error: string | null;
+}
+
+export default function ProfileClient({ 
+  initialUserData, 
+  initialPaymentMethods, 
+  initialNotificationSettings,
+  error 
+}: ProfileClientProps) {
+  const router = useRouter();
+  const { user, logout } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [activeTab, setActiveTab] = useState<ProfileTab>("personal");
+  const [showAddPaymentForm, setShowAddPaymentForm] = useState(false);
+  const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
+  const [showEnableTwoFactorForm, setShowEnableTwoFactorForm] = useState(false);
+  
+  // User data state
+  const [userData, setUserData] = useState({
+    name: initialUserData?.name || "User",
+    email: initialUserData?.email || "user@example.com",
+    phone: initialUserData?.phone || "+1 (555) 123-4567",
+    address: initialUserData?.address || "123 Main St, New York, NY 10001",
+    avatar: initialUserData?.avatar || "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
+  });
+  
+  // Form state
+  const [formData, setFormData] = useState({ ...userData });
+  
+  // Payment methods state
+  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(initialPaymentMethods || []);
+  
+  // Notification settings state
+  const [notificationSettings, setNotificationSettings] = useState<NotificationSetting[]>(
+    initialNotificationSettings || []
+  );
+  
+  // Handle logout
+  const handleLogout = () => {
+    logout();
+    router.push("/customer/login");
+  };
+  
+  // Handle form input change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+  
+  // Handle form submission
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setUserData(formData);
+    setIsEditing(false);
+    // In a real app, we would save the data to the server here
+  };
+  
+  // Handle cancel edit
+  const handleCancelEdit = () => {
+    setFormData(userData);
+    setIsEditing(false);
+  };
+  
+  // Toggle notification setting
+  const toggleNotification = (id: string) => {
+    setNotificationSettings(prev => 
+      prev.map(setting => 
+        setting.id === id ? { ...setting, enabled: !setting.enabled } : setting
+      )
+    );
+    // In a real app, we would save the setting to the server here
+  };
+  
+  return (
+    <div className="bg-gray-50 min-h-screen pb-20">
+      <CustomerNavbar />
+      
+      <div className="max-w-6xl mx-auto px-4 pt-24">
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
+            Error loading profile: {error}
+          </div>
+        )}
+        
+        <div className="flex flex-col md:flex-row gap-6">
+          {/* Sidebar */}
+          <div className="w-full md:w-64 bg-white rounded-lg shadow-sm p-6">
+            <div className="flex flex-col items-center mb-6">
+              <div className="relative mb-4">
+                <div className="w-24 h-24 rounded-full overflow-hidden">
+                  <Image 
+                    src={userData.avatar} 
+                    alt={userData.name}
+                    width={96}
+                    height={96}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <button className="absolute bottom-0 right-0 bg-primary text-white rounded-full p-2 shadow-md">
+                  <Camera className="w-4 h-4" />
+                </button>
+              </div>
+              <h2 className="text-xl font-semibold">{userData.name}</h2>
+              <p className="text-gray-500 text-sm">{userData.email}</p>
+            </div>
+            
+            <nav className="space-y-1">
+              <button 
+                onClick={() => setActiveTab("personal")}
+                className={`w-full flex items-center px-4 py-2 rounded-md ${
+                  activeTab === "personal" 
+                    ? "bg-primary text-white" 
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <User className="w-5 h-5 mr-3" />
+                Personal Info
+              </button>
+              <button 
+                onClick={() => setActiveTab("payment")}
+                className={`w-full flex items-center px-4 py-2 rounded-md ${
+                  activeTab === "payment" 
+                    ? "bg-primary text-white" 
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <CreditCard className="w-5 h-5 mr-3" />
+                Payment Methods
+              </button>
+              <button 
+                onClick={() => setActiveTab("notifications")}
+                className={`w-full flex items-center px-4 py-2 rounded-md ${
+                  activeTab === "notifications" 
+                    ? "bg-primary text-white" 
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <Bell className="w-5 h-5 mr-3" />
+                Notifications
+              </button>
+              <button 
+                onClick={() => setActiveTab("security")}
+                className={`w-full flex items-center px-4 py-2 rounded-md ${
+                  activeTab === "security" 
+                    ? "bg-primary text-white" 
+                    : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                <Shield className="w-5 h-5 mr-3" />
+                Security
+              </button>
+              <button 
+                onClick={handleLogout}
+                className="w-full flex items-center px-4 py-2 rounded-md text-red-600 hover:bg-red-50"
+              >
+                <LogOut className="w-5 h-5 mr-3" />
+                Logout
+              </button>
+            </nav>
+          </div>
+          
+          {/* Main content */}
+          <div className="flex-1">
+            {/* Personal Info Tab */}
+            {activeTab === "personal" && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold">Personal Information</h2>
+                  {!isEditing ? (
+                    <button 
+                      onClick={() => setIsEditing(true)}
+                      className="flex items-center text-primary hover:text-primary-dark"
+                    >
+                      <Edit className="w-4 h-4 mr-1" />
+                      Edit
+                    </button>
+                  ) : (
+                    <div className="flex space-x-2">
+                      <button 
+                        onClick={handleCancelEdit}
+                        className="flex items-center text-gray-500 hover:text-gray-700"
+                      >
+                        <X className="w-4 h-4 mr-1" />
+                        Cancel
+                      </button>
+                      <button 
+                        onClick={handleSubmit}
+                        className="flex items-center text-primary hover:text-primary-dark"
+                      >
+                        <Save className="w-4 h-4 mr-1" />
+                        Save
+                      </button>
+                    </div>
+                  )}
+                </div>
+                
+                {isEditing ? (
+                  <form onSubmit={handleSubmit} className="space-y-4">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                        Full Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                        Phone Number
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                        Address
+                      </label>
+                      <input
+                        type="text"
+                        id="address"
+                        name="address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+                      />
+                    </div>
+                  </form>
+                ) : (
+                  <div className="space-y-4">
+                    <div className="flex items-start">
+                      <User className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500">Full Name</p>
+                        <p className="font-medium">{userData.name}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <Mail className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500">Email Address</p>
+                        <p className="font-medium">{userData.email}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <Phone className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500">Phone Number</p>
+                        <p className="font-medium">{userData.phone}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-start">
+                      <MapPin className="w-5 h-5 text-gray-400 mr-3 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-gray-500">Address</p>
+                        <p className="font-medium">{userData.address}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {/* Payment Methods Tab */}
+            {activeTab === "payment" && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-semibold">Payment Methods</h2>
+                  <button 
+                    onClick={() => setShowAddPaymentForm(true)}
+                    className="flex items-center text-primary hover:text-primary-dark"
+                  >
+                    <Plus className="w-4 h-4 mr-1" />
+                    Add New
+                  </button>
+                </div>
+                
+                {paymentMethods.length === 0 ? (
+                  <div className="text-center py-8">
+                    <CreditCard className="w-12 h-12 mx-auto text-gray-300 mb-3" />
+                    <p className="text-gray-500">No payment methods added yet</p>
+                    <button 
+                      onClick={() => setShowAddPaymentForm(true)}
+                      className="mt-4 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
+                    >
+                      Add Payment Method
+                    </button>
+                  </div>
+                ) : (
+                  <div className="space-y-4">
+                    {paymentMethods.map((method) => (
+                      <div 
+                        key={method.id} 
+                        className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
+                      >
+                        <div className="flex items-center">
+                          <div className="w-10 h-10 mr-4">
+                            <Image 
+                              src={method.icon} 
+                              alt={method.name}
+                              width={40}
+                              height={40}
+                              className="w-full h-full object-contain"
+                            />
+                          </div>
+                          <div>
+                            <p className="font-medium">{method.name}</p>
+                            {method.expiry && (
+                              <p className="text-sm text-gray-500">Expires {method.expiry}</p>
+                            )}
+                          </div>
+                        </div>
+                        <button 
+                          onClick={() => {
+                            setPaymentMethods(prev => prev.filter(m => m.id !== method.id));
+                            // In a real app, we would delete the payment method from the server here
+                          }}
+                          className="text-red-500 hover:text-red-700"
+                        >
+                          <Trash2 className="w-5 h-5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {/* Notifications Tab */}
+            {activeTab === "notifications" && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="mb-6">
+                  <h2 className="text-xl font-semibold">Notification Preferences</h2>
+                  <p className="text-gray-500 mt-1">Manage how you receive notifications</p>
+                </div>
+                
+                <div className="space-y-4">
+                  {notificationSettings.map((setting) => (
+                    <div 
+                      key={setting.id} 
+                      className="flex items-center justify-between p-4 border border-gray-100 rounded-lg"
+                    >
+                      <div>
+                        <p className="font-medium">{setting.name}</p>
+                        <p className="text-sm text-gray-500">{setting.description}</p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          className="sr-only peer" 
+                          checked={setting.enabled}
+                          onChange={() => toggleNotification(setting.id)}
+                        />
+                        <div className={`w-11 h-6 rounded-full peer ${setting.enabled ? 'bg-primary' : 'bg-gray-200'} peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary peer-focus:ring-opacity-50 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${setting.enabled ? 'after:translate-x-full' : ''}`}></div>
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Security Tab */}
+            {activeTab === "security" && (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="mb-6">
+                  <h2 className="text-xl font-semibold">Security Settings</h2>
+                  <p className="text-gray-500 mt-1">Manage your account security</p>
+                </div>
+                
+                <div className="space-y-6">
+                  {/* Password Section */}
+                  <div className="border-b border-gray-200 pb-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <div>
+                        <h3 className="font-medium">Password</h3>
+                        <p className="text-sm text-gray-500">Last changed 3 months ago</p>
+                      </div>
+                      <button 
+                        onClick={() => setShowChangePasswordForm(true)}
+                        className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
+                      >
+                        Change Password
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Two-Factor Authentication */}
+                  <div className="border-b border-gray-200 pb-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <div>
+                        <h3 className="font-medium">Two-Factor Authentication</h3>
+                        <p className="text-sm text-gray-500">Add an extra layer of security to your account</p>
+                      </div>
+                      <button 
+                        onClick={() => setShowEnableTwoFactorForm(true)}
+                        className="px-4 py-2 border border-primary text-primary rounded-md hover:bg-primary-50"
+                      >
+                        Enable
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {/* Login History */}
+                  <div>
+                    <div className="flex justify-between items-center mb-4">
+                      <div>
+                        <h3 className="font-medium">Login History</h3>
+                        <p className="text-sm text-gray-500">Recent login activity</p>
+                      </div>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-md">
+                        <div className="flex items-center">
+                          <div className="bg-green-100 p-2 rounded-full mr-3">
+                            <Shield className="w-4 h-4 text-green-600" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">Current Session</p>
+                            <p className="text-xs text-gray-500">New York, USA • Chrome on Windows</p>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500">Just now</p>
+                      </div>
+                      <div className="flex justify-between items-center p-3 bg-gray-50 rounded-md">
+                        <div className="flex items-center">
+                          <div className="bg-gray-100 p-2 rounded-full mr-3">
+                            <Shield className="w-4 h-4 text-gray-600" />
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium">Previous Login</p>
+                            <p className="text-xs text-gray-500">New York, USA • Chrome on Windows</p>
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500">Yesterday</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

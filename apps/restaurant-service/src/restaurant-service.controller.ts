@@ -301,11 +301,52 @@ export class RestaurantServiceController {
   })
   @ApiResponse({ status: 404, description: 'Restaurant or menu item not found' })
   @Get(':restaurantId/menu/:menuId')
-  getMenuItemById(
+  getMenuById(
     @Param('restaurantId') restaurantId: string,
     @Param('menuId') menuId: string
   ) {
-    return this.menuService.getMenuItemById(restaurantId, menuId);
+    return this.menuService.findOneMenuItem(restaurantId, menuId);
+  }
+
+  @ApiOperation({ summary: 'Get dishes for a specific menu' })
+  @ApiParam({ name: 'restaurantId', description: 'Restaurant ID', type: 'string' })
+  @ApiParam({ name: 'menuId', description: 'Menu ID', type: 'string' })
+  @ApiResponse({ 
+    status: 200, 
+    description: 'Returns dishes for the specified menu',
+    schema: {
+      properties: {
+        success: { type: 'boolean', example: true },
+        message: { type: 'string', example: 'Dishes retrieved successfully' },
+        count: { type: 'number', example: 3 },
+        page: { type: 'number', example: 1 },
+        limit: { type: 'number', example: 10 },
+        totalPages: { type: 'number', example: 1 },
+        hasNext: { type: 'boolean', example: false },
+        hasPrevious: { type: 'boolean', example: false },
+        dishes: {
+          type: 'array',
+          items: {
+            properties: {
+              dishId: { type: 'number', example: 1 },
+              name: { type: 'string', example: 'Margherita Pizza' },
+              description: { type: 'string', example: 'Classic Italian pizza with tomato sauce and mozzarella' },
+              cost: { type: 'number', example: 12.99 },
+              picture: { type: 'string', example: 'https://cdn-icons-png.flaticon.com/512/857/857681.png' },
+              category: { type: 'string', example: 'Pizza' }
+            }
+          }
+        }
+      }
+    }
+  })
+  @ApiResponse({ status: 404, description: 'Restaurant or menu not found' })
+  @Get(':restaurantId/menu/:menuId/dishes')
+  getMenuDishes(
+    @Param('restaurantId') restaurantId: string,
+    @Param('menuId') menuId: string
+  ) {
+    return this.menuService.findMenuDishes(restaurantId, menuId);
   }
 
   @ApiOperation({ summary: 'Search menus by name or description' })

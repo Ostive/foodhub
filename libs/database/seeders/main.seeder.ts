@@ -8,6 +8,7 @@ import { DishSeeder } from './dish.seeder';
 import { MenuSeeder } from './menu.seeder';
 import { CreditCardSeeder } from './credit-card.seeder';
 import { PlanningSeeder } from './planning.seeder';
+import { OrderSeeder } from './order.seeder';
 import { CreditCard } from '../entities/credit_card.entity';
 import { PromoAvailableUser } from '../entities/promo_available_user.entity';
 import { Promo } from '../entities/promo.entity';
@@ -146,6 +147,10 @@ async function seed() {
     // Run the planning seeder
     const planningSeeder = new PlanningSeeder(dataSource);
     await planningSeeder.run();
+
+    // Run the order seeder last since it depends on users, dishes, and menus
+    const orderSeeder = new OrderSeeder(dataSource);
+    await orderSeeder.run();
 
     console.log('🎉 Database seeding completed successfully!');
   } catch (error) {

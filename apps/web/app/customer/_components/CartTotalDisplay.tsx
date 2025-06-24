@@ -3,31 +3,42 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ShoppingBag } from 'lucide-react';
-import { useCart } from '@/contexts/CartContext';
+import { useCart } from '@/lib/hooks/useCart';
+import type { ExtendedDish } from '@/app/customer/restaurant/[restaurantId]/_components/RestaurantDetailsClient';
 
 interface CartTotalDisplayProps {
-  menuItems: any[];
+  menuItems: ExtendedDish[];
   restaurantId: string;
 }
 
 export default function CartTotalDisplay({ menuItems, restaurantId }: CartTotalDisplayProps) {
-  const { cartItems, getTotalItems } = useCart();
+  const { cart: rawCart, getCartItemCount } = useCart();
   const [isVisible, setIsVisible] = useState(false);
   
-  const cartItemCount = getTotalItems();
+  // Ensure cart is always an array
+  const cart = Array.isArray(rawCart) ? rawCart : [];
+  
+  const cartItemCount = getCartItemCount();
   
   // Calculate cart total
   const calculateCartTotal = (): string => {
     let total = 0;
     
-    Object.entries(cartItems).forEach(([itemId, quantity]) => {
-      // Find the item in the menu items
-      const item = menuItems.find(item => item.id === itemId);
+    // Safely iterate over cart items
+    for (let i = 0; i < cart.length; i++) {
+      const cartItem = cart[i];
+      if (!cartItem) continue;
+      
+      // Find the item in the menu items to get the most up-to-date price
+      const item = menuItems.find(item => item.dishId === cartItem.id);
       if (item) {
-        const price = parseFloat(item.price.replace(/[^0-9.]/g, ''));
-        total += price * quantity;
+        // Use cost property from the menu item
+        total += item.cost * cartItem.quantity;
+      } else {
+        // Fallback to the price stored in the cart item
+        total += cartItem.price * cartItem.quantity;
       }
-    });
+    }
     
     return `$${total.toFixed(2)}`;
   };

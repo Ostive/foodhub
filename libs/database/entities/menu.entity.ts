@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { OneToMany } from "typeorm";
 import { User } from './user.entity';
 import { MenuDish } from './menu_dish.entity';
@@ -57,4 +57,10 @@ export class Menu {
 
   @OneToMany(() => MenuTopping, mt => mt.menu)
   menuToppings: MenuTopping[];
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 }

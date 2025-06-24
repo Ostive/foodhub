@@ -1,4 +1,4 @@
-import { Entity, PrimaryColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Order } from './order.entity';
 import { Menu } from './menu.entity';
 
@@ -9,6 +9,9 @@ export class OrderMenu {
 
   @PrimaryColumn()
   menuId: number;
+  
+  @Column({ type: 'int', default: 1 })
+  quantity: number;
 
   @ManyToOne(() => Order, order => order.orderMenus, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'orderId' })

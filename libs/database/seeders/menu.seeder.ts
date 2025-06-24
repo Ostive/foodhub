@@ -59,7 +59,7 @@ export class MenuSeeder {
         name: 'Menu Déjeuner',
         description: 'Formule complète avec entrée, plat et dessert',
         cost: menuCost,
-        picture: 'lunch-menu.jpg',
+        picture: 'https://cdn-icons-png.flaticon.com/512/1046/1046849.png',
         tags: ['lunch', 'set-menu'],
         isVegetarian: starter.isVegetarian && main.isVegetarian && dessert.isVegetarian,
         dishes: [
@@ -82,7 +82,7 @@ export class MenuSeeder {
         name: 'Menu Pâtes',
         description: 'Un délicieux plat de pâtes accompagné et une boisson',
         cost: menuCost,
-        picture: 'pasta-menu.jpg',
+        picture: 'https://cdn-icons-png.flaticon.com/512/1046/1046849.png',
         tags: ['pasta', 'italian'],
         isVegetarian: pasta.isVegetarian && (!side || side.isVegetarian),
         dishes: [
@@ -119,7 +119,7 @@ export class MenuSeeder {
           name: 'Menu Végétarien',
           description: 'Une sélection de nos meilleurs plats végétariens',
           cost: Math.round(baseCost * 0.9), // 10% discount
-          picture: 'vegetarian-menu.jpg',
+          picture: 'https://cdn-icons-png.flaticon.com/512/1046/1046849.png',
           tags: ['vegetarian', 'healthy'],
           isVegetarian: true,
           dishes: menuDishes
@@ -137,7 +137,7 @@ export class MenuSeeder {
         name: 'Menu Découverte',
         description: 'La sélection du chef avec nos plats les plus raffinés',
         cost: Math.round(baseCost * 0.85), // 15% discount
-        picture: 'chef-special.jpg',
+        picture: 'https://cdn-icons-png.flaticon.com/512/1046/1046849.png',
         tags: ['chef', 'special', 'gourmet'],
         isVegetarian: specialDishes.every(d => d.isVegetarian),
         dishes: specialDishes.map((dish, index): MenuDishData => ({
@@ -197,7 +197,7 @@ export class MenuSeeder {
         menu.name = menuData.name;
         menu.description = menuData.description;
         menu.cost = menuData.cost;
-        menu.picture = menuData.picture || 'default-menu.jpg';
+        menu.picture = menuData.picture || 'https://cdn-icons-png.flaticon.com/512/1046/1046849.png';
         menu.tags = menuData.tags;
         menu.isVegetarian = menuData.isVegetarian;
         menu.user = restaurant;

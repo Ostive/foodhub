@@ -8,6 +8,7 @@ export interface Restaurant {
   phone: string;
   address: string;
   role: string;
+  name?: string; // Added name property
   profilePicture?: string;
   cuisineType?: string;
   priceRange?: string;

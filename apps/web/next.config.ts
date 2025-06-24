@@ -36,6 +36,55 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'cwdaust.com.au',
       },
+      {
+        protocol: 'https',
+        hostname: 'ornery-avalanche.biz',
+      },
+      {
+        protocol: 'https',
+        hostname: 'flaticon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'late-guacamole.info',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cdn-icons-png.flaticon.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'static.vecteezy.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'marvelous-alligator.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'distorted-folklore.name',
+      },
+      {
+        protocol: 'https',
+        hostname: 'immense-yarmulke.info',
+      },
+      {
+        protocol: 'https',
+        hostname: 'faint-unit.info',
+      },
+      {
+        protocol: 'https',
+        hostname: 'untrue-humidity.biz',
+      },
+      {
+        protocol: 'https',
+        hostname: 'late-guacamole.info',
+      },
+      {
+        protocol: 'https',
+        hostname: 'second-utilization.com',
+      },
+
       // Add other domains as needed
     ],
   },

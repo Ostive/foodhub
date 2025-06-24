@@ -42,6 +42,9 @@ export class User {
     @Column({ type: 'varchar', length: 255 })
     role: 'customer' | 'delivery_person' | 'restaurant' | 'developer' | 'manager' | 'admin' = 'customer';
 
+    @Column({ type: 'boolean', default: true })
+    isActive: boolean;
+
     @Column({ type: 'varchar', length: 500, nullable: true })
     profilePicture: string;
 

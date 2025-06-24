@@ -49,12 +49,12 @@ export class FilterMenuDto extends PaginationDto {
   @ApiPropertyOptional({
     description: 'Field to sort results by',
     example: 'name',
-    enum: ['name', 'cost', 'createdAt'],
+    enum: ['name', 'cost', 'createdAt', 'menuId'],
     default: 'createdAt'
   })
   @IsOptional()
   @IsString()
-  sortBy?: 'name' | 'cost' | 'createdAt' = 'createdAt';
+  sortBy?: 'name' | 'cost' | 'createdAt' | 'menuId' = 'createdAt';
 
   @ApiPropertyOptional({
     description: 'Sort order direction',
