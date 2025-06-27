@@ -165,10 +165,11 @@ export default function ClientHomePage({
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <CustomerNavbar />
+      
       
       {/* Hero Section */}
       <div className="relative h-[300px] md:h-[400px] bg-gradient-to-r from-[#FF5F6D] to-[#FFC371]">
+        <CustomerNavbar />
         {/* Hero Content */}
         <div className="container mx-auto px-4 h-full flex flex-col justify-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
@@ -179,7 +180,7 @@ export default function ClientHomePage({
           </p>
           
           {/* Search Bar */}
-          <div className="bg-white rounded-lg shadow-lg p-2 flex items-center max-w-2xl">
+         <div className="rounded-lg shadow-lg p-2 flex items-center max-w-2xl" style={{ backgroundColor: 'white' }}>  
             <div className="flex items-center flex-grow border-r border-gray-200 pr-2">
               <MapPin className="text-red-500 mr-2" size={20} />
               <button 
@@ -211,49 +212,51 @@ export default function ClientHomePage({
         </div>
       </div>
       
-      {/* Categories Section */}
-      <div className="container mx-auto px-4 py-8 relative">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">Categories</h2>
-          <div className="flex space-x-2">
-            <button 
-              onClick={() => handleScroll('left')}
-              className={`p-2 rounded-full ${canScrollLeft ? 'bg-gray-200 text-gray-700' : 'bg-gray-100 text-gray-400'}`}
-              disabled={!canScrollLeft}
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button 
-              onClick={() => handleScroll('right')}
-              className={`p-2 rounded-full ${canScrollRight ? 'bg-gray-200 text-gray-700' : 'bg-gray-100 text-gray-400'}`}
-              disabled={!canScrollRight}
-            >
-              <ChevronRight size={20} />
-            </button>
-          </div>
-        </div>
-        
+   {/* Categories Section */}
+<div className="container mx-auto px-4 py-8 relative">
+  <div className="flex items-center justify-between mb-4">
+    <h2 className="text-2xl font-bold">Categories</h2>
+    <div className="flex space-x-2">
+      <button 
+        onClick={() => handleScroll('left')}
+        className={`p-2 rounded-full ${canScrollLeft ? 'bg-gray-200 text-gray-700' : 'bg-gray-100 text-gray-400'}`}
+        disabled={!canScrollLeft}
+      >
+        <ChevronLeft size={20} />
+      </button>
+      <button 
+        onClick={() => handleScroll('right')}
+        className={`p-2 rounded-full ${canScrollRight ? 'bg-gray-200 text-gray-700' : 'bg-gray-100 text-gray-400'}`}
+        disabled={!canScrollRight}
+      >
+        <ChevronRight size={20} />
+      </button>
+    </div>
+  </div>
+
+  <div 
+    ref={categoriesRef}
+    className="flex overflow-x-auto scrollbar-hide space-x-4 pb-4"
+    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+  >
+    {categories.map((category, index) => (
+      <div key={index} className="flex-shrink-0 text-center">
         <div 
-          ref={categoriesRef}
-          className="flex overflow-x-auto scrollbar-hide space-x-4 pb-4"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          onClick={() => router.push(`/customer/search/results?category=${category.name}`)}
+          className="w-24 h-24 md:w-28 md:h-28 cursor-pointer border border-black rounded-lg overflow-hidden transform transition duration-300 hover:scale-105"
         >
-          {categories.map((category, index) => (
-            <div key={index} className="flex-shrink-0">
-              <div 
-                onClick={() => router.push(`/customer/search/results?category=${category.name}`)}
-                className="w-32 h-32 md:w-40 md:h-40 cursor-pointer"
-              >
-                <OverlayCard
-                  image={category.image}
-                  title={category.name}
-                />
-              </div>
-            </div>
-          ))}
+          <img 
+            src={category.image} 
+            alt={category.name} 
+            className="w-full h-full object-cover"
+          />
         </div>
+        <p className="mt-2 text-sm font-medium text-gray-700">{category.name}</p>
       </div>
-      
+    ))}
+  </div>
+</div>
+
       {/* Popular Restaurants Section */}
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-4">
