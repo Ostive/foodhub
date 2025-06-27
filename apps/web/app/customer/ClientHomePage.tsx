@@ -165,7 +165,7 @@ export default function ClientHomePage({
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <CustomerNavbar />
+      
       
       {/* Hero Section with Food Image Background */}
       <div className="relative h-[300px] md:h-[400px] bg-cover bg-center" style={{ 
@@ -240,9 +240,8 @@ export default function ClientHomePage({
         </div>
         
         <div 
-          ref={categoriesRef}
-          className="flex overflow-x-auto scrollbar-hide space-x-4 pb-4"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          onClick={() => router.push(`/customer/search/results?category=${category.name}`)}
+          className="w-24 h-24 md:w-28 md:h-28 cursor-pointer border border-black rounded-lg overflow-hidden transform transition duration-300 hover:scale-105"
         >
           {categories.map((category, index) => (
             <div key={index} className="flex-shrink-0">
@@ -266,6 +265,7 @@ export default function ClientHomePage({
             </div>
           ))}
         </div>
+        <p className="mt-2 text-sm font-medium text-gray-700">{category.name}</p>
       </div>
       
       {/* Popular Restaurants Section - Disabled as requested */}

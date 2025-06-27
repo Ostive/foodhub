@@ -25,7 +25,7 @@ import { useAuth } from "@/lib/auth/auth-context";
 import { LogoutButton } from "@/components/auth/logout-button";
 import { useCart } from "@/contexts/CartContext";
 
-export default function CustomerNavbarNew() {
+export default function CustomerNavbar() {
   const router = useRouter();
   const { isAuthenticated, user } = useAuth();
   const { getCartItemCount } = useCart();
@@ -52,7 +52,7 @@ export default function CustomerNavbarNew() {
 
   return (
     <>
-      <Navbar className="bg-white shadow-md sticky top-0 z-50 border-b border-green-100">
+      <Navbar className="sticky top-5 z-50 border-green-100">
         <NavBody>
           <Link href="/customer" className="flex items-center space-x-2">
         <Image
