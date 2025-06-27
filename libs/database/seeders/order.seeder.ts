@@ -16,6 +16,7 @@ type OrderDishChoice = {
 type OrderDishData = {
   dishId: number;
   quantity: number;
+  price?: number;
   specialInstructions?: string;
   personalizationChoices?: OrderDishChoice[];
 };
@@ -23,6 +24,7 @@ type OrderDishData = {
 type OrderMenuData = {
   menuId: number;
   quantity: number;
+  price?: number;
   specialInstructions?: string;
 };
 
@@ -32,6 +34,7 @@ type OrderData = {
   deliveryLocalisation: string;
   time: Date;
   cost: number;
+  deliveryFee: number;
   status: OrderStatus;
   verificationCode: string;
   dishes: OrderDishData[];
@@ -65,18 +68,9 @@ export class OrderSeeder {
       OrderStatus.DELIVERED,
     ];
 
-    // Get all existing dish and menu IDs
-    // Only get dishes that can be sold alone
-    const sellableDishes = await this.dishRepository.find({ 
-      where: { isSoldAlone: true },
-      select: ['dishId']
-    });
-    const dishIds = sellableDishes.map(dish => dish.dishId);
-    
-    const menuIds = (await this.menuRepository.find({ select: ['menuId'] })).map(menu => menu.menuId);
-
-    if (dishIds.length === 0 || menuIds.length === 0) {
-      console.warn('⚠️  No sellable dishes or menus found. Please seed dishes (with isSoldAlone: true) and menus first.');
+    // We'll fetch dishes and menus per restaurant as we create orders
+    if (restaurants.length === 0) {
+      console.warn('⚠️  No restaurants found. Please seed restaurants first.');
       return [];
     }
 
@@ -88,27 +82,54 @@ export class OrderSeeder {
       const restaurant = faker.helpers.arrayElement(restaurants);
       const status = faker.helpers.arrayElement(statuses);
       const orderTime = faker.date.recent({ days: 30 });
-
-      // Generate 1-2 dishes and 0-1 menus per order (fewer to avoid running out of unique IDs)
-      const dishCount = Math.min(faker.number.int({ min: 1, max: 2 }), dishIds.length);
-      const menuCount = menuIds.length > 0 ? faker.number.int({ min: 0, max: 1 }) : 0;
-
-      // Shuffle and take unique dish IDs
-      const selectedDishIds = faker.helpers.shuffle([...dishIds]).slice(0, dishCount);
+      
+      // Get dishes that belong to this restaurant and can be sold alone
+      const restaurantDishes = await this.dishRepository.find({
+        where: { 
+          userId: restaurant.userId,
+          isSoldAlone: true 
+        },
+        select: ['dishId', 'cost']
+      });
+      
+      // Get menus that belong to this restaurant
+      const restaurantMenus = await this.menuRepository.createQueryBuilder('menu')
+        .innerJoin('menu.user', 'user')
+        .where('user.userId = :userId', { userId: restaurant.userId })
+        .select(['menu.menuId', 'menu.cost'])
+        .getMany();
+      
+      // Log restaurant dishes and menus for debugging
+      console.log(`Restaurant ${restaurant.userId} (${restaurant.firstName}) has ${restaurantDishes.length} dishes and ${restaurantMenus.length} menus`);
+      
+      // Skip if restaurant has no dishes
+      if (restaurantDishes.length === 0) {
+        console.log(`Skipping order for restaurant ${restaurant.userId} (${restaurant.firstName}) - no dishes available`);
+        continue;
+      }
+      
+      // Generate 1-2 dishes and 0-1 menus per order
+      const dishCount = Math.min(faker.number.int({ min: 1, max: 2 }), restaurantDishes.length);
+      const menuCount = restaurantMenus.length > 0 ? faker.number.int({ min: 0, max: 1 }) : 0;
+      
+      // Shuffle and take unique dish IDs from this restaurant
+      const restaurantDishIds = restaurantDishes.map(dish => dish.dishId);
+      const selectedDishIds = faker.helpers.shuffle([...restaurantDishIds]).slice(0, dishCount);
       const dishes: OrderDishData[] = selectedDishIds.map(dishId => ({
         dishId,
         quantity: faker.number.int({ min: 1, max: 3 })
       }));
       
-      // Shuffle and take unique menu IDs
+      // Shuffle and take unique menu IDs from this restaurant
+      const restaurantMenuIds = restaurantMenus.map(menu => menu.menuId);
       const selectedMenuIds = menuCount > 0 
-        ? faker.helpers.shuffle([...menuIds]).slice(0, menuCount)
+        ? faker.helpers.shuffle([...restaurantMenuIds]).slice(0, menuCount)
         : [];
       const menus: OrderMenuData[] = selectedMenuIds.map(menuId => ({
         menuId,
         quantity: faker.number.int({ min: 1, max: 2 })
       }));
-
+      
       // Get dish details with personalization options
       const dishDetails = await Promise.all(selectedDishIds.map(id => 
         this.dishRepository.findOne({ 
@@ -117,7 +138,7 @@ export class OrderSeeder {
         })
       ));
       
-      // Get menu prices
+      // Get menu prices (already have costs from initial query, but keeping this for consistency)
       const menuPrices = await Promise.all(selectedMenuIds.map(id =>
         this.menuRepository.findOne({ where: { menuId: id }, select: ['cost'] })
       ));
@@ -161,22 +182,37 @@ export class OrderSeeder {
           }
         }
         
-        // Update the dish with personalization choices
+        // Update the dish with personalization choices and price
         updatedDishes.push({
           ...item,
+          price: itemCost, // Store the calculated price including personalization
           personalizationChoices: personalizationChoices.length > 0 ? personalizationChoices : undefined
         });
         
         dishCost += item.quantity * itemCost;
       }
       
-      // Calculate menu costs
-      const menuCost = menus.reduce((sum, item, index) => {
-        const price = menuPrices[index]?.cost || 0;
-        return sum + (item.quantity * price);
-      }, 0);
+      // Update menus with prices and calculate menu costs
+      const updatedMenus: OrderMenuData[] = [];
+      let menuCost = 0;
       
-      const totalCost = dishCost + menuCost;
+      for (let i = 0; i < menus.length; i++) {
+        const menuItem = menus[i];
+        const menuPrice = menuPrices[i]?.cost || 0;
+        
+        updatedMenus.push({
+          ...menuItem,
+          price: menuPrice
+        });
+        
+        menuCost += menuItem.quantity * menuPrice;
+      }
+      
+      // Calculate delivery fee based on random factors (distance, etc.)
+      const deliveryFee = parseFloat(faker.number.float({ min: 2, max: 8, fractionDigits: 2 }).toFixed(2));
+      
+      // Add delivery fee to total cost
+      const totalCost = dishCost + menuCost + deliveryFee;
 
       // Ensure customer has an address, fallback to a fake one if not
       const deliveryAddress = customer.address || faker.location.streetAddress();
@@ -187,10 +223,11 @@ export class OrderSeeder {
         deliveryLocalisation: deliveryAddress,
         time: orderTime,
         cost: parseFloat(totalCost.toFixed(2)),
+        deliveryFee: deliveryFee,
         status,
         verificationCode: faker.string.alphanumeric(6).toUpperCase(),
         dishes: updatedDishes,
-        menus,
+        menus: updatedMenus,
       });
     }
 
@@ -243,29 +280,32 @@ export class OrderSeeder {
           deliveryLocalisation: orderItem.deliveryLocalisation,
           time: orderItem.time,
           cost: orderItem.cost,
+          deliveryFee: orderItem.deliveryFee,
           status: orderItem.status,
           verificationCode: orderItem.verificationCode,
         });
 
         const savedOrder = await queryRunner.manager.save(order);
 
-        // Add order dishes with personalization choices
+        // Add order dishes with personalization choices and price
         for (const dish of orderItem.dishes) {
           const orderDish = this.orderDishRepository.create({
             order: { orderId: savedOrder.orderId },
             dish: { dishId: dish.dishId },
             quantity: dish.quantity,
+            price: dish.price, // Include the price field
             personalizationChoices: dish.personalizationChoices || undefined
           });
           await queryRunner.manager.save(OrderDish, orderDish);
         }
 
-        // Add order menus
+        // Add order menus with price
         for (const menu of orderItem.menus) {
           const orderMenu = this.orderMenuRepository.create({
             orderId: savedOrder.orderId,
             menuId: menu.menuId,
-            quantity: menu.quantity
+            quantity: menu.quantity,
+            price: menu.price // Include the price field
           });
           await queryRunner.manager.save(OrderMenu, orderMenu);
         }

@@ -31,6 +31,9 @@ export class Order {
   @Column({ type: 'float' })
   cost: number;
 
+  @Column({ type: 'float', nullable: true, default: 0 })
+  deliveryFee: number;
+
   @Column({ type: 'enum', enum: OrderStatus, default: OrderStatus.CREATED })
   status: OrderStatus;
 

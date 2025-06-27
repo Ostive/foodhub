@@ -1,9 +1,11 @@
 "use client";
 
+import { Suspense } from "react";
 import dynamic from "next/dynamic";
 
 // Import the profile client component with dynamic import to avoid SSR
-const ProfileClient = dynamic(() => import("../ProfileClient"), {
+// We need to use the full path to ensure it's found correctly
+const DynamicProfileClient = dynamic(() => import("../ProfileClient"), {
   ssr: false,
   loading: () => (
     <div className="flex items-center justify-center min-h-screen">
@@ -26,7 +28,7 @@ export default function ProfileWrapper({
   error
 }: ProfileWrapperProps) {
   return (
-    <ProfileClient
+    <DynamicProfileClient
       initialUserData={initialUserData}
       initialPaymentMethods={initialPaymentMethods}
       initialNotificationSettings={initialNotificationSettings}

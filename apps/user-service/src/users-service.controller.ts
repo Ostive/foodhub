@@ -33,6 +33,15 @@ export class UsersController {
     return this.usersService.createCustomer(createCustomerDto);
   }
 
+  @ApiOperation({ summary: 'Get a customer by ID' })
+  @ApiParam({ name: 'id', description: 'Customer ID' })
+  @ApiResponse({ status: 200, description: 'Customer found' })
+  @ApiResponse({ status: 404, description: 'Customer not found' })
+  @Get('customer/:id')
+  findCustomerById(@Param('id') id: string) {
+    return this.usersService.findCustomerById(+id);
+  }
+
   @ApiOperation({ summary: 'Create a new delivery person user' })
   @ApiBody({ type: CreateDeliveryPersonDto, description: 'Delivery person data' })
   @ApiResponse({ status: 201, description: 'Delivery person successfully created' })
@@ -148,6 +157,64 @@ export class UsersController {
       throw new BadRequestException('Invalid user ID format. Must be a number.');
     }
     return this.usersService.findOne(userId);
+  }
+  
+  @ApiOperation({ summary: 'Find a customer by email' })
+  @ApiParam({ name: 'email', description: 'Customer email address', example: 'customer@example.com' })
+  @ApiResponse({ status: 200, description: 'Returns the customer with the specified email' })
+  @ApiResponse({ status: 404, description: 'Customer not found' })
+  @Get('customers/email/:email')
+  findCustomerByEmail(@Param('email') email: string) {
+    return this.usersService.findCustomerByEmail(email);
+  }
+  
+  @Patch('customers/email/:email')
+  @ApiOperation({ summary: 'Update a customer by email' })
+  @ApiParam({ name: 'email', description: 'Customer email' })
+  @ApiBody({ type: UpdateUserDto })
+  @ApiResponse({ status: 200, description: 'Customer updated successfully' })
+  @ApiResponse({ status: 404, description: 'Customer not found' })
+  async updateCustomerByEmail(
+    @Param('email') email: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return this.usersService.updateCustomerByEmail(email, updateUserDto);
+  }
+
+  @Post('customers/email/:email/credit-cards')
+  @ApiOperation({ summary: 'Add a credit card to a customer' })
+  @ApiParam({ name: 'email', description: 'Customer email' })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        creditCardNumber: { type: 'string', example: '1234567890123456' },
+        expiryDate: { type: 'string', example: '12/25' },
+        name: { type: 'string', example: 'John Doe' },
+      },
+      required: ['creditCardNumber', 'expiryDate', 'name'],
+    },
+  })
+  @ApiResponse({ status: 201, description: 'Credit card added successfully' })
+  @ApiResponse({ status: 404, description: 'Customer not found' })
+  async addCreditCard(
+    @Param('email') email: string,
+    @Body() creditCardData: { creditCardNumber: string; expiryDate: string; name: string },
+  ) {
+    return this.usersService.addCreditCardByEmail(email, creditCardData);
+  }
+
+  @Delete('customers/email/:email/credit-cards/:id')
+  @ApiOperation({ summary: 'Delete a credit card from a customer' })
+  @ApiParam({ name: 'email', description: 'Customer email' })
+  @ApiParam({ name: 'id', description: 'Credit card ID' })
+  @ApiResponse({ status: 200, description: 'Credit card deleted successfully' })
+  @ApiResponse({ status: 404, description: 'Customer or credit card not found' })
+  async deleteCreditCard(
+    @Param('email') email: string,
+    @Param('id') id: string,
+  ) {
+    return this.usersService.deleteCreditCardByEmail(email, +id);
   }
   
   @ApiOperation({ summary: 'Find a customer by ID' })

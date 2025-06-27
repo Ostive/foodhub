@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Put, Patch, Query, BadRequestException } from '@nestjs/common';
 import { OrderServiceService } from './order-service.service';
-import { CreateOrderDto, UpdateOrderDto } from './dto/order.dto';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderStatus } from 'libs/database/entities/order_status.enum';
 import { Order } from 'libs/database/entities/order.entity';
 import { NotFoundException } from '@nestjs/common';
@@ -11,11 +12,12 @@ import { ApiTags, ApiOperation, ApiParam, ApiBody, ApiResponse } from '@nestjs/s
 export class OrderServiceController {
   constructor(private readonly orderServiceService: OrderServiceService) {}
 
-  @ApiOperation({ summary: 'Get welcome message' })
-  @ApiResponse({ status: 200, description: 'Returns a welcome message' })
-  @Get('hello')
-  getHello(): string {
-    return this.orderServiceService.getHello();
+
+  @ApiOperation({ summary: 'Get all orders' })
+  @ApiResponse({ status: 200, description: 'Returns all orders' })
+  @Get()
+  findAll(@Query('restaurantId') restaurantId?: string) {
+    return this.orderServiceService.findAll(restaurantId ? +restaurantId : undefined);
   }
 
   @ApiOperation({ summary: 'Create a new order' })
@@ -129,18 +131,11 @@ export class OrderServiceController {
   })
   @ApiResponse({ status: 400, description: 'Invalid status' })
   @Get('status/:status')
-  getOrdersByStatus(@Param('status') status: OrderStatus) {
-    return this.orderServiceService.getOrdersByStatus(status);
+  findByStatus(@Param('status') status: OrderStatus) {
+    return this.orderServiceService.findByStatus(status);
   }
 
-    @ApiOperation({ summary: 'Get all orders' })
-    @Get()
-    async getOrders(@Query('restaurantId') restaurantId: number) {
-      if (!restaurantId) {
-        throw new BadRequestException('restaurantId is required');
-      }
-      return this.orderServiceService.getAllOrders(restaurantId);
-    }
+  // This is a duplicate of the findAll method at the top of the controller, so we're removing it
   @ApiOperation({ summary: 'Get orders assigned to a specific delivery person' })
   @ApiParam({
     name: 'deliveryPersonId',
@@ -153,8 +148,8 @@ export class OrderServiceController {
     type: [Order]
   })
   @Get('delivery-person/:deliveryPersonId')
-  getDeliveryPersonOrders(@Param('deliveryPersonId') deliveryPersonId: string) {
-    return this.orderServiceService.getDeliveryPersonOrders(+deliveryPersonId);
+  findByDeliveryPerson(@Param('deliveryPersonId') deliveryPersonId: string) {
+    return this.orderServiceService.findByDeliveryPerson(+deliveryPersonId);
   }
 
   @ApiOperation({ summary: 'Get orders available for delivery' })
@@ -164,8 +159,24 @@ export class OrderServiceController {
     type: [Order]
   })
   @Get('available-for-delivery')
-  getOrdersAvailableForDelivery() {
-    return this.orderServiceService.getOrdersAvailableForDelivery();
+  findAvailableForDelivery() {
+    return this.orderServiceService.findAvailableForDelivery();
+  }
+
+  @ApiOperation({ summary: 'Get orders for a specific customer' })
+  @ApiParam({
+    name: 'customerId',
+    description: 'ID of the customer',
+    example: '1'
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns all orders for the specified customer',
+    type: [Order]
+  })
+  @Get('customer/:customerId')
+  findByCustomer(@Param('customerId') customerId: string) {
+    return this.orderServiceService.findByCustomer(+customerId);
   }
 
   @ApiOperation({ summary: 'Update order status with validation' })

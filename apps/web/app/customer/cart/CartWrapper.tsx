@@ -25,7 +25,8 @@ export default function CartWrapper({ addressSuggestions, paymentMethods, error 
   return (
     <>
       <CustomerNavbar />
-      <div className="pt-8"> {/* Add spacing between navbar and content */}
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <h1 className="text-2xl font-bold mb-6">Your Cart</h1>
         <DynamicCartClient 
           addressSuggestions={addressSuggestions} 
           paymentMethods={paymentMethods} 

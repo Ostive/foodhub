@@ -18,6 +18,9 @@ export class OrderDish {
   @Column({ type: 'int', default: 1 })
   quantity: number;
 
+  @Column({ type: 'float', nullable: true })
+  price: number;
+
   @Column({ type: 'jsonb', nullable: true })
   personalizationChoices: PersonalizationChoice[];
 

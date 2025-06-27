@@ -13,6 +13,9 @@ export class OrderMenu {
   @Column({ type: 'int', default: 1 })
   quantity: number;
 
+  @Column({ type: 'float', nullable: true })
+  price: number;
+
   @ManyToOne(() => Order, order => order.orderMenus, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'orderId' })
   order: Order;

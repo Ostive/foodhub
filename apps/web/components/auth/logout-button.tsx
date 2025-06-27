@@ -8,11 +8,13 @@ import { useLogout } from '@/lib/hooks/use-logout';
 interface LogoutButtonProps {
   className?: string;
   variant?: 'default' | 'icon' | 'text';
+  children?: React.ReactNode;
 }
 
 export function LogoutButton({ 
   className = '', 
-  variant = 'default' 
+  variant = 'default',
+  children
 }: LogoutButtonProps) {
   const router = useRouter();
   const { mutate: logout, isPending } = useLogout();
@@ -47,7 +49,7 @@ export function LogoutButton({
         disabled={isPending}
         className={`text-gray-600 hover:text-gray-900 font-medium ${className}`}
       >
-        {isPending ? 'Logging out...' : 'Logout'}
+        {isPending ? 'Logging out...' : children || 'Logout'}
       </button>
     );
   }

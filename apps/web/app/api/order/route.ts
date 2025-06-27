@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { CreateOrderSchema } from '@/lib/schemas/order.schema';
+import { CreateOrderSchema, OrderDishSchema, OrderMenuSchema } from '@/lib/schemas/order.schema';
 
 /**
  * Order API endpoint
@@ -65,6 +65,54 @@ export async function POST(request: NextRequest) {
     // Parse and validate request body
     const body = await request.json();
     
+    // Define cart item type
+    interface CartItem {
+      id: string;
+      type: string;
+      quantity: number;
+      price?: number;
+      specialInstructions?: string;
+    }
+    
+    // Transform legacy cart format if needed
+    if (body.cartItems && Array.isArray(body.cartItems)) {
+      // Initialize dishes and menus arrays if they don't exist
+      if (!body.dishes) body.dishes = [];
+      if (!body.menus) body.menus = [];
+      
+      // Convert cartItems to dishes and menus
+      body.cartItems.forEach((item: CartItem) => {
+        if (item.type === 'dish') {
+          body.dishes.push({
+            dishId: parseInt(item.id),
+            quantity: item.quantity,
+            price: item.price || 0
+          });
+        } else if (item.type === 'menu') {
+          body.menus.push({
+            menuId: parseInt(item.id),
+            quantity: item.quantity,
+            price: item.price || 0
+          });
+        }
+      });
+    }
+    
+    // Convert deliveryAddress to deliveryLocalisation if needed
+    if (body.deliveryAddress && !body.deliveryLocalisation) {
+      body.deliveryLocalisation = body.deliveryAddress;
+    }
+    
+    // Set current time if not provided
+    if (!body.time) {
+      body.time = new Date().toISOString();
+    }
+    
+    // Set status to 'created' if not provided
+    if (!body.status) {
+      body.status = 'created';
+    }
+    
     // Validate against schema
     const result = CreateOrderSchema.safeParse(body);
     if (!result.success) {
@@ -74,15 +122,28 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    // Prepare the order data for the order service
+    const orderData = {
+      customerId: result.data.customerId,
+      restaurantId: result.data.restaurantId,
+      deliveryLocalisation: result.data.deliveryLocalisation,
+      time: result.data.time,
+      cost: result.data.cost,
+      deliveryFee: result.data.deliveryFee,
+      status: result.data.status,
+      dishes: result.data.dishes,
+      menus: result.data.menus || []
+    };
+    
     // Forward the request to the order service
-    const orderServiceUrl = process.env.ORDER_SERVICE_URL || 'http://localhost:3003';
-    const response = await fetch(`${orderServiceUrl}/orders`, {
+    const orderServiceUrl = process.env.ORDER_SERVICE_URL || 'http://localhost:3001';
+    const response = await fetch(`${orderServiceUrl}/api/orders`, {
       method: 'POST',
       headers: {
         'Authorization': authHeader,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(result.data),
+      body: JSON.stringify(orderData),
     });
 
     // Return the response from the order service

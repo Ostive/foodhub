@@ -91,28 +91,74 @@ export const OrderSchema = z.object({
 export type Order = z.infer<typeof OrderSchema>;
 
 /**
+ * Personalization choice schema
+ */
+export const PersonalizationChoiceSchema = z.object({
+  optionId: z.number(),
+  choiceIds: z.array(z.number())
+});
+
+/**
+ * Order dish schema
+ */
+export const OrderDishSchema = z.object({
+  dishId: z.number(),
+  quantity: z.number().positive(),
+  price: z.number().optional(),
+  personalizationChoices: z.array(PersonalizationChoiceSchema).optional()
+});
+
+/**
+ * Order menu schema
+ */
+export const OrderMenuSchema = z.object({
+  menuId: z.number(),
+  quantity: z.number().positive(),
+  price: z.number().optional()
+});
+
+/**
  * Create order schema (for order creation)
  */
 export const CreateOrderSchema = z.object({
+  customerId: z.number(),
   restaurantId: z.number(),
-  items: z.array(
+  deliveryLocalisation: z.string(),
+  time: z.string().optional(),
+  cost: z.number().optional(),
+  deliveryFee: z.number().optional(),
+  status: z.string().optional(),
+  dishes: z.array(OrderDishSchema),
+  menus: z.array(OrderMenuSchema).optional(),
+  // Legacy fields for backward compatibility
+  cartItems: z.array(
     z.object({
-      menuItemId: z.number(),
+      id: z.string(),
+      type: z.string(),
       quantity: z.number().positive(),
-      specialInstructions: z.string().optional(),
-      options: z.array(
-        z.object({
-          name: z.string(),
-          value: z.string(),
-        })
-      ).optional(),
+      specialInstructions: z.string().optional()
     })
-  ),
-  deliveryAddress: z.string(),
+  ).optional(),
+  // Additional frontend-specific fields
+  paymentMethod: PaymentMethodSchema.optional(),
   deliveryInstructions: z.string().optional(),
-  paymentMethod: PaymentMethodSchema,
   tip: z.number().nonnegative().optional(),
   promoCode: z.string().optional(),
 });
 
 export type CreateOrder = z.infer<typeof CreateOrderSchema>;
+
+/**
+ * Order dish type
+ */
+export type OrderDish = z.infer<typeof OrderDishSchema>;
+
+/**
+ * Order menu type
+ */
+export type OrderMenu = z.infer<typeof OrderMenuSchema>;
+
+/**
+ * Personalization choice type
+ */
+export type PersonalizationChoice = z.infer<typeof PersonalizationChoiceSchema>;

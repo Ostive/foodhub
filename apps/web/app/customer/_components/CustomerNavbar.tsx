@@ -11,6 +11,8 @@ import {
   User,
   Menu as IconMenu2,
   X as IconX,
+  Package,
+  LogOut
 } from "lucide-react";
 import {
   Navbar,
@@ -52,7 +54,7 @@ export default function CustomerNavbarNew() {
     <>
       <Navbar className="bg-white shadow-md sticky top-0 z-50 border-b border-green-100">
         <NavBody>
-          <Link href="/" className="flex items-center space-x-2">
+          <Link href="/customer" className="flex items-center space-x-2">
         <Image
           src="/FOOD-LOGO.png"
           alt="FoodHUB Logo"
@@ -114,11 +116,16 @@ export default function CustomerNavbarNew() {
                 <Link href="/customer/profile" className="block py-2 text-sm text-gray-700 hover:text-green-600 flex items-center">
                   <User className="w-4 h-4 mr-2" /> My Profile
                 </Link>
+                <Link href="/customer/orders" className="block py-2 text-sm text-gray-700 hover:text-green-600 flex items-center">
+                  <Package className="w-4 h-4 mr-2" /> My Orders
+                </Link>
                 <div className="w-full text-left py-2">
                   <LogoutButton 
                     variant="text" 
                     className="text-red-600 hover:text-red-700 flex items-center text-sm w-full" 
-                  />
+                  >
+                    <LogOut className="w-4 h-4 mr-2" /> Logout
+                  </LogoutButton>
                 </div>
               </div>
             </div>
@@ -183,14 +190,19 @@ export default function CustomerNavbarNew() {
                     <p className="text-xs text-gray-600 truncate max-w-xs">{userData.address}</p>
                   </div>
                 </div>
-                <Link href="/customer/profile" className="block py-3 text-[#009E73] font-semibold border-b border-gray-100">
-                  My Profile
+                <Link href="/customer/profile" className="block py-3 text-[#009E73] font-semibold border-b border-gray-100 flex items-center">
+                  <User className="w-5 h-5 mr-2" /> My Profile
+                </Link>
+                <Link href="/customer/orders" className="block py-3 text-[#009E73] font-semibold border-b border-gray-100 flex items-center">
+                  <Package className="w-5 h-5 mr-2" /> My Orders
                 </Link>
                 <div className="w-full py-3 border-b border-gray-100">
                   <LogoutButton 
                     variant="text" 
-                    className="text-red-600 font-semibold w-full text-left" 
-                  />
+                    className="text-red-600 font-semibold w-full text-left flex items-center" 
+                  >
+                    <LogOut className="w-5 h-5 mr-2" /> Logout
+                  </LogoutButton>
                 </div>
               </>
             ) : (

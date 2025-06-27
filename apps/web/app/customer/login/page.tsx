@@ -226,9 +226,9 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* Right side - Image */}
+      {/* Right side - Image with green tinted overlay */}
       <div className="hidden md:block md:flex-1 bg-cover bg-center" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?auto=format&fit=crop&w=1600&q=80')" }}>
-        <div className="h-full w-full bg-black bg-opacity-40 flex flex-col justify-center items-center text-white p-12">
+        <div className="h-full w-full bg-gradient-to-r from-green-900/30 to-green-700/20 flex flex-col justify-center items-center text-white p-12">
           <div className="max-w-md text-center">
             <h2 className="text-3xl font-bold mb-6">Delicious food, delivered to your door</h2>
             <p className="text-lg mb-8">Order from your favorite local restaurants with free delivery on your first order.</p>

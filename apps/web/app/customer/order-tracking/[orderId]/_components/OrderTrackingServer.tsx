@@ -1,4 +1,37 @@
-import { Order } from "@/lib/api/orders-api";
+// Define the order tracking types to match our processed order structure
+interface OrderRestaurant {
+  id: string;
+  name: string;
+  image: string;
+  phone: string;
+}
+
+interface OrderCustomer {
+  name: string;
+  address: string;
+}
+
+interface OrderItem {
+  id: string;
+  name: string;
+  quantity: number;
+  price: string;
+  image?: string;
+}
+
+interface Order {
+  id: string;
+  status: string;
+  placedAt: string;
+  restaurant: OrderRestaurant;
+  customer: OrderCustomer;
+  items: OrderItem[];
+  total: string;
+  subtotal: string;
+  deliveryFee: string;
+  tax: string;
+  verificationCode?: string;
+}
 
 /**
  * Server component that fetches order data by ID
@@ -9,20 +42,105 @@ export async function getOrderData(orderId: string): Promise<{
   error: string | null;
 }> {
   try {
-    // Fetch order data from API
-    const response = await fetch(`${process.env.ORDER_SERVICE_URL}/orders/${orderId}`, {
-      cache: "no-store", // Don't cache to ensure fresh data
-      next: { revalidate: 30 } // Revalidate every 30 seconds as fallback
-    });
+    // Get auth token from cookies
+    const cookieStore = await (await import('next/headers')).cookies();
+    const authToken = cookieStore.get('auth_token')?.value;
     
-    if (!response.ok) {
-      throw new Error(`Failed to fetch order: ${response.statusText}`);
+    if (!authToken) {
+      return {
+        order: null,
+        error: 'No authentication token found'
+      };
     }
     
-    const order = await response.json();
+    // Fetch order data from API using the correct endpoint
+    let response;
+    
+    try {
+      // Use the correct endpoint: /api/orders/:id with GET method
+      response = await fetch(`${process.env.ORDER_SERVICE_URL}/api/orders/${orderId}`, {
+        method: 'GET',
+        cache: "no-store", // Use no-store for real-time data without caching
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+    } catch (error) {
+      console.error('Error fetching order:', error);
+      throw new Error(`Failed to connect to order service: ${error instanceof Error ? error.message : String(error)}`);
+    }
+    
+    // Handle 404 Not Found errors specially
+    if (response.status === 404) {
+      return {
+        order: null,
+        error: null // Return null to trigger the "not found" UI instead of error UI
+      };
+    }
+    
+    // Handle other error responses
+    if (!response.ok) {
+      throw new Error(`Failed to fetch order: ${response.status} ${response.statusText}`);
+    }
+    
+    const orderData = await response.json();
+    
+    // Process the order data to match the expected format for the client
+    const processedOrder = {
+      id: String(orderData.orderId),
+      status: orderData.status || 'processing',
+      placedAt: orderData.time || new Date().toISOString(),
+      restaurant: {
+        id: String(orderData.restaurantId),
+        name: orderData.restaurantName || 'Restaurant',
+        image: orderData.restaurantImage || '/images/default-restaurant.png',
+        phone: orderData.restaurantPhone || '555-123-4567'
+      },
+      customer: {
+        name: orderData.customerName || 'Customer',
+        address: orderData.deliveryLocalisation || ''
+      },
+      // Add sample items if none are provided by the API
+      items: orderData.orderDishes || orderData.orderItems || [
+        {
+          id: "sample-1",
+          name: "Sample Dish",
+          quantity: 1,
+          price: "$10.99",
+          image: "/images/default-dish.png"
+        }
+      ],
+      total: typeof orderData.cost === 'number' ? `$${orderData.cost.toFixed(2)}` : '$0.00',
+      subtotal: typeof orderData.cost === 'number' ? `$${(orderData.cost - (orderData.deliveryFee || 0)).toFixed(2)}` : '$0.00',
+      deliveryFee: typeof orderData.deliveryFee === 'number' ? `$${orderData.deliveryFee.toFixed(2)}` : '$0.00',
+      tax: typeof orderData.tax === 'number' ? `$${orderData.tax.toFixed(2)}` : '$0.00',
+      verificationCode: orderData.verificationCode || ''
+    };
+    
+    // Try to fetch additional restaurant details if we have a restaurant ID
+    try {
+      if (orderData.restaurantId) {
+        const restaurantResponse = await fetch(`${process.env.RESTAURANT_SERVICE_URL}/api/restaurants/${orderData.restaurantId}`, {
+          cache: "no-store",
+          headers: {
+            'Authorization': `Bearer ${authToken}`
+          }
+        });
+        
+        if (restaurantResponse.ok) {
+          const restaurantData = await restaurantResponse.json();
+          processedOrder.restaurant.name = restaurantData.name || processedOrder.restaurant.name;
+          processedOrder.restaurant.image = restaurantData.profilePicture || processedOrder.restaurant.image;
+          processedOrder.restaurant.phone = restaurantData.phone || processedOrder.restaurant.phone;
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching restaurant details:', error);
+      // Continue with the order data we have
+    }
     
     return {
-      order,
+      order: processedOrder,
       error: null
     };
   } catch (error) {
@@ -87,7 +205,7 @@ export const mockOrders: Record<string, any> = {
   }
 };
 
-// Helper function to get order data (uses mock data if API fails)
+// Helper function to get order data with proper error handling
 export async function getOrderDataWithFallback(orderId: string): Promise<{
   order: any;
   error: string | null;
@@ -95,24 +213,17 @@ export async function getOrderDataWithFallback(orderId: string): Promise<{
   try {
     const { order, error } = await getOrderData(orderId);
     
-    // If API call fails but we have mock data for this order ID, use that
-    if (!order && mockOrders[orderId]) {
+    // If the error is related to "No order found", we don't treat it as an error
+    // This allows the client to show a friendly "Order not found" message
+    if (error && (error.includes('No order found') || error.includes('Order not found'))) {
       return {
-        order: mockOrders[orderId],
-        error: null
+        order: null,
+        error: null // Return null error to trigger the "not found" UI instead of error UI
       };
     }
     
     return { order, error };
   } catch (error) {
-    // Fallback to mock data if available
-    if (mockOrders[orderId]) {
-      return {
-        order: mockOrders[orderId],
-        error: null
-      };
-    }
-    
     return {
       order: null,
       error: error instanceof Error ? error.message : "Failed to fetch order details"

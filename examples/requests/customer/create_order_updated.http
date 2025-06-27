@@ -1,0 +1,39 @@
+### Create a new order with updated DTO structure
+POST http://localhost:3000/orders
+Content-Type: application/json
+Authorization: Bearer your_auth_token_here
+
+{
+  "customerId": 1,
+  "restaurantId": 2,
+  "deliveryLocalisation": "123 Main Street, Apt 4B, New York, NY 10001",
+  "time": "2025-06-25T07:23:00.000Z",
+  "cost": 37.97,
+  "deliveryFee": 3.99,
+  "status": "created",
+  "dishes": [
+    {
+      "dishId": 1,
+      "quantity": 2,
+      "price": 12.99,
+      "personalizationChoices": [
+        {
+          "optionId": 1,
+          "choiceIds": [2, 3]
+        }
+      ]
+    },
+    {
+      "dishId": 4,
+      "quantity": 1,
+      "price": 8.99
+    }
+  ],
+  "menus": [
+    {
+      "menuId": 3,
+      "quantity": 1,
+      "price": 15.99
+    }
+  ]
+}

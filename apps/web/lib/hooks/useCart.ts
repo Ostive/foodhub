@@ -13,6 +13,7 @@ export interface CartItem {
   type: CartItemType;
   restaurantId: number;
   restaurantName?: string;
+  specialInstructions?: string;
 }
 
 export function useCart() {

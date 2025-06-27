@@ -1,7 +1,10 @@
 import { Injectable, ValidationPipe, UsePipes } from '@nestjs/common';
-import { CreateOrderDto, UpdateOrderDto } from './dto/order.dto';
+import { CreateOrderDto } from './dto/create-order.dto';
+import { UpdateOrderDto } from './dto/update-order.dto';
 import { OrderStatus } from 'libs/database/entities/order_status.enum';
 import { Order } from 'libs/database/entities/order.entity';
+import { OrderDish } from 'libs/database/entities/order_dish.entity';
+import { OrderMenu } from 'libs/database/entities/order_menu.entity';
 import { NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -15,13 +18,14 @@ export class OrderServiceService {
   constructor(
     @InjectRepository(Order)
     private readonly orderRepository: Repository<Order>,
+    @InjectRepository(OrderDish)
+    private readonly orderDishRepository: Repository<OrderDish>,
+    @InjectRepository(OrderMenu)
+    private readonly orderMenuRepository: Repository<OrderMenu>,
     private readonly cartItemService: CartItemService,
     private readonly orderItemsService: OrderItemsService,
   ) {}
 
-  getHello(): string {
-    return 'Hello World!';
-  }
 
   async createOrder(createOrderDto: CreateOrderDto) {
     // Generate a 6-digit verification code
@@ -29,25 +33,36 @@ export class OrderServiceService {
     
     // Create a new order with proper typing
     const newOrder = new Order();
-    newOrder.customerId = createOrderDto.userId;
+    newOrder.customerId = createOrderDto.customerId;
     newOrder.restaurantId = createOrderDto.restaurantId;
-    newOrder.deliveryLocalisation = createOrderDto.deliveryAddress || '';
-    newOrder.time = new Date();
-    newOrder.cost = 0; // Will be calculated after items are processed
-    newOrder.status = OrderStatus.CREATED;
+    newOrder.deliveryLocalisation = createOrderDto.deliveryLocalisation || '';
+    newOrder.time = createOrderDto.time || new Date();
+    newOrder.cost = createOrderDto.cost || 0; // Use provided cost or calculate after items are processed
+    newOrder.deliveryFee = createOrderDto.deliveryFee || 0;
+    newOrder.status = createOrderDto.status || OrderStatus.CREATED;
     newOrder.verificationCode = verificationCode;
     
     // Save the order first to get the order ID
     const savedOrder = await this.orderRepository.save(newOrder);
     
-    // Process cart items if they exist (new format)
-    if (createOrderDto.cartItems && createOrderDto.cartItems.length > 0) {
-      await this.cartItemService.processCartItems(savedOrder, createOrderDto.cartItems);
+    // Process dishes if they exist
+    if (createOrderDto.dishes && createOrderDto.dishes.length > 0) {
+      await this.orderItemsService.processDishes(savedOrder, createOrderDto.dishes);
     }
-    // Process legacy items if they exist and no cart items were provided
-    else if (createOrderDto.items && createOrderDto.items.length > 0) {
+    
+    // Process menus if they exist
+    if (createOrderDto.menus && createOrderDto.menus.length > 0) {
+      await this.orderItemsService.processMenus(savedOrder, createOrderDto.menus);
+    }
+    
+    // For backward compatibility - process cart items if they exist (old format)
+    if (createOrderDto['cartItems'] && createOrderDto['cartItems'].length > 0) {
+      await this.cartItemService.processCartItems(savedOrder, createOrderDto['cartItems']);
+    }
+    // For backward compatibility - process legacy items if they exist and no other items were provided
+    else if (createOrderDto['items'] && createOrderDto['items'].length > 0) {
       // Convert legacy items to cart items format
-      const cartItems = createOrderDto.items.map(item => ({
+      const cartItems = createOrderDto['items'].map(item => ({
         id: item.itemId.toString(),
         type: CartItemType.DISH, // Legacy items are always dishes
         quantity: item.quantity,
@@ -71,30 +86,46 @@ export class OrderServiceService {
     if (!order) throw new NotFoundException('Order not found');
     
     // Update order properties
-    const { items, cartItems, ...orderProps } = updateOrderDto;
+    const { dishes, menus, ...orderProps } = updateOrderDto;
     Object.assign(order, orderProps);
     
     // Save the updated order
     const updatedOrder = await this.orderRepository.save(order);
     
-    // Process cart items if they exist (new format)
-    if (cartItems && cartItems.length > 0) {
-      // Clear existing items first
+    // Process dishes if they exist
+    if (dishes && dishes.length > 0) {
+      // Delete existing dishes for this order
+      await this.orderDishRepository.delete({ orderId: order.orderId });
+      // Add new dishes
+      await this.orderItemsService.processDishes(order, dishes);
+    }
+    
+    // Process menus if they exist
+    if (menus && menus.length > 0) {
+      // Delete existing menus for this order
+      await this.orderMenuRepository.delete({ orderId: order.orderId });
+      // Add new menus
+      await this.orderItemsService.processMenus(order, menus);
+    }
+    
+    // For backward compatibility - process cart items if they exist
+    if (updateOrderDto['cartItems'] && updateOrderDto['cartItems'].length > 0) {
+      // Clear existing items
       await this.cartItemService.clearOrderItems(order.orderId);
       // Add new items
-      await this.cartItemService.processCartItems(updatedOrder, cartItems);
+      await this.cartItemService.processCartItems(updatedOrder, updateOrderDto['cartItems']);
     }
-    // Process legacy items if they exist and no cart items were provided
-    else if (items && items.length > 0) {
-      // Clear existing items first
+    // For backward compatibility - process legacy items if they exist
+    else if (updateOrderDto['items'] && updateOrderDto['items'].length > 0) {
+      // Clear existing items
       await this.cartItemService.clearOrderItems(order.orderId);
       
       // Convert legacy items to cart items format
-      const cartItemsFromLegacy = items.map(item => ({
+      const cartItemsFromLegacy = updateOrderDto['items'].map(item => ({
         id: item.itemId.toString(),
         type: CartItemType.DISH, // Legacy items are always dishes
         quantity: item.quantity,
-        specialInstructions: item.specialInstructions
+        specialInstructions: item.specialInstructions || ''
       }));
       
       await this.cartItemService.processCartItems(updatedOrder, cartItemsFromLegacy);
@@ -136,21 +167,29 @@ export class OrderServiceService {
     return this.orderRepository.save(order);
   }
 
-  async getOrdersByStatus(status: OrderStatus): Promise<Order[]> {
+  async findByStatus(status: OrderStatus): Promise<Order[]> {
     return this.orderRepository.find({ where: { status } });
   }
 
-  // Get all orders, optionally filtered by restaurant ID
-  async getAllOrders(restaurantId?: number): Promise<Order[]> {
+  // Find all orders, optionally filtered by restaurant ID
+  async findAll(restaurantId?: number): Promise<Order[]> {
     if (restaurantId) {
-      return this.orderRepository.find({ where: { restaurantId } });
+      return this.orderRepository.find({ 
+        where: { restaurantId },
+        relations: ['orderDishes', 'orderMenus'],
+        order: { time: 'DESC' }
+      });
     }
-    return this.orderRepository.find();}
+    return this.orderRepository.find({
+      relations: ['orderDishes', 'orderMenus'],
+      order: { time: 'DESC' }
+    });
+  }
   
   /**
-   * Get all orders assigned to a specific delivery person
+   * Find all orders assigned to a specific delivery person
    */
-  async getDeliveryPersonOrders(deliveryPersonId: number): Promise<Order[]> {
+  async findByDeliveryPerson(deliveryPersonId: number): Promise<Order[]> {
     return this.orderRepository.find({
       where: { deliveryId: deliveryPersonId },
       relations: ['customer', 'restaurant']
@@ -158,9 +197,22 @@ export class OrderServiceService {
   }
 
   /**
-   * Get all orders available for delivery (accepted by restaurant but not yet assigned to a delivery person)
+   * Find all orders for a specific customer
+   * @param customerId The ID of the customer
+   * @returns Array of orders for the customer
    */
-  async getOrdersAvailableForDelivery(): Promise<Order[]> {
+  async findByCustomer(customerId: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { customerId },
+      relations: ['orderDishes', 'orderMenus'],
+      order: { time: 'DESC' }
+    });
+  }
+
+  /**
+   * Find all orders available for delivery (accepted by restaurant but not yet assigned to a delivery person)
+   */
+  async findAvailableForDelivery(): Promise<Order[]> {
     return this.orderRepository.find({
       where: { status: OrderStatus.ACCEPTED_RESTAURANT },
       relations: ['restaurant']
@@ -231,7 +283,7 @@ export class OrderServiceService {
    */
   async findOneWithItems(orderId: number) {
     const order = await this.findOne(orderId);
-    const orderItems = await this.orderItemsService.findOrderItems(orderId);
+    const orderItems = await this.orderItemsService.getOrderItems(orderId);
     
     return {
       ...order,
@@ -246,7 +298,7 @@ export class OrderServiceService {
    */
   async calculateOrderTotal(orderId: number): Promise<number> {
     // Get all dishes and menus for this order
-    const { dishes, menus } = await this.orderItemsService.findOrderItems(orderId);
+    const { dishes, menus } = await this.orderItemsService.getOrderItems(orderId);
     
     // Calculate total from dishes
     const dishesTotal = dishes.reduce((total, item) => {

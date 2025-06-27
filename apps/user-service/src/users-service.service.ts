@@ -7,8 +7,9 @@ import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { CreateManagerDto } from './dto/create-manager.dto';
 import { CreateAdminDto } from './dto/create-admin.dto';
 import { User } from '../../../libs/database/entities/user.entity';
+import { CreditCard } from '../../../libs/database/entities/credit_card.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Planning } from '../../../libs/database/entities/planning.entity';
 
@@ -19,6 +20,7 @@ export class UsersService {
     private readonly userRepository: Repository<User>,
     @InjectRepository(Planning)
     private readonly planningRepository: Repository<Planning>,
+    private readonly dataSource: DataSource
   ) {}
 
   private async checkEmailExists(email: string): Promise<void> {
@@ -26,6 +28,174 @@ export class UsersService {
     if (existingUser) {
       throw new ConflictException('Email already exists');
     }
+  }
+  
+  async findCustomerByEmail(email: string): Promise<User> {
+    const user = await this.userRepository.findOne({ 
+      where: { 
+        email, 
+        role: 'customer',
+        isActive: true 
+      },
+      relations: ['creditCards'] // Include credit cards in the response
+    });
+    
+    if (!user) {
+      throw new NotFoundException(`Customer with email ${email} not found`);
+    }
+    
+    // Remove password from the response
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword as User;
+  }
+
+  async findCustomerById(id: number): Promise<User> {
+    const user = await this.userRepository.findOne({ 
+      where: { 
+        userId: id, 
+        role: 'customer',
+        isActive: true 
+      },
+      relations: ['creditCards'] // Include credit cards in the response
+    });
+    
+    if (!user) {
+      throw new NotFoundException(`Customer with ID ${id} not found`);
+    }
+    
+    // Remove password from the response
+    const { password, ...userWithoutPassword } = user;
+    return userWithoutPassword as User;
+  }
+  
+  async updateCustomerByEmail(email: string, updateUserDto: UpdateUserDto): Promise<User> {
+    // Find the customer first with credit cards
+    const user = await this.userRepository.findOne({ 
+      where: { 
+        email, 
+        role: 'customer',
+        isActive: true 
+      },
+      relations: ['creditCards'] // Include credit cards when finding the user
+    });
+    
+    if (!user) {
+      throw new NotFoundException(`Customer with email ${email} not found`);
+    }
+    
+    // If password is provided, hash it
+    if (updateUserDto.password) {
+      updateUserDto.password = await this.hashPassword(updateUserDto.password);
+    }
+    
+    // Update the user
+    Object.assign(user, updateUserDto);
+    
+    // Save the updated user
+    const updatedUser = await this.userRepository.save(user);
+    
+    // Fetch the updated user with credit cards
+    const userWithRelations = await this.userRepository.findOne({
+      where: { userId: updatedUser.userId },
+      relations: ['creditCards']
+    });
+    
+    if (!userWithRelations) {
+      throw new NotFoundException(`User not found after update`);
+    }
+    
+    // Remove password from the response
+    const { password, ...userWithoutPassword } = userWithRelations;
+    return userWithoutPassword as User;
+  }
+  
+  async addCreditCardByEmail(email: string, creditCardData: { creditCardNumber: string; expiryDate: string; name: string }): Promise<User> {
+    // Find the customer with credit cards
+    const user = await this.userRepository.findOne({ 
+      where: { 
+        email, 
+        role: 'customer',
+        isActive: true 
+      },
+      relations: ['creditCards']
+    });
+    
+    if (!user) {
+      throw new NotFoundException(`Customer with email ${email} not found`);
+    }
+    
+    // Create a new credit card entity
+    const creditCard = new CreditCard();
+    creditCard.creditCardNumber = creditCardData.creditCardNumber;
+    creditCard.expiryDate = creditCardData.expiryDate;
+    creditCard.name = creditCardData.name;
+    creditCard.userId = user.userId;
+    
+    // First save the credit card directly using the repository
+    const creditCardRepository = this.dataSource.getRepository(CreditCard);
+    const savedCreditCard = await creditCardRepository.save(creditCard);
+    
+    // Add the credit card to the user's credit cards
+    if (!user.creditCards) {
+      user.creditCards = [];
+    }
+    user.creditCards.push(savedCreditCard);
+    
+    // Save the updated user
+    await this.userRepository.save(user);
+    
+    // Fetch the updated user with credit cards
+    const updatedUser = await this.userRepository.findOne({
+      where: { userId: user.userId },
+      relations: ['creditCards']
+    });
+    
+    if (!updatedUser) {
+      throw new NotFoundException(`User not found after adding credit card`);
+    }
+    
+    // Remove password from the response
+    const { password, ...userWithoutPassword } = updatedUser;
+    return userWithoutPassword as User;
+  }
+  
+  async deleteCreditCardByEmail(email: string, creditCardId: number): Promise<void> {
+    // Use a transaction to ensure atomicity
+    await this.dataSource.transaction(async transactionalEntityManager => {
+      // Find the customer with credit cards
+      const user = await transactionalEntityManager.findOne(User, { 
+        where: { 
+          email, 
+          role: 'customer',
+          isActive: true 
+        },
+        relations: ['creditCards']
+      });
+      
+      if (!user) {
+        throw new NotFoundException(`Customer with email ${email} not found`);
+      }
+      
+      // Check if the credit card exists and belongs to the user
+      const creditCardIndex = user.creditCards.findIndex(card => card.creditCardId === creditCardId);
+      if (creditCardIndex === -1) {
+        throw new NotFoundException(`Credit card with ID ${creditCardId} not found for this user`);
+      }
+      
+      // Execute a direct SQL DELETE query
+      // This bypasses TypeORM's entity lifecycle hooks that might be causing the issue
+      await transactionalEntityManager.query(
+        `DELETE FROM credit_cards WHERE "creditCardId" = $1`,
+        [creditCardId]
+      );
+      
+      // Update the user's credit cards array in memory
+      user.creditCards.splice(creditCardIndex, 1);
+      
+      // Save the updated user with the modified credit cards array
+      // This ensures the in-memory representation matches the database
+      await transactionalEntityManager.save(user);
+    });
   }
 
   private async hashPassword(password: string): Promise<string> {

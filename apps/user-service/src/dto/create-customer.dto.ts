@@ -61,13 +61,15 @@ export class CreateCustomerDto {
   password: string;
 
   @ApiPropertyOptional({
-    description: 'Customer phone number in international format',
-    example: '+33612345678',
-    pattern: '^\+\d{10,15}$'
+    description: 'Phone must be a valid French number (e.g., +33623456789 or 0623456789)',
+    example: '+33623456789 or 0623456789',
+    pattern: '^(\+33[1-9]\d{8}|0[1-9]\d{8})$'
   })
   @IsOptional()
   @IsString({ message: 'Phone must be a string' })
-  @Matches(/^\+\d{10,15}$/, { message: 'Phone must be in international format (e.g., +33612345678)' })
+  @Matches(/^(\+33[1-9]\d{8}|0[1-9]\d{8})$/, {
+    message: 'Phone must be in French format: +33XXXXXXXXX or 0XXXXXXXXX',
+  })
   phone?: string;
 
   @ApiPropertyOptional({

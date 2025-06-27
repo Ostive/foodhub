@@ -53,14 +53,26 @@ export default function ProfileClient({
     email: initialUserData?.email || "user@example.com",
     phone: initialUserData?.phone || "+1 (555) 123-4567",
     address: initialUserData?.address || "123 Main St, New York, NY 10001",
-    avatar: initialUserData?.avatar || "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png"
+    avatar: initialUserData?.avatar || "/images/default-avatar.png" // Use local default image
   });
   
   // Form state
   const [formData, setFormData] = useState({ ...userData });
   
   // Payment methods state
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(initialPaymentMethods || []);
+  const [paymentMethods, setPaymentMethods] = useState<any[]>(
+    initialUserData?.creditCards || initialPaymentMethods || []
+  );
+  
+  // New credit card state
+  const [newCreditCard, setNewCreditCard] = useState({
+    creditCardNumber: '',
+    expiryDate: '',
+    name: ''
+  });
+  
+  // Credit card form state
+  const [showAddCardForm, setShowAddCardForm] = useState(false);
   
   // Notification settings state
   const [notificationSettings, setNotificationSettings] = useState<NotificationSetting[]>(
@@ -80,11 +92,47 @@ export default function ProfileClient({
   };
   
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setUserData(formData);
-    setIsEditing(false);
-    // In a real app, we would save the data to the server here
+    try {
+      // Get the auth token from cookies
+      const authToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('auth_token='))
+        ?.split('=')[1];
+      
+      if (!authToken) {
+        console.error('No auth token found');
+        return;
+      }
+      
+      // Save the data to the server using our new PATCH endpoint
+      const response = await fetch(`${process.env.NEXT_PUBLIC_USER_SERVICE_URL}/api/users/customers/email/${userData.email}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to update profile: ${response.statusText}`);
+      }
+      
+      const updatedData = await response.json();
+      // Ensure avatar is never empty
+      const updatedUserData = {
+        ...updatedData,
+        avatar: updatedData.avatar || userData.avatar || "/images/default-avatar.png"
+      };
+      setUserData(updatedUserData);
+      setIsEditing(false);
+      alert('Profile updated successfully!');
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again.');
+    }
   };
   
   // Handle cancel edit
@@ -101,6 +149,97 @@ export default function ProfileClient({
       )
     );
     // In a real app, we would save the setting to the server here
+  };
+  
+  // Handle credit card input change
+  const handleCardInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setNewCreditCard(prev => ({ ...prev, [name]: value }));
+  };
+  
+  // Handle add credit card
+  const handleAddCreditCard = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      // Get the auth token from cookies
+      const authToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('auth_token='))
+        ?.split('=')[1];
+      
+      if (!authToken) {
+        console.error('No auth token found');
+        return;
+      }
+      
+      // Add the new credit card to the server
+      const response = await fetch(`${process.env.NEXT_PUBLIC_USER_SERVICE_URL}/api/users/customers/email/${userData.email}/credit-cards`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${authToken}`
+        },
+        body: JSON.stringify(newCreditCard)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to add credit card: ${response.statusText}`);
+      }
+      
+      const updatedUser = await response.json();
+      
+      // Update the payment methods state with the new credit cards
+      setPaymentMethods(updatedUser.creditCards || []);
+      
+      // Reset the form
+      setNewCreditCard({
+        creditCardNumber: '',
+        expiryDate: '',
+        name: ''
+      });
+      setShowAddCardForm(false);
+      
+      alert('Credit card added successfully!');
+    } catch (error) {
+      console.error('Error adding credit card:', error);
+      alert('Failed to add credit card. Please try again.');
+    }
+  };
+  
+  // Handle delete credit card
+  const handleDeleteCreditCard = async (creditCardId: number) => {
+    try {
+      // Get the auth token from cookies
+      const authToken = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('auth_token='))
+        ?.split('=')[1];
+      
+      if (!authToken) {
+        console.error('No auth token found');
+        return;
+      }
+      
+      // Delete the credit card from the server
+      const response = await fetch(`${process.env.NEXT_PUBLIC_USER_SERVICE_URL}/api/users/customers/email/${userData.email}/credit-cards/${creditCardId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${authToken}`
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Failed to delete credit card: ${response.statusText}`);
+      }
+      
+      // Update the payment methods state
+      setPaymentMethods(prev => prev.filter(card => card.creditCardId !== creditCardId));
+      
+      alert('Credit card deleted successfully!');
+    } catch (error) {
+      console.error('Error deleting credit card:', error);
+      alert('Failed to delete credit card. Please try again.');
+    }
   };
   
   return (
@@ -324,54 +463,115 @@ export default function ProfileClient({
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-xl font-semibold">Payment Methods</h2>
                   <button 
-                    onClick={() => setShowAddPaymentForm(true)}
+                    onClick={() => setShowAddCardForm(true)}
                     className="flex items-center text-primary hover:text-primary-dark"
                   >
                     <Plus className="w-4 h-4 mr-1" />
-                    Add New
+                    Add New Card
                   </button>
                 </div>
+                
+                {showAddCardForm && (
+                  <div className="mb-6 p-4 border border-gray-200 rounded-lg">
+                    <h3 className="text-lg font-medium mb-4">Add New Credit Card</h3>
+                    <form onSubmit={handleAddCreditCard} className="space-y-4">
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                          Cardholder Name
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={newCreditCard.name}
+                          onChange={handleCardInputChange}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+                          required
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="creditCardNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                          Card Number
+                        </label>
+                        <input
+                          type="text"
+                          id="creditCardNumber"
+                          name="creditCardNumber"
+                          value={newCreditCard.creditCardNumber}
+                          onChange={handleCardInputChange}
+                          placeholder="1234567890123456"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+                          required
+                          maxLength={16}
+                        />
+                      </div>
+                      <div>
+                        <label htmlFor="expiryDate" className="block text-sm font-medium text-gray-700 mb-1">
+                          Expiry Date (MM/YY)
+                        </label>
+                        <input
+                          type="text"
+                          id="expiryDate"
+                          name="expiryDate"
+                          value={newCreditCard.expiryDate}
+                          onChange={handleCardInputChange}
+                          placeholder="MM/YY"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-primary focus:border-primary"
+                          required
+                          maxLength={5}
+                        />
+                      </div>
+                      <div className="flex space-x-2 pt-2">
+                        <button
+                          type="button"
+                          onClick={() => setShowAddCardForm(false)}
+                          className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
+                        >
+                          Add Card
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                )}
                 
                 {paymentMethods.length === 0 ? (
                   <div className="text-center py-8">
                     <CreditCard className="w-12 h-12 mx-auto text-gray-300 mb-3" />
                     <p className="text-gray-500">No payment methods added yet</p>
                     <button 
-                      onClick={() => setShowAddPaymentForm(true)}
+                      onClick={() => setShowAddCardForm(true)}
                       className="mt-4 px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark"
                     >
-                      Add Payment Method
+                      Add Credit Card
                     </button>
                   </div>
                 ) : (
                   <div className="space-y-4">
-                    {paymentMethods.map((method) => (
+                    {paymentMethods.map((card) => (
                       <div 
-                        key={method.id} 
+                        key={card.creditCardId} 
                         className="flex items-center justify-between p-4 border border-gray-200 rounded-lg"
                       >
                         <div className="flex items-center">
-                          <div className="w-10 h-10 mr-4">
-                            <Image 
-                              src={method.icon} 
-                              alt={method.name}
-                              width={40}
-                              height={40}
-                              className="w-full h-full object-contain"
-                            />
+                          <div className="w-10 h-10 mr-4 flex items-center justify-center bg-gray-100 rounded-md">
+                            <CreditCard className="w-6 h-6 text-gray-600" />
                           </div>
                           <div>
-                            <p className="font-medium">{method.name}</p>
-                            {method.expiry && (
-                              <p className="text-sm text-gray-500">Expires {method.expiry}</p>
-                            )}
+                            <p className="font-medium">{card.name}</p>
+                            <p className="text-sm text-gray-500">
+                              •••• •••• •••• {card.creditCardNumber.slice(-4)}
+                            </p>
+                            <p className="text-xs text-gray-500">Expires {card.expiryDate}</p>
                           </div>
                         </div>
                         <button 
-                          onClick={() => {
-                            setPaymentMethods(prev => prev.filter(m => m.id !== method.id));
-                            // In a real app, we would delete the payment method from the server here
-                          }}
+                          onClick={() => handleDeleteCreditCard(card.creditCardId)}
                           className="text-red-500 hover:text-red-700"
                         >
                           <Trash2 className="w-5 h-5" />

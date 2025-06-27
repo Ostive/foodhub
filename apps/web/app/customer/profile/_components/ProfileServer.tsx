@@ -9,34 +9,83 @@ export async function getProfileData(): Promise<{
   error: string | null;
 }> {
   try {
-    // Fetch user data from API
-    const userId = "current"; // In a real app, this would be the authenticated user's ID
-    const response = await fetch(`${process.env.USER_SERVICE_URL}/api/users/${userId}`, {
-      cache: "no-store", // Don't cache to ensure fresh data
-      next: { revalidate: 60 } // Revalidate every minute as fallback
-    });
+    // Get the auth token from cookies if available
+    // Using the correct pattern for Next.js cookies in Server Components
+    const cookieStore = await (await import('next/headers')).cookies();
+    const authToken = cookieStore.get('auth_token')?.value;
     
-    if (!response.ok) {
-      throw new Error(`Failed to fetch user data: ${response.statusText}`);
+    if (!authToken) {
+      console.log('No authentication token found, using mock data');
+      return getMockProfileData('No authentication token found');
     }
     
-    const userData = await response.json();
-    
-    // If we can't fetch from the API, fall back to mock data
-    if (!userData) {
-      return getMockProfileData();
+    // First, decode the JWT token to get the user information
+    // This is a simple way to extract the payload without verification
+    const tokenParts = authToken.split('.');
+    if (tokenParts.length !== 3) {
+      console.log('Invalid token format, using mock data');
+      return getMockProfileData('Invalid token format');
     }
     
-    // Try to fetch payment methods from API
-    let paymentMethods = [];
+    // Decode the payload part (second part) of the JWT
+    let userData;
+    let userId;
+    
     try {
-      const paymentResponse = await fetch(`${process.env.USER_SERVICE_URL}/api/users/${userId}/payment-methods`, {
+      const payload = JSON.parse(atob(tokenParts[1]));
+      console.log('JWT payload:', payload); // Log the payload to see its structure
+      
+      // Extract email from the JWT token
+      const userEmail = payload.email;
+      
+      if (!userEmail) {
+        console.log('No email found in token, using mock data');
+        return getMockProfileData('No email found in token');
+      }
+      
+      // Fetch user data from users service using the email
+      const response = await fetch(`${process.env.USER_SERVICE_URL}/api/users/customers/email/${userEmail}`, {
         cache: "no-store",
-        next: { revalidate: 60 }
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+        }
       });
       
-      if (paymentResponse.ok) {
-        paymentMethods = await paymentResponse.json();
+      if (!response.ok) {
+        console.log(`Failed to fetch user data: ${response.statusText}, using mock data`);
+        return getMockProfileData(`Failed to fetch user data: ${response.statusText}`);
+      }
+      
+      userData = await response.json();
+      userId = userData.userId || userData.id;
+      
+      if (!userData) {
+        console.log('No user data returned from API, using mock data');
+        return getMockProfileData('No user data returned from API');
+      }
+    } catch (error) {
+      console.error('Error decoding token or fetching user data:', error);
+      return getMockProfileData(error instanceof Error ? error.message : 'Error fetching user data');
+    }
+    
+    // Try to fetch payment methods from API using the user ID
+    let paymentMethods = [];
+    try {
+      // Get the user ID from the userData response
+      const userId = userData.userId || userData.id;
+      
+      if (userId) {
+        const paymentResponse = await fetch(`${process.env.USER_SERVICE_URL}/api/users/customers/${userId}/payment-methods`, {
+          cache: "no-store",
+          next: { revalidate: 60 },
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+          }
+        });
+        
+        if (paymentResponse.ok) {
+          paymentMethods = await paymentResponse.json();
+        }
       }
     } catch (error) {
       console.error("Error fetching payment methods:", error);

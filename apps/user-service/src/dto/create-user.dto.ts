@@ -56,7 +56,9 @@ export class CreateUserDto {
   })
   @IsOptional()
   @IsString({ message: 'Phone must be a string' })
-  @Matches(/^\+\d{10,15}$/, { message: 'Phone must be in international format (e.g., +33612345678)' })
+  @Matches(/^(\+33[1-9]\d{8}|0[1-9]\d{8})$/, {
+    message: 'Phone must be in French format: +33XXXXXXXXX or 0XXXXXXXXX',
+  })
   phone?: string;
 
   @ApiPropertyOptional({

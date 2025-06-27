@@ -5,6 +5,9 @@ import { OrderDish } from 'libs/database/entities/order_dish.entity';
 import { OrderMenu } from 'libs/database/entities/order_menu.entity';
 import { Dish } from 'libs/database/entities/dish.entity';
 import { Menu } from 'libs/database/entities/menu.entity';
+import { Order } from 'libs/database/entities/order.entity';
+import { OrderDishDto } from '../dto/order-dish.dto';
+import { OrderMenuDto } from '../dto/order-menu.dto';
 
 /**
  * Service to retrieve order items (dishes and menus) for a specific order
@@ -125,15 +128,50 @@ export class OrderItemsService {
    * @param orderId The order ID
    * @returns Object containing arrays of dishes and menus with quantities
    */
-  async findOrderItems(orderId: number): Promise<{
+  async getOrderItems(orderId: number): Promise<{
     dishes: { dish: Dish; quantity: number }[];
     menus: { menu: Menu; quantity: number }[];
   }> {
-    const [dishes, menus] = await Promise.all([
-      this.findOrderDishes(orderId),
-      this.findOrderMenus(orderId),
-    ]);
-
+    const dishes = await this.findOrderDishes(orderId);
+    const menus = await this.findOrderMenus(orderId);
+    
     return { dishes, menus };
+  }
+  
+  /**
+   * Process dishes for a new order
+   * @param order The order entity
+   * @param dishes Array of dish DTOs
+   */
+  async processDishes(order: Order, dishes: OrderDishDto[]): Promise<void> {
+    // Create order dish entries for each dish
+    for (const dishDto of dishes) {
+      const orderDish = new OrderDish();
+      orderDish.orderId = order.orderId;
+      orderDish.dishId = dishDto.dishId;
+      orderDish.quantity = dishDto.quantity;
+      orderDish.price = dishDto.price || 0; // Use 0 if price is undefined
+      orderDish.personalizationChoices = dishDto.personalizationChoices || [];
+      
+      await this.orderDishRepository.save(orderDish);
+    }
+  }
+  
+  /**
+   * Process menus for a new order
+   * @param order The order entity
+   * @param menus Array of menu DTOs
+   */
+  async processMenus(order: Order, menus: OrderMenuDto[]): Promise<void> {
+    // Create order menu entries for each menu
+    for (const menuDto of menus) {
+      const orderMenu = new OrderMenu();
+      orderMenu.orderId = order.orderId;
+      orderMenu.menuId = menuDto.menuId;
+      orderMenu.quantity = menuDto.quantity;
+      orderMenu.price = menuDto.price || 0; // Use 0 if price is undefined
+      
+      await this.orderMenuRepository.save(orderMenu);
+    }
   }
 }

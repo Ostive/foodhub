@@ -30,10 +30,10 @@ export default function OrderSummary({
         <span className="text-gray-500">Service Fee</span>
         <span>{formatCurrency(serviceFee)}</span>
       </div>
-      <Separator className="bg-green-100" />
+      <Separator className="bg-gray-200" />
       <div className="flex justify-between font-bold">
-        <span className="text-green-700">Total</span>
-        <span className="text-green-700 text-lg">{formatCurrency(total)}</span>
+        <span className="text-green-500">Total</span>
+        <span className="text-green-500 text-lg">{formatCurrency(total)}</span>
       </div>
     </div>
   );

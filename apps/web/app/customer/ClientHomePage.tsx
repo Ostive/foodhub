@@ -167,10 +167,16 @@ export default function ClientHomePage({
     <div className="bg-gray-50 min-h-screen">
       <CustomerNavbar />
       
-      {/* Hero Section */}
-      <div className="relative h-[300px] md:h-[400px] bg-gradient-to-r from-[#FF5F6D] to-[#FFC371]">
+      {/* Hero Section with Food Image Background */}
+      <div className="relative h-[300px] md:h-[400px] bg-cover bg-center" style={{ 
+        backgroundImage: "url('https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=1600&q=80')",
+        backgroundPosition: "center",
+        backgroundSize: "cover"
+      }}>
+        {/* Light overlay with green tint for better image visibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-green-900/30 to-green-700/30"></div>
         {/* Hero Content */}
-        <div className="container mx-auto px-4 h-full flex flex-col justify-center">
+        <div className="container mx-auto px-4 h-full flex flex-col justify-center relative z-10">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4">
             Delicious food delivered to your door
           </h1>
@@ -178,10 +184,10 @@ export default function ClientHomePage({
             Order from your favorite restaurants and track your order in real-time
           </p>
           
-          {/* Search Bar */}
+          {/* Search Bar - Uber Eats style */}
           <div className="bg-white rounded-lg shadow-lg p-2 flex items-center max-w-2xl">
             <div className="flex items-center flex-grow border-r border-gray-200 pr-2">
-              <MapPin className="text-red-500 mr-2" size={20} />
+              <MapPin className="text-green-500 mr-2" size={20} />
               <button 
                 onClick={() => setIsAddressModalOpen(true)}
                 className="text-gray-700 flex-grow text-left truncate"
@@ -202,7 +208,7 @@ export default function ClientHomePage({
               </div>
               <button 
                 type="submit"
-                className="bg-red-500 text-white px-4 py-2 rounded-lg ml-2 hidden md:block"
+                className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg ml-2 hidden md:block"
               >
                 Search
               </button>
@@ -211,7 +217,7 @@ export default function ClientHomePage({
         </div>
       </div>
       
-      {/* Categories Section */}
+      {/* Categories Section - Updated to cubic form */}
       <div className="container mx-auto px-4 py-8 relative">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-2xl font-bold">Categories</h2>
@@ -242,37 +248,28 @@ export default function ClientHomePage({
             <div key={index} className="flex-shrink-0">
               <div 
                 onClick={() => router.push(`/customer/search/results?category=${category.name}`)}
-                className="w-32 h-32 md:w-40 md:h-40 cursor-pointer"
+                className="w-32 h-32 md:w-40 md:h-40 cursor-pointer transition-transform hover:scale-105"
               >
-                <OverlayCard
-                  image={category.image}
-                  title={category.name}
-                />
+                <div className="bg-white shadow-lg rounded-lg h-full w-full overflow-hidden flex flex-col">
+                  <div className="h-3/4 overflow-hidden">
+                    <img 
+                      src={category.image} 
+                      alt={category.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="h-1/4 flex items-center justify-center bg-white p-2">
+                    <p className="font-medium text-center text-gray-800">{category.name}</p>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
         </div>
       </div>
       
-      {/* Popular Restaurants Section */}
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl font-bold">Popular Restaurants</h2>
-          <Link href="/customer/popular-restaurants" className="text-red-500 flex items-center">
-            View all <ArrowRight size={16} className="ml-1" />
-          </Link>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {popularRestaurants.map((restaurant, index) => (
-            <div key={index} onClick={() => router.push(`/customer/restaurant/${restaurant.id}`)} className="cursor-pointer">
-              <RestaurantCard
-                restaurant={formatRestaurantForDisplay(restaurant)}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      {/* Popular Restaurants Section - Disabled as requested */}
+      {/* Popular restaurants section has been removed */}
       
       {/* Cuisine-based Sections */}
       {Object.entries(restaurantsByCuisine).map(([cuisine, restaurants]) => (

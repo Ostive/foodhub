@@ -58,14 +58,32 @@ export default function OrdersClient({ initialOrders, error }: OrdersClientProps
     return true;
   });
   
-  // Format date
+  // Format date with consistent format for server/client hydration
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString(undefined, { 
-      month: 'short', 
-      day: 'numeric',
-      year: 'numeric'
-    });
+    try {
+      if (!dateString) return 'Date unavailable';
+      
+      // Parse the date string
+      const date = new Date(dateString);
+      
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        console.error('Invalid date in formatDate:', dateString);
+        return 'Date unavailable';
+      }
+      
+      // Use explicit date formatting to avoid hydration errors
+      const day = date.getDate();
+      const month = date.getMonth(); // 0-indexed
+      const year = date.getFullYear();
+      
+      // Create consistent date format (MMM DD, YYYY)
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${months[month]} ${day}, ${year}`;
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Date unavailable';
+    }
   };
   
   // Get status icon and color
@@ -254,7 +272,7 @@ export default function OrdersClient({ initialOrders, error }: OrdersClientProps
                       <div className="space-y-2 text-sm border-t border-gray-100 pt-4 mb-4">
                         <div className="flex justify-between">
                           <span className="text-gray-500">Subtotal</span>
-                          <span>{(parseFloat(order.total) - parseFloat(order.deliveryFee)).toFixed(2)}</span>
+                          <span>${(parseFloat(order.total.replace('$', '')) - parseFloat(order.deliveryFee.replace('$', ''))).toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-500">Delivery Fee</span>

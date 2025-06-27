@@ -14,6 +14,10 @@ export default async function OrdersPage() {
     const { orders, error } = await getOrdersWithFallback();
     
     // Render the orders client component with the fetched data
+    // If there's an error related to "No orders found", we don't pass it as an error
+    // This allows the client to show the empty state UI instead of an error message
+    const displayError = error && !error.includes('No orders found') ? error : null;
+    
     return (
       <Suspense fallback={
         <div className="flex items-center justify-center min-h-screen">
@@ -22,7 +26,7 @@ export default async function OrdersPage() {
       }>
         <OrdersClient 
           initialOrders={orders} 
-          error={error} 
+          error={displayError} 
         />
       </Suspense>
     );

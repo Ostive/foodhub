@@ -84,7 +84,30 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'second-utilization.com',
       },
-
+      {
+        protocol: 'https',
+        hostname: 'arid-citizen.net',
+      },
+      {
+        protocol: 'https',
+        hostname: 'closed-yin.org',
+      },
+      {
+        protocol: 'https',
+        hostname: 'hateful-partridge.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'educated-lift.info',
+      },
+      {
+        protocol: 'https',
+        hostname: 'trim-hierarchy.name',
+      },
+      {
+        protocol: 'https',
+        hostname: 'intelligent-cardboard.name',
+      },
       // Add other domains as needed
     ],
   },

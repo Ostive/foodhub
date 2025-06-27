@@ -1,0 +1,25 @@
+### Create a new order
+POST http://localhost:3000/orders
+Content-Type: application/json
+Authorization: Bearer your_auth_token_here
+
+{
+  "userId": 1,
+  "restaurantId": 2,
+  "cartItems": [
+    {
+      "id": "1",
+      "type": "dish",
+      "quantity": 2,
+      "specialInstructions": "Extra spicy please"
+    },
+    {
+      "id": "3",
+      "type": "menu",
+      "quantity": 1,
+      "specialInstructions": "No onions in any dishes"
+    }
+  ],
+  "deliveryAddress": "123 Main Street, Apt 4B, New York, NY 10001",
+  "specialInstructions": "Please ring doorbell twice on arrival"
+}
